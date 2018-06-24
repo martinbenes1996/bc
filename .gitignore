@@ -1,0 +1,30 @@
+
+# generated files
+src/collector
+
+### Temporary files ###
+**.dep
+**~
+
+### Object files ##
+**.o
+
+### Precompiled Headers ###
+**.gch
+
+### Libraries ###
+**.a
+**.so
+
+### Executables ###
+src/collector
+doc/html
+
+### Documentation ###
+*.pdf
+*.aux
+*.toc
+*.log
+
+### Visual studio code ###
+.vscode/
