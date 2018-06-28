@@ -11,7 +11,7 @@ lib:
 	@printf "";\
 	$(MAKE) -C lib/ -s
 	@printf "";\
-	mv lib/lib.so . > /dev/null 2> /dev/null
+	mv lib/libglobals.so . > /dev/null 2> /dev/null
 
 .PHONY: doxygen
 doxygen:
@@ -30,4 +30,4 @@ clean:
 	@printf "";\
 	$(MAKE) clean -C core/ -s
 	@echo "Cleaning main directory.";\
-	rm -rf lib.so collector > /dev/null 2> /dev/null
+	rm -rf libglobals.so collector > /dev/null 2> /dev/null

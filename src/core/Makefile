@@ -2,8 +2,8 @@
 # compile settings
 cc = g++
 defines = -DDEBUG_MODE #-DCOLOR_MODE #-DUSE_SYSLOG
-linkings = -lpthread -lm
-flags = $(defines) -O2 -g -std=c++17 -pedantic -Wall -Wextra
+linkings = -lpthread -lm -ldl -lrt
+flags = $(defines) -O2 -g -std=c++17 -pedantic -Wall -Wextra -L.. -rdynamic -I../lib/
 
 # source settings
 src = $(wildcard *.cpp)
@@ -35,7 +35,7 @@ $(output) : $(obj)
 
 # compiling
 %.o : %.cpp
-	@echo "Compiling $@.";\
+	#@echo "Compiling $@.";\
 	$(cc) $(flags) $(defines) -c $< -o $@
 
 # clean
