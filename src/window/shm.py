@@ -23,15 +23,19 @@ class Bottles:
     def __init__(self, number):
         self._as_parameter_ = number
 
-
 class ShmWrapper:
     def __init__(self):
-        #os.environ['LD_LIBRARY_PATH'] = '../'
-        self.shm = ctypes.cdll.LoadLibrary('/home/martin/bc/src/libglobals.so')
-        print(self.isInitialized())
-        if not self.isInitialized():
-            print("Shared memory not initialized.", file=sys.stderr)
-            exit(1)
+        print("open shared memory")
+        self.lib = ctypes.cdll.LoadLibrary('/home/martin/bc/src/libglobals.so')
+        self.connectSharedMemory()
+    def __del__(self):
+        print("close shared memory")
+        print("shmid", self.shmid)
+        print("shm", self.shm)
+        self.lib.closeSharedMemory(self.shmid, self.shm)
         
-    def isInitialized(self):
-        return bool(self.shm.isInitialized() % 2)
+    def isShmCreated(self):
+        return bool(self.lib.isShmCreated() % 2)
+    def connectSharedMemory(self):
+        self.shmid = self.lib.connectSharedMemory()
+        self.shm = self.lib.allocateSharedMemory(self.shmid)

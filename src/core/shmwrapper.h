@@ -20,6 +20,7 @@ class ShmWrapper {
             assert((figure >= 0) && (figure < 256));
             return mShm->figures[figure]; 
         }
+        bool getValid() { return mShm->valid; }
 
     private:
         void *mLibHandle = NULL;

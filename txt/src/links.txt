@@ -1,0 +1,8 @@
+https://www.conrad.cz/pir-senzor-smd-b-b-thermo-technik-pir-t1-m1-l0-12-v-dc-max-dosah-12-m.k172500
+
+https://arduino-shop.cz/arduino/1164-arduino-nano-v30-atmega328-16m-5v-ch340g-zakladni-deska.html
+https://arduino-shop.cz/arduino/911-internet-veci-je-tady-tcp-ip-wifi-esp8266-1420990568.html
+
+https://arduino-shop.cz/arduino/1422-dvojlinka-cyh-2x0-15-cernorudy-1475267050.html
+
+http://navody.arduino-shop.cz/navody-k-produktum/esp8266-vyvojova-deska-wemos-d1.html

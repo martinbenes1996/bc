@@ -69,40 +69,39 @@ typedef struct SharedMemory SharedMemory;
 /* --------------------------------------- */
 
 static struct SharedMemory mShm;
-static const char * mShmName = "/core2win.shm";
-
-bool mShmCreated = false;
-bool isShmCreated() { return mShmCreated; }
 
 int createSharedMemory() {
-
 	// creating new shm
-	int shmid = shmget(0, sizeof(struct SharedMemory), IPC_CREAT|IPC_EXCL|0666);
+	int shmid = shmget(42, sizeof(struct SharedMemory), IPC_CREAT|IPC_EXCL|0666);
 	CHECK_NONNEGATIVE(shmid);
+    printf("shmid %d\n", shmid);
     return shmid;
 }
 int connectSharedMemory() {
-    return shm_open(mShmName, O_RDONLY, 00644);
+    int shmid = shmget(42, sizeof(struct SharedMemory), 0);
+    printf("shmid %d\n", shmid);
+    return shmid;
 }
 SharedMemory* allocateSharedMemory(int shmid) {
-    return (struct SharedMemory *)shmat(shmid, NULL, 0);
+    CHECK_NONNEGATIVE(shmid);
+    struct SharedMemory * p = (struct SharedMemory *)shmat(shmid, NULL, 0);
+    printf("shm %p\n", (void *)p);
+    return p;
 }
 
-void closeSharedMemory(int shmid, SharedMemory* p) {
-    //if(shm_unlink(mShmName) != 0) abort();
+void xxx(int shmid) { allocateSharedMemory(shmid)->valid = true; }
 
+void closeSharedMemory(int shmid, SharedMemory* p) {
     // remove shared memory
     CHECK_NONNEGATIVE( shmdt(p) );
     CHECK_NONNEGATIVE( shmctl(shmid, IPC_RMID, NULL) );
 }
 
 struct Direction getDirection(int azimuth) {
-    assert( isShmCreated() ); 
     assert(azimuth >= 0 && azimuth < 360);
     return mShm.space[azimuth];
 }
 struct Figure getFigure(int figure) {
-    assert( isShmCreated() );
     assert(figure >= 0 && figure < 256);
     return mShm.figures[figure];
 }
