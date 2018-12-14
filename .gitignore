@@ -1,13 +1,12 @@
 
 # generated files
-src/collector
 
 ### Temporary files ###
-**.dep
-**~
+**/*.dep
+**/*~
 
 ### Object files ##
-**.o
+**/*.o
 
 ### Precompiled Headers ###
 **.gch
@@ -17,14 +16,16 @@ src/collector
 **.so
 
 ### Executables ###
-src/collector
-doc/html
 
 ### Documentation ###
-*.pdf
-*.aux
-*.toc
-*.log
+**/*.pdf
+**/*.aux
+**/*.toc
+**/*.log
+**/*.bbl
+**/*.blg
+**/*.out
+**/*.ptc
 
 ### Visual studio code ###
-.vscode/
+**/.vscode
