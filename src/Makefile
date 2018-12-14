@@ -1,17 +1,11 @@
 
 .PHONY: all
-all: collector
+all: bc_client
 	@echo > /dev/null
 
-collector:
-	$(MAKE) -C core/ -s
-
-.PHONY: lib
-lib:
-	@printf "";\
-	$(MAKE) -C lib/ -s
-	@printf "";\
-	mv lib/libglobals.so . > /dev/null 2> /dev/null
+bc_client:
+	$(MAKE) -C client/ -s
+	cp client/bc_client .
 
 .PHONY: doxygen
 doxygen:
@@ -26,8 +20,6 @@ run:
 .PHONY: clean
 clean:
 	@printf "";\
-	$(MAKE) clean -C lib/ -s
-	@printf "";\
-	$(MAKE) clean -C core/ -s
+	$(MAKE) clean -C client/ -s
 	@echo "Cleaning main directory.";\
-	rm -rf libglobals.so collector > /dev/null 2> /dev/null
+	rm -rf bc_client > /dev/null 2> /dev/null
