@@ -1,7 +1,10 @@
 %===============================================================================
 % Autoři: Michal Bidlo, Bohuslav Křena, Jaroslav Dytrych, Petr Veigend a Adam Herout 2018
+
 \chapter{Introduction}
 \label{chapter:introduction}
+
+
 
 Everything with a~temperature above absolute zero emits some kind of radiation. As you know, the~dominant wavelengths of this~radiation belong to the~infrared spectrum and we have biological sensors called {\it thermoreceptors} in our skin to feel it. Yes, I am speaking about heat. 
 
@@ -48,7 +51,12 @@ your bare eyes.
 
 
 
+
+
+
 \chapter{Theory}
+
+
 
 \section{Physics of radiation}
 
@@ -57,6 +65,7 @@ than absolute zero emits electromagnetic radiation. $$T_{obj}>0~K\equiv -273.15^
 It is caused by a charged subatomical particles (electrons, protons) that are undergoing an acceleration, emitting an energy in a form
 of photon - electromagnetic radiation.
 
+
 \subsection*{Characteristics}
 The electromagnetic radiation have a number of measurable characteristics. The most significant ones
 are {\it frequency} $f$ and {\it wavelength} $\lambda$. They are mutually transferrable by the formule using
@@ -64,41 +73,196 @@ radiation speed $v$. Since the speed $v$ is not dependent on frequency nor wavel
 and wavelength are proportional and $v = c=3\cdot10^{8}~m\cdot s^{-1}$ is {\it a~speed of light}.
 $$f=\frac{v}{\lambda}=\frac{c}{\lambda}=\frac{3\cdot10^{8}}{\lambda}$$
 
-Electromagnetic waves are being divided into categories according to their usage by the frequency $f$
+The whole electromagnetic waves are being divided into categories according to their usage by the frequency $f$
 or wavelength $\lambda$. With increasing wavelength~$\lambda$ it is gamma, X-rays, ultraviolet (UV),
-visible light, infrared (IR) and radio waves, this division is shown in the image \ref{fig:spectrum}.
+visible light, infrared (IR) and radio waves. This is called electromagnetic spectrum
+and it is shown in the image \ref{fig:spectrum}.
 
 \begin{figure}[h!]
 \begin{center}
-\includegraphics[width=0.5\textwidth]{obrazky-figures/spectrum.png}
-\caption{Electromagnetic spectrum\label{fig:spectrum} \cite{izgspectrum}}
+\includegraphics[width=0.8\textwidth]{obrazky-figures/spectrum.png}
+\caption{Electromagnetic spectrum\label{fig:spectrum}}
 \end{center}    
 \end{figure}
 
-Another measurable characteristic is {\it an energy of radiation}. It is linearly dependend on
-frequency and can be computed as
-$$W_e=h\cdot f$$where $W_e$ corresponds to a photon energy, $f$ is the frequency of the
-electromagntic radiation and $h=6.63\cdot10^{-34}~J\cdot s $ is a Planck constant.
+Another measurable characteristic is {\it an energy of radiation}. It is linearly dependend on frequency and can be computed as
+$$W_e=h\cdot f$$
+where $f$ is the frequency of the electromagntic radiation and
+$h=6.63\cdot10^{-34}~J\cdot s $
+is a Planck constant. \cite{NasaEMSpectrum}
+
+{\it Irradiance} $I$ is the radiant flux per surface. The Stefan-Boltzmann law defines it
+for electromagnetic radiation as
+$$I = \sigma \cdot T^4$$
+where $\sigma = 5.6704\cdot 10^{-8} Wm^{-2}K^{-4}$ is the Stefan-Boltzmann constant and
+$T$ is a thermodynamic temperature. 
 
 
-\section{Infrared radiation processed by organisms}
-Therefore, infrared rays are surrounding us during our whole life, human skin is very sensitive to it,
-we sense it as a warmth. 
 
-Human body with temperature around $36.5^\circ C$ radiates mainly at wavelength around $10~\mu m$,
-our skin is to that kind of radiation sensitive, we can feel it as a warmth.
+\section{Radiation processed by organisms}
+Many organisms evolved so they could process parts of electromagnetic spectrum. The eyes enables not only
+mammals, but also cephalopods and arthropods to see - to sense what we call visible light, but not only -
+some insects can even see a part of ultraviolet. Additionally organisms including human often have
+receptors in their skin so they can get information about intensity of infrared radiation around them,
+so called thermoreceptors. We feel infrared radiation as temperature.
+
+
+\subsection*{Visible light}
+\label{subsection:eye}
+Human eyes can process radiation $\lambda \in \langle 380~nm;760~nm \rangle$, it is called visible light, one of the bands
+of electromagnetic spectrum. We can see objects by receiving radiation from a light source reflected from
+the surface of observed object on our retina. There a biological system composed of light-sensitive cells
+rods and cones which propagate the information through a nerve to the brain.
+
+The ray coming to our eye is going through a converging lens, which changes its trajectory aiming to the
+most sensitive place on retina (with a lot of the rods and cons) called {\it Fovea centralis}. \cite{LightEyeVision}
+
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[width=0.4\textwidth]{obrazky-figures/placeholder.jpg}
+\caption{Structure of an eye.\label{fig:eye}}
+\end{center}    
+\end{figure}
+
+
+\subsection*{Heat}
+Same as the visible light, the infrared rays surrounds us during our whole life too. We sense it as heat.
+The heat receptors called {\it thermoreceptors} are common amongst the evolved animals, on our body it is
+located especially on a surface (in a skin), but also in some organs.
+
+There is a difference between visible light and infrared radiation - processed visible light can come from
+a source or reflected from the surface, while the IR can originate only from the primary source - warm item.
+
+Our skin contains two types of thermoreceptors - sensing cold, colder than a body temperature and
+hot - hotter than a body temperature. This is already well described, on the other hand the 
+evaluation center of these receptors in the brain and its mechanisms is not fully understanded yet
+and a matter of current research. \cite{BodilySenses} 
+
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[width=0.4\textwidth]{obrazky-figures/placeholder.jpg}
+\caption{Structure of a skin.\label{fig:skin}}
+\end{center}    
+\end{figure}
+
+Some animals even use sensing the heat as a primary way how to survive. Several groups of snakes
+(pythons, rattlesnakes, boas and others) have special organs under their eyes which can be used
+when hunting warm-blooded animals (mouses, rats, rabbits etc.). Using the receptor they can
+accuratly estimate the direction and the distance of the prey by its body temperature. \cite{SnakeInfrared}
+
+Blood-eating organisms such as vampire bats or south-american heteroptera {\it Triatoma infestans}
+can use IR receptors to look for a warm spot - a vein under the skin. Then they bite on the
+right place and lick the blood. 
+
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[width=0.6\textwidth]{obrazky-figures/python.jpeg}
+\caption{Thermoreceptors of python.\cite{Python}\label{fig:python}}
+\end{center}    
+\end{figure}
+
 
 \subsection*{Discovery}
-The infrared electromagnetic waves were observed and named in 1800 by German-English astronomer sir
-Frederick Harschel, who also discovered the planet Uran. He dispersed light by a prism and found
-out that the temperature of the light is growing with wavelength, the highest for the red.
+For the first time, the infrared electromagnetic waves were observed and named in 1800 by German-English
+astronome sir Frederick Harschel. He dispersed light by a prism and found out that the temperature of
+the light is growing with wavelength, the red light had the highest one.
 
-The thermometer was showing continuous growth even when moving beyond the red spectrum. Harshel
-pronounced that except the visible light there must be also invisible one.
+When he measured the temperature behind the red light, there was no visible light on the table but
+the thermometer was showing even higher temperature moving beyond the red spectrum. Harshel
+pronounced hypothesis that except the visible light there must be also invisible one which we can
+not see. \cite{HerschelLife}
+
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[width=0.4\textwidth]{obrazky-figures/herschel.jpg}
+\caption{Sir William Herschel discovering the infrared radiation.\cite{HerschelLife}\label{fig:herschel}}
+\end{center}    
+\end{figure}
+
+A great coincidence is that he was an astronome, he even discovered the planet Uran, and it is his discovery,
+the IR waves, which now enables us to explore and understand the universe. \cite{NasaIrVideo}
+
+
+
+
+\section{Temperature homeostasis}
+The animal bodies require physical and chemical conditions in order to work properly (or at all). One of
+the physical aspects that needs to be watched and often regulated is a temperature. There are generally
+three types of animals - {\it ectotherms}, {\it endotherms} and {\it mesotherms}.
+
+Ectotherms do not regulate its body temperature and rely on the external source, endotherms keeps it the
+same indipendently on the environment, this is called {\it homeothermy}\footnote{Homeothermy is an aspect
+of homeostasis. It means keeping its inner body temperature within the preset limits.}. Mesotherm
+strategy is then something in between.
+
+Endotherm groups are birds and mammals, the most significant ectotherm group are reptiles. They compensate
+it with basking in the sun. The thermal characteristics of these groups can be seen in the figure \ref{fig:thermoregulatory}.
+
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[width=0.6\textwidth]{obrazky-figures/thermoregulatory.png}
+\caption{Thermal regulation graph.\label{fig:thermoregulatory}}
+\end{center}    
+\end{figure}
+
+Human body temperature $T_{HB}$ varies in $\langle 36^{\circ}C; 38^{\circ}C \rangle$, in the hyperthermia
+it can rise up to $40^{\circ}C$. To compute the peak wavelength of the radiation emitted by human body
+(temperature $37^{\circ}C$ or $310.15~K$) the Wien's displacement law can be used.
+$$\lambda_{max}=\frac{b}{T}=\frac{2.8977729 \cdot 10^{-3}}{310.15} = 9.3431~\mu m$$
+
+%\begin{figure}[h!]
+%\begin{center}
+%\includegraphics[width=0.4\textwidth]{obrazky-figures/placeholder.jpg}
+%\caption{Human body wavelength.\label{fig:bodywavelength}}
+%\end{center}    
+%\end{figure}
+
+%The figure \ref{fig:bodywavelength} shows the measured frequency composition of the IR emitted by human
+%body by the ...cite....
+
+
+
 
 \section{Infrared radiation processed by machines}
 PIR ({\it passive infrared}) sensor is an electronic device that scans electromagnetic
-radiation at~wavelength $\lambda\in<700~nm;2.5~mm>$ aka frequency $f\in<120~MHz;430~THz>$.
+radiation at~wavelength $\lambda\in \langle 700~nm;2.5~mm \rangle$ aka frequency $f\in \langle 120~MHz;430~THz \rangle$. \cite{an2105}
+
+
+\subsection*{Principles of PIR sensor}
+There is a number of approaches how to construct such a sensor. The point is to convert the electromagnetic
+energy into the electric voltage and send it away via wire to be processed by some hardware or software.
+
+First way how to do it is {\it a bolometer}. It uses the fact that resistance of a resistor is different
+when changing a temperature. So with using the same voltage it measures the electric current and
+with the Ohm law $R = \frac{U}{I}$ the sensor computes instantaneus resistance.
+
+Another type is {\it a thermoelectric sensor} reacting to the different thermoelectric resistance of
+exposed wire and comparative wire.
+
+The last is {\it a pyroelectric detector}. The principle is based on electrostatic polarization,
+changing during the temperature change. \cite{DetectorsBook}
+
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[width=0.3\textwidth]{obrazky-figures/pirscheme.png}
+\caption{Single element pyroelectric detector.\cite{an2105}\label{fig:pir}}
+\end{center}    
+\end{figure}
+
+
+\subsection*{Sensing of the infrared radiation}
+The structure of PIR sensor is inspirated by structure of an eye described in subsection
+\ref{subsection:eye}. The incoming infrared radiation coming to the sensor is going through
+so called {\it Fresnel lens}.
+
+<Description of Fresnel lens>.
+
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[width=0.5\textwidth]{obrazky-figures/fresnellens.png}
+\caption{Frensel lens.\label{fig:fresnellens}}
+\end{center}
+\end{figure}
 
 
 
