@@ -13,7 +13,7 @@ dep = $(src:.cpp=.dep)
 obj = $(src:.cpp=.o) 
 
 #output settings
-output = bc_client
+output = collector
 all: $(output)
 	@echo > /dev/null
 
@@ -23,7 +23,7 @@ endif
 
 # linking
 $(output): $(obj)
-	@echo "Linking project into bc_client.";\
+	@echo "Linking project into collector.";\
 	$(cc) $(flags) $^ -o $@ $(linkings)
 
 # dependencies generating
