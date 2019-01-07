@@ -2,10 +2,11 @@
 #define _COMM_H_
 
 #include <arpa/inet.h>
-#include <exception>
-#include <iostream>
 #include <cstdio>
 #include <cstring>
+#include <exception>
+#include <functional>
+#include <iostream>
 #include <netinet/in.h>
 #include <string>
 #include <sys/types.h>
@@ -111,6 +112,57 @@ namespace Comm {
         private:
             int sock_;
             struct sockaddr_in server_;
+    };
+
+    class Listener {
+        public:
+            Listener() {
+                sock_ = socket(AF_INET, SOCK_DGRAM, 0);
+                if(sock_ < 0) { throw Exception("Comm::Server: socket() failed."); }
+            }
+
+            ~Listener() { if(!listener_) listener_->join(); }
+
+            void listen_async(std::function<void(std::array<int,SEGMENT_SIZE>)> actualizer) {
+                actualizer_ = actualizer;
+                listener_ = new std::thread([this](){ this->listen(); });
+            }
+
+            void listen() {
+
+                struct sockaddr_in server, from;
+                unsigned fromsize = sizeof(from);
+                memset(&server, 0, sizeof(server));
+                server.sin_family = AF_INET;
+                server.sin_addr.s_addr = INADDR_ANY;
+                server.sin_port = htons(5005);
+
+                int bindstatus = bind(sock_, (struct sockaddr *)&server, sizeof(server));
+                if(bindstatus < 0) { throw Exception("Comm::Server: bind() failed."); }
+
+                char segment[2*SEGMENT_SIZE];
+                std::cout << "Comm::Listener: UDP waiting for connection.\n";
+
+                while(true) {
+                    
+                    unsigned recvsize = recvfrom(sock_, segment, 2*SEGMENT_SIZE, 0, (struct sockaddr *)&from, &fromsize);
+                    if(recvsize < 2*SEGMENT_SIZE) { throw Exception("Comm::Server: recvfrom() failed."); }
+
+                    std::array<int, SEGMENT_SIZE> a;
+                    for(int i = 0; i < SEGMENT_SIZE*2; i += 2) {
+                        unsigned r = (segment[0] << 8) | (0xFF & segment[1]);
+                        a.at(i/2) = r;                        
+                    }
+                    actualizer_(a);
+                    std::cout << "Comm::Listener: Received " << recvsize << " B.\n";
+                }
+            }
+
+        private:
+            int sock_;
+            std::thread * listener_;
+
+            std::function<void(std::array<int,SEGMENT_SIZE>)> actualizer_;
     };
 }
 

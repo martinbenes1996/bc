@@ -3,6 +3,7 @@
 
 #include <array>
 #include <cstdlib>
+#include <functional>
 #include <map>
 #include <string>
 #include <time.h>
@@ -103,11 +104,20 @@ namespace HW {
                 return f;
             }
 
+            void actualizeData(std::array<int, SEGMENT_SIZE> data) {
+                data_ = data;
+                #ifdef DEBUG_SENSOR
+                    DebugPrompt(); std::cerr << "Data actualized.\n";
+                #endif
+            }
+
 
         private:
             std::string name_;
             int azimuth_;
             Geo::Coords::Polar position_;
+
+            std::array<int, SEGMENT_SIZE> data_;
 
             static const unsigned featN_ = 13;
 
@@ -140,6 +150,11 @@ namespace Recog {
                                                     sqrt(2*25*25 - 2*25*25*cos(-OMEGA/360.*M_PI)) // distance
                                                 )
                 ));
+            }
+
+            std::function<void(std::array<int,SEGMENT_SIZE>)> getActualizer(std::string sensorkey) {
+                HW::Sensor* s = &sensors_.at(sensorkey);
+                return [s](std::array<int,SEGMENT_SIZE> data){ s->actualizeData(data); };
             }
 
             Result calculate() {

@@ -29,7 +29,12 @@ int main(int argc, char *argv[]) {
     std::cout << "\n";
     */
 
+    
+    
+    Comm::Listener listener;
     Recog::Fusion fusion;
+    listener.listen_async( fusion.getActualizer("C") );
+
     do {
         Recog::Result result = fusion.calculate();
         result.log();
