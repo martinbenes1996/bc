@@ -12,6 +12,8 @@
 #include <sys/socket.h>
 #include <thread>
 
+#include "model.h"
+
 namespace Comm {
     class Exception {
         public:
@@ -100,8 +102,7 @@ namespace Comm {
                 server_.sin_port = htons(12345);
             }
 
-            typedef const char * Data;
-            void send(Data d, size_t size) {
+            void send(void * d, size_t size) {
                 std::cout << "Comm::MCastServer: sending update to " << inet_ntoa(server_.sin_addr) << ":" << ntohs(server_.sin_port) << "\n";
                 int sent = sendto(sock_, d, size, 0, (struct sockaddr*)&server_, sizeof(server_));
                 if(sent < 0) { throw Exception("Comm:MCastServer: sendto() failed."); }

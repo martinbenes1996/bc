@@ -402,16 +402,23 @@ use the Internet and send the data to the remote visualizer.
 
 \begin{figure}[h!]
 \begin{center}
-\includegraphics[width=0.8\textwidth]{obrazky-figures/design.png}
+\includegraphics[width=0.6\textwidth]{obrazky-figures/design.png}
 \caption{Geometry for three PIR sensors.\label{fig:design}}
 \end{center}
 \end{figure}
 
 \section{Sensor module}
 
-\section{Visualizer}
+Sensor module is a board with fixed sensors on it and a microcontroller performing the
+classification process described in subsection \ref{label:dataprocessing}.
 
-\section{Data Processing pipeline}
+The sensors signal is at the end fused together and the results are classified objects
+with coordinates in polar coordinate system relative to the module position. These
+coordinates are sent to the client.
+
+
+\subsection{Data Processing pipeline}
+\label{label:dataprocessing}
 
 The data path in the design is slightly inspired by classification phases except
 there is fuzzification used here. It enables to create a fusion logic over vague
@@ -427,19 +434,19 @@ also it reduces the issue with positioning the sensors, since it is given by the
 board construction.
 
 The key here is to find the best value for $\Omega$ to minimize $r$, but maximize
-$\phi$. Low $r$ means more reliable results. High $\phi$ increases measurable range.
+$\varphi$. Low $r$ means more reliable results. High $\varphi$ increases measurable range.
 Unfortunatelly these parameters are inversely propotional, a compromise needs to be done.
 
 \begin{figure}[h!]
 \begin{center}
-\includegraphics[width=0.75\textwidth]{obrazky-figures/3pir_geometry.png}
+\includegraphics[width=0.6\textwidth]{obrazky-figures/3pir_geometry.png}
 \caption{Geometry for three PIR sensors.\label{fig:3pir_geometry}}
 \end{center}
 \end{figure}
 
 Now let's express both observed parameters with $\Omega$. A sensor has $250~mm$ to $250~mm$,
 $o$ is a size of empty space on the sides of sensor, equation substituted $L = (12.5 + o)$.
-$$\phi = 230 + \Omega$$
+$$\varphi = 230 + \Omega$$
 $$r = \frac{\sin{(\frac{\Omega}{2})}L}{\tg{(\frac{\Omega}{2}-40)}} - \cos{(\frac{\Omega}{2})}L$$
 
 
@@ -459,6 +466,8 @@ The result is processed by a post-processing unit to consider costs and make
 the final (hard) decision.
 
 
+\section{Visualizer}
+
 
 
 
@@ -472,14 +481,27 @@ Important is post-processing.
 
 \chapter{Implementation}
 
-Delit pouze na funkcni implementacni celky.
+\subsection*{Sensor module}
 
-Nastroje pouzite k realizaci. SPecifika cilove platformy.
+\subsection*{Client app}
+Client app is written in {\it Python3} and graphical library {\it Tkinter}.
+This choice was made with portability of the program taken into consideration.
+The design of user interface is described in chapter \ref{Label:UI}.
+
+
+
+
+\subsection*{Communication}
+The communication of the sensor module and the client app is designed as a client-server. The results
+from the classification performed by server are sent to the client which shows it to user.
+
+As the technology for the channel a LAN multicast stream is used at 224.0.0.128:12345.
+The main advantage in comparison to unicast is a support of multiple clients.
 
 
 
 \chapter{User Interface}
-
+\label{Label:UI}
 
 
 
