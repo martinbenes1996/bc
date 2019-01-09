@@ -61,7 +61,7 @@ class Client:
 class MCastClient:
     def __init__(self):
         """Multicast client constructor."""
-        print('Comm.MCastClient: Initialize')
+        #print('Comm.MCastClient: Initialize')
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
         try:
             self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)

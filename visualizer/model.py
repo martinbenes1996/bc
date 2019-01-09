@@ -14,7 +14,7 @@ class Model:
             count, data = self.client.receive()
             
             print("Model.actualize():", count, "data received")
-            print("Model.actualize():", data)
+            #print("Model.actualize():", data)
 
             self.objects = data
     

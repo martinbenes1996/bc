@@ -104,18 +104,19 @@ class App(tk.Canvas):
     def update(self):
         # hide and delete all drawn objects
         for o in self.objects:
+            self.itemconfigure(o, state='hidden')
             self.delete(o)
         self.objects = []
         # draw the new objects
-        print("App.update: objects", self.getData())
+        #print("App.update: objects", self.getData())
         for o in self.getData():
             self.objects.append( self.add_object(*o) )
         self.after(500, self.update)
     
     def add_object(self, azimuth, distance):
-        print("App.create_object: azimuth", azimuth, "distance", distance)
+        #print("App.create_object: azimuth", azimuth, "distance", distance)
         r = 10
         x0,y0 = self.polar2global(azimuth, distance)
         x1,y1 = self.polar2global(azimuth, distance)
-        print("App.create_object: [",x0,y0,"] [",x1, y1,"]")
-        self.create_oval(x0-r, y0+r, x1+r, y1-r, fill="#ffffff")
+        #print("App.create_object: [",x0,y0,"] [",x1, y1,"]")
+        return self.create_oval(x0-r, y0+r, x1+r, y1-r, fill="#ffffff")
