@@ -41,5 +41,5 @@ $(output): $(obj)
 # clean
 .PHONY: clean
 clean:
-	@echo "Cleaning core/ subdirectory.";\
+	@echo "Cleaning.";\
 	rm -rf *~ *.o *.gch *.dep $(output) > /dev/null 2> /dev/null

@@ -45,5 +45,4 @@ namespace Geo {
 
 #define SEGMENT_SIZE 240
 
-
 #endif // _GLOBALS_H_

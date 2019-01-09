@@ -20,8 +20,11 @@ l = [int.from_bytes(data[i:i+2],byteorder='big') for i in range(0,len(data)-1,2)
 fig = plt.figure()
 ax = fig.add_subplot(111)
 ax.plot(l, color='magenta')
-ax.set_xlabel('time')
-ax.set_ylabel('signal')
+ax.set_xlabel('samples')
+ax.set_ylabel('signal [ADC to 10bit]')
+
+lines = plt.legend().get_lines()
+plt.setp(lines, linewidth='1')
 
 plt.ylim(0,1027)
 plt.show()

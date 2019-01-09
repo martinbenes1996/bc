@@ -75,12 +75,29 @@ class MCastClient:
         self.sock.setsockopt(socket.SOL_IP, socket.IP_MULTICAST_IF, socket.inet_aton(host))
         mreq = struct.pack('4sL', socket.inet_aton('224.0.0.128'), socket.INADDR_ANY)
         self.sock.setsockopt(socket.IPPROTO_IP, socket.IP_ADD_MEMBERSHIP, mreq)
+
+        self.sock.settimeout(1)
         
     
     def receive(self):
-        data, addr = self.sock.recvfrom(1024)
-        print("Comm.MCastClient: received update")
-        return data
+        try:
+            data, addr = self.sock.recvfrom(1024)
+        
+        # no connection
+        except socket.timeout as e:
+            print("Comm.MCastClient: no update received, empty data generated.")
+            return 0,[]
+        
+        # parse data
+        count = struct.unpack('i', data[0:4])[0]
+        if count > 0:
+            seqdata = struct.unpack('ii'*count, data[4:])
+            data = [(seqdata[i],seqdata[i+1]) for i in range(0, len(seqdata), 2)]
+        else:
+            data = []
+
+        print("Comm.MCastClient: received update from ", addr)
+        return len(data), data
 
     
 
