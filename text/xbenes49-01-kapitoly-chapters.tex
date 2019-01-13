@@ -378,9 +378,21 @@ the simpliest way is using treshold.
 
 
 
-
 \chapter{Data}
 
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[width=0.85\textwidth]{obrazky-figures/signal_calm.png}
+\caption{Signal of zero movement.\label{fig:signalcalm}}
+\end{center}
+\end{figure}
+
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[width=0.85\textwidth]{obrazky-figures/signal_walk.png}
+\caption{Signal of person walking around.\label{fig:signalcalm}}
+\end{center}
+\end{figure}
 Where did it came from?
 
 Technical description.
@@ -454,16 +466,71 @@ $$r = \frac{\sin{(\frac{\Omega}{2})}L}{\tg{(\frac{\Omega}{2}-40)}} - \cos{(\frac
 The size of segments has a great influence on processing speed. And since the
 result should run in the real time, it is quite important.
 
-\paragraph{Features and fuzzy}
+\paragraph{Features extractions}
 Choosing good features is inevitable part of desing and the following classifier
-is strictrly dependent on the form of features, since it is its input. The features
-will be fuzzy values.
+is strictrly dependent on the form of features, since it is its input. Feature extraction
+and fuzzification is implemented in the program {\it collector}.
 
-\paragraph{Classification}
-Classifier takes the fuzzy expression of sensor output and performs a predefined
-algorithm looking for patterns as presence of person, movement in searched area etc.
-The result is processed by a post-processing unit to consider costs and make 
-the final (hard) decision.
+The input is a vector of N samples and the process transforms them into the vector of
+F features on the output.
+
+\paragraph{Fuzzification and classification}
+The classifier fuzzifies received a F-sized feature vector representing a segment of samples sensed by a sensor
+into a 2D fuzzy values array. These values express fuzzy membership value of presence of a person.
+
+Representation of the space in front of a sensor is inspired by cellular automata - carved into
+segments. These segments are given by azimuth (phase) with a center in the sensor and by
+the distance zone - deltas in polar coordinates.
+
+Even though the space because of the construction of sensor has a shape of circular sector,
+it can be easily represented by classical 2D matrix, as it is shown in the figure \ref{fig:circularsector}.
+
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[width=0.7\textwidth]{obrazky-figures/circularsector_transformation.png}
+\caption{Representation of circular sector.\label{fig:circularsector}}
+\end{center}
+\end{figure}
+
+{\it Note: In the fuzzification design, characteristics of the actions we would like to classifying
+must be already known - speed of walk, direction, distinction of multiple people presence}.
+
+The output of fuzzification is a 2D matrix of space segments containing fuzzy value expressing
+presence of person.
+
+\paragraph{Defuzzification}
+
+To get the results in a form of coordinate(s) of classified objects a cluster analysis is done. It calculates
+a clusters of high membership values, for optimalization $\alpha$-cut on a certain level or tresholded
+matrix can be used. Algorithm PAM (Partitioning Around Medoids is used), similar to k-means, where item called
+medoid is used to represent the cluster instead of mean.
+
+{\it This is not PAM. Add PAM algorithm -- formally and listing.}
+
+$$ \mathit{PAM}(k, data) = argmin \left( \sum_{i=1}^{k} \sum_{j=1}^{k} ||data(i) data(j)||  \right) $$
+
+\begin{lstlisting}
+function PAM(k, clusters[k]) {
+  medoids $\leftarrow$ [random()] * k
+  for (i in <1-k>) {
+    // finish here PAM algorithm
+  }
+}
+\end{lstlisting}
+
+To estimate the $k$, elbow method can be used: calculating k-means for different k values and taking the one with
+minimal within-cluster sum of square (WCSS).\cite{ClusterAnalysis} \cite{VagueNatureInformation}
+
+$$\mathit{WCSS} = \sum_{i=1}^{k} \sum_{x \in S_i} ||x - \mu_i||^2$$
+
+Very important is computing a distance of two segments. Since the original circular sector segmentation
+is not homogenous, the distances varies with each distance. It can be calculated though using
+cosine law. $P = (d, \alpha)$ is a segment given by polar coordinates, $d$ is distance and $\alpha$ is
+azimuth.
+
+$$|P_{1} P_{2}| = \sqrt{(d_{1})^{2} + (d_{2})^{2} - 2d_{1}d_{2}(\alpha_1 - \alpha_2)}$$
+
+
 
 
 \section{Visualizer}
@@ -481,22 +548,26 @@ Important is post-processing.
 
 \chapter{Implementation}
 
-\subsection*{Sensor module}
-
-\subsection*{Client app}
-Client app is written in {\it Python3} and graphical library {\it Tkinter}.
-This choice was made with portability of the program taken into consideration.
-The design of user interface is described in chapter \ref{Label:UI}.
-
-
-
+\section{Collector}
+{\it Collector} is a program, as the name says, that collects data from sensors and implements
+the whole described algorithm. Classified objects are then sent to a {\it visualizer}.
+Communication of collector and visualizer is described in subsection \ref{CollVisuComm}
 
 \subsection*{Communication}
+\label{CollVisuComm}
 The communication of the sensor module and the client app is designed as a client-server. The results
 from the classification performed by server are sent to the client which shows it to user.
 
 As the technology for the channel a LAN multicast stream is used at 224.0.0.128:12345.
 The main advantage in comparison to unicast is a support of multiple clients.
+
+\section{Visualizer}
+Client app called {\it Visualizer} is written in {\it Python3} and graphical library {\it Tkinter}.
+This choice was made with portability of the program taken into consideration.
+The design of user interface is described in chapter \ref{Label:UI}.
+
+
+
 
 
 

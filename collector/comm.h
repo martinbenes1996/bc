@@ -33,16 +33,7 @@ namespace Comm {
                 struct sockaddr_in server_address, client_address;
                 memset(&server_address, 0, sizeof(server_address));
                 memset(&client_address, 0, sizeof(client_address));
-
-                //server_address.sin_family = AF_INET; // IPv4
-                //server_address.sin_addr.s_addr = INADDR_ANY;
-                //server_address.sin_port = htons(PORT);
-
-                //int bindresult = bind(sock, (const struct sockaddr *)&)server_address, sizeof(server_address));
-                //if(bindresult < 0) { throw Exception("Comm::Server: bind() failed."); }
-
-                // run thread to response for client bcast requests
-                //bcaster_ = new std::thread(&Server::addressToClients(), this);
+                
                 bcaster_ = new std::thread([this](){ this->addressToClients(); });
             }
 
@@ -78,9 +69,6 @@ namespace Comm {
                     if(recvsize < 13) { throw Exception("Comm::Server: recvfrom() failed."); }
 
                     unsigned short port = ntohs(*(unsigned short *)(buffer + 11));
-                    //unsigned char digit[] = {(unsigned char)buffer[11], (unsigned char)buffer[12]};
-                    //short port = digit[0]*256 + digit[1];
-                    //printf("%u %u\n", digit[0], digit[1]);
                     std::cout << "Received " << recvsize << "B: " << std::string(buffer).substr(0,11) << ": " << port << "\n";
                 } while(1);
             }
