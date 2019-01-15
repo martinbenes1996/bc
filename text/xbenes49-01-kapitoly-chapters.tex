@@ -292,6 +292,8 @@ as you can see in the~figure \ref{fig:fresnellens}. Then the~ray is transformed 
 \end{center}
 \end{figure}
 
+{\it Description of fresnel len of PIR STD.}
+
 
 
 \newpage
@@ -393,11 +395,9 @@ the simpliest way is using treshold.
 \caption{Signal of person walking around.\label{fig:signalcalm}}
 \end{center}
 \end{figure}
-Where did it came from?
 
-Technical description.
+{\it Origin of data, description, training.}
 
-Training etc.
 
 
 
@@ -474,6 +474,8 @@ and fuzzification is implemented in the program {\it collector}.
 The input is a vector of N samples and the process transforms them into the vector of
 F features on the output.
 
+{\it Wavelet transformation for feature extraction}
+
 \paragraph{Fuzzification and classification}
 The classifier fuzzifies received a F-sized feature vector representing a segment of samples sensed by a sensor
 into a 2D fuzzy values array. These values express fuzzy membership value of presence of a person.
@@ -492,30 +494,98 @@ it can be easily represented by classical 2D matrix, as it is shown in the figur
 \end{center}
 \end{figure}
 
-{\it Note: In the fuzzification design, characteristics of the actions we would like to classifying
-must be already known - speed of walk, direction, distinction of multiple people presence}.
+{\it Fuzzification. Consider action characteristics (speed, direction, multiple people).}
 
 The output of fuzzification is a 2D matrix of space segments containing fuzzy value expressing
 presence of person.
 
+Using more sensors brings several advantages: the measuring might be more precise since the person presence
+classified by two independent sensors is not only more probable but the computed position
+can get more accurate than when using only one sensor.
+
+If more sensors are used it is necessary to merge their space segments matrixes in one.
+To do that, a fuzzy logic mechanism {\it Takagi-Sugeno rules} can be used as described in \cite{InsightIntoFuzzyModelling}.
+The form of rules is [IF {\it antecendent} THEN {\it succendent}] as shown in the table \ref{table:takagisugeno}.
+During the calculation all the antecendentes are evaluated and the most relevant leads to application of corresponding succendent to the output.
+
+
+\begin{table}[h!]
+\begin{tabular}{|c|c|c|} \hline
+\textbf{Rule}   & \textbf{Antecendent}                                & \textbf{Succendent}                             \\ \hline
+$R_1$           & $X_1$ is $A_{11}$ and \dots and $X_n$ is $A_{1n}$   & $Y = b_{10} + b_{11}X_1 + \dots + b_{1n}X_n$    \\ \hline
+$R_2$           & $X_1$ is $A_{21}$ and \dots and $X_n$ is $A_{2n}$   & $Y = b_{20} + b_{21}X_1 + \dots + b_{2n}X_n$    \\ \hline
+\multicolumn{3}{|c|}{\dots}                                                                                             \\ \hline
+$R_m$           & $X_1$ is $A_{m1}$ and \dots and $X_n$ is $A_{mn}$   & $Y = b_{m0} + b_{m1}X_1 + \dots + b_{mn}X_n$    \\ \hline
+\end{tabular}
+\caption{Takagi-Sugeno rules.\label{table:takagisugeno} \cite{InsightIntoFuzzyModelling}}
+\end{table}
+
+%\begin{equation}
+%\begin{split}
+%R_1 := \mathit{if} (X_1 is A_{11}) \mathit{and} \dots \mathit{and} (X_n is A_{1n}) \mathit{then} \\
+%            Y = b_{10} + b_{11}X_1 + \dots + b_{1n}X_n \\
+%\dots \\
+%R_m := IF X_1 is A_{m1} AND \dots AND X_n is A_{mn} THEN \\
+%            Y = b_{m0} + b_{m1}X_1 + \dots + b_{mn}X_n
+%\end{split}
+%\end{equation}
+
+The algorithm is based on IF-THEN rules (implications), where for input antecedents (conditions) are evaluated all together and the
+most relevant is used. The 
+
 \paragraph{Defuzzification}
+
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[width=0.5\textwidth]{obrazky-figures/3pir_area.png}
+\caption{Fusion of detection areas.\label{fig:3pir_area}}
+\end{center}
+\end{figure}
+
 
 To get the results in a form of coordinate(s) of classified objects a cluster analysis is done. It calculates
 a clusters of high membership values, for optimalization $\alpha$-cut on a certain level or tresholded
 matrix can be used. Algorithm PAM (Partitioning Around Medoids is used), similar to k-means, where item called
 medoid is used to represent the cluster instead of mean.
 
-{\it This is not PAM. Add PAM algorithm -- formally and listing.}
+$$ \mathit{PAM}(k, data) = argmin \left( \sum_{i=1}^{k} \sum_{j=1}^{k} ||data_{i} data_{j}||  \right) $$
 
-$$ \mathit{PAM}(k, data) = argmin \left( \sum_{i=1}^{k} \sum_{j=1}^{k} ||data(i) data(j)||  \right) $$
+\begin{lstlisting}[style=python]
+def PAM(k,data):
+  # pick medoids
+  medoids = [].generate(k,data.random())
+  # compute dissimilarity matrix
+  dm = DissimilarityMatrix(data,calculateDistance)
+  # create clusters
+  changed = True
+  while changed:
+    changed = False
+    clusters = []
+    for medoid_idx,medoid in medoids.enum():
+      cluster = []
+      for d in data:
+        # add to cluster with closest distance to its medoid
+        if dm[d,medoid] == dm[d,medoids].min():
+          cluster.append(d)
+      # set new center (SWAP phase)
+      cluster.append(medoid)
+      if medoid is not cluster.center():
+        medoids[medoid_idx] = cluster.center()
+        changed = True
+      clusters.append(cluster)
+  return clusters
+\end{lstlisting}
 
-\begin{lstlisting}
-function PAM(k, clusters[k]) {
-  medoids $\leftarrow$ [random()] * k
-  for (i in <1-k>) {
-    // finish here PAM algorithm
-  }
-}
+\begin{lstlisting}[style=python]
+function elbow(data):
+  # try all k
+  best = inf
+  for k in <1,K_MAX>:
+    clusters = PAM(data, k)
+    # take minimal
+    if WCSS(clusters) < best:
+      best = clusters
+  return best
 \end{lstlisting}
 
 To estimate the $k$, elbow method can be used: calculating k-means for different k values and taking the one with
@@ -530,19 +600,6 @@ azimuth.
 
 $$|P_{1} P_{2}| = \sqrt{(d_{1})^{2} + (d_{2})^{2} - 2d_{1}d_{2}(\alpha_1 - \alpha_2)}$$
 
-
-
-
-\section{Visualizer}
-
-
-
-
-Wavelet transformation for feature extraction.
-
-Classification includes fuzzification.
-
-Important is post-processing.
 
 
 
@@ -574,6 +631,14 @@ The design of user interface is described in chapter \ref{Label:UI}.
 \chapter{User Interface}
 \label{Label:UI}
 
+{\it Description of visualizer}
+
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[width=0.6\textwidth]{obrazky-figures/visualizer.png}
+\caption{Visualizer prototype with sample data. {\it Will be replaced.} \label{fig:visualizer}}
+\end{center}
+\end{figure}
 
 
 \chapter{Testing}
