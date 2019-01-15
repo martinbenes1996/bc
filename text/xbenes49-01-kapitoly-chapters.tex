@@ -429,7 +429,7 @@ with coordinates in polar coordinate system relative to the module position. The
 coordinates are sent to the client.
 
 
-\subsection{Data Processing pipeline}
+\section{Data Processing pipeline}
 \label{label:dataprocessing}
 
 The data path in the design is slightly inspired by classification phases except
@@ -462,11 +462,11 @@ $$\varphi = 230 + \Omega$$
 $$r = \frac{\sin{(\frac{\Omega}{2})}L}{\tg{(\frac{\Omega}{2}-40)}} - \cos{(\frac{\Omega}{2})}L$$
 
 
-\paragraph{Segmentation}
+\subsection*{Segmentation}
 The size of segments has a great influence on processing speed. And since the
 result should run in the real time, it is quite important.
 
-\paragraph{Features extractions}
+\subsection*{Features extractions}
 Choosing good features is inevitable part of desing and the following classifier
 is strictrly dependent on the form of features, since it is its input. Feature extraction
 and fuzzification is implemented in the program {\it collector}.
@@ -476,7 +476,7 @@ F features on the output.
 
 {\it Wavelet transformation for feature extraction}
 
-\paragraph{Fuzzification and classification}
+\subsection*{Fuzzification and classification}
 The classifier fuzzifies received a F-sized feature vector representing a segment of samples sensed by a sensor
 into a 2D fuzzy values array. These values express fuzzy membership value of presence of a person.
 
@@ -499,41 +499,17 @@ it can be easily represented by classical 2D matrix, as it is shown in the figur
 The output of fuzzification is a 2D matrix of space segments containing fuzzy value expressing
 presence of person.
 
-Using more sensors brings several advantages: the measuring might be more precise since the person presence
+Using more sensors brings advantages: the measuring might be more precise since the person presence
 classified by two independent sensors is not only more probable but the computed position
-can get more accurate than when using only one sensor.
+can get more accurate than when using only one sensor. The disadvantage is higher price and need
+to know the mutual orientation and position of the sensors. 
 
-If more sensors are used it is necessary to merge their space segments matrixes in one.
-To do that, a fuzzy logic mechanism {\it Takagi-Sugeno rules} can be used as described in \cite{InsightIntoFuzzyModelling}.
-The form of rules is [IF {\it antecendent} THEN {\it succendent}] as shown in the table \ref{table:takagisugeno}.
-During the calculation all the antecendentes are evaluated and the most relevant leads to application of corresponding succendent to the output.
-
-
-\begin{table}[h!]
-\begin{tabular}{|c|c|c|} \hline
-\textbf{Rule}   & \textbf{Antecendent}                                & \textbf{Succendent}                             \\ \hline
-$R_1$           & $X_1$ is $A_{11}$ and \dots and $X_n$ is $A_{1n}$   & $Y = b_{10} + b_{11}X_1 + \dots + b_{1n}X_n$    \\ \hline
-$R_2$           & $X_1$ is $A_{21}$ and \dots and $X_n$ is $A_{2n}$   & $Y = b_{20} + b_{21}X_1 + \dots + b_{2n}X_n$    \\ \hline
-\multicolumn{3}{|c|}{\dots}                                                                                             \\ \hline
-$R_m$           & $X_1$ is $A_{m1}$ and \dots and $X_n$ is $A_{mn}$   & $Y = b_{m0} + b_{m1}X_1 + \dots + b_{mn}X_n$    \\ \hline
-\end{tabular}
-\caption{Takagi-Sugeno rules.\label{table:takagisugeno} \cite{InsightIntoFuzzyModelling}}
-\end{table}
-
-%\begin{equation}
-%\begin{split}
-%R_1 := \mathit{if} (X_1 is A_{11}) \mathit{and} \dots \mathit{and} (X_n is A_{1n}) \mathit{then} \\
-%            Y = b_{10} + b_{11}X_1 + \dots + b_{1n}X_n \\
-%\dots \\
-%R_m := IF X_1 is A_{m1} AND \dots AND X_n is A_{mn} THEN \\
-%            Y = b_{m0} + b_{m1}X_1 + \dots + b_{mn}X_n
-%\end{split}
-%\end{equation}
-
-The algorithm is based on IF-THEN rules (implications), where for input antecedents (conditions) are evaluated all together and the
-most relevant is used. The 
-
-\paragraph{Defuzzification}
+If more sensors are used it is necessary to merge their space segments matrixes in one,
+as shown in the figure \ref{fig:3pir_area}. To do so, a fuzzy logic mechanism
+{\it Takagi-Sugeno rules} can be used as described in \cite{InsightIntoFuzzyModelling}.
+The form of rules is [IF {\it antecendent} THEN {\it succendent}] as shown in the table
+\ref{table:takagisugeno}. During the calculation all the antecendentes are evaluated
+and the most relevant leads to application of corresponding succendent to the output.
 
 \begin{figure}[h!]
 \begin{center}
@@ -542,6 +518,57 @@ most relevant is used. The
 \end{center}
 \end{figure}
 
+\begin{table}[h!]
+\begin{center}
+\begin{tabular}{|c|c|c|} \hline
+\textbf{Rule}   & \textbf{Antecendent}                                & \textbf{Succendent}                             \\ \hline
+$R_1$           & $X_1$ is $A_{11}$ and \dots and $X_n$ is $A_{1n}$   & $Y = b_{10} + b_{11}X_1 + \dots + b_{1n}X_n$    \\ \hline
+$R_2$           & $X_1$ is $A_{21}$ and \dots and $X_n$ is $A_{2n}$   & $Y = b_{20} + b_{21}X_1 + \dots + b_{2n}X_n$    \\ \hline
+\multicolumn{3}{|c|}{\dots}                                                                                             \\ \hline
+$R_m$           & $X_1$ is $A_{m1}$ and \dots and $X_n$ is $A_{mn}$   & $Y = b_{m0} + b_{m1}X_1 + \dots + b_{mn}X_n$    \\ \hline
+\end{tabular}
+\caption{Takagi-Sugeno rules. $X$ is input, $A$ is a matrix of fuzzy numbers, $b$ is a matrix of fuzzy coefficients.\label{table:takagisugeno} \cite{InsightIntoFuzzyModelling}}
+\end{center}
+\end{table}
+
+The designed fusion fuzzy system is to be seen in the table \ref{table:fuzzyfusion}. To be able to merge
+the space segments, overlap must be known and then vector $X$ is created, containing pairs of values
+from each vector ($X[i]_L$ and $X[i]_R$). Each of these pairs is input to the fusion algorithm, which
+merges it to one fuzzy number result. 
+
+$C_{L}$ and $C_{R}$ are 2D matrixes of coefficients with indexing $[i,j]$, where $i,j \in \{0,L,M,H\}$.
+The fuzzy sets LOW, MEDIUM and HIGH of $X$ composes a basic evaluative trichotomy extended for unknown state OUT.
+The optimal values of coefficients and the fuzzy sets parameters have to be found experimentally. 
+
+\begin{table}[h!]
+\begin{center}
+\begin{tabular}{|c|c c|rcl|} \hline
+\textbf{Rule}   & \textbf{$X_L$}  & \textbf{$X_R$}  & \multicolumn{3}{|c|}{\textbf{Y}}  \\ \hline
+$R_1$           & OUT             & OUT             & $C_{L}[0,0]    $&+&$ C_{R}[0,0]   $   \\ \hline
+$R_2$           & OUT             & LOW             & $C_{L}[0,L]    $&+&$ C_{R}[L,0]X_R$   \\ \hline
+$R_3$           & OUT             & MEDIUM          & $C_{L}[0,M]    $&+&$ C_{R}[M,0]X_R$   \\ \hline
+$R_4$           & OUT             & HIGH            & $C_{L}[0,H]    $&+&$ C_{R}[H,0]X_R$   \\ \hline
+$R_5$           & LOW             & OUT             & $C_{L}[L,0]X_L $&+&$ C_{R}[0,L]   $   \\ \hline
+$R_6$           & LOW             & LOW             & $C_{L}[L,L]X_L $&+&$ C_{R}[L,L]X_R$   \\ \hline
+$R_7$           & LOW             & MEDIUM          & $C_{L}[L,M]X_L $&+&$ C_{R}[M,L]X_R$   \\ \hline
+$R_8$           & LOW             & HIGH            & $C_{L}[L,H]X_L $&+&$ C_{R}[H,L]X_R$   \\ \hline
+$R_9$           & MEDIUM          & OUT             & $C_{L}[M,0]X_L $&+&$ C_{R}[0,M]$      \\ \hline
+$R_{10}$        & MEDIUM          & LOW             & $C_{L}[M,L]X_L $&+&$ C_{R}[L,M]X_R$   \\ \hline
+$R_{11}$        & MEDIUM          & MEDIUM          & $C_{L}[M,M]X_L $&+&$ C_{R}[M,M]X_R$   \\ \hline
+$R_{12}$        & MEDIUM          & HIGH            & $C_{L}[M,H]X_L $&+&$ C_{R}[H,M]X_R$   \\ \hline
+$R_{13}$        & HIGH            & OUT             & $C_{L}[H,0]X_L $&+&$ C_{R}[0,H]   $   \\ \hline
+$R_{14}$        & HIGH            & LOW             & $C_{L}[H,L]X_L $&+&$ C_{R}[L,H]X_R$   \\ \hline
+$R_{15}$        & HIGH            & MEDIUM          & $C_{L}[H,M]X_L $&+&$ C_{R}[M,H]X_R$   \\ \hline
+$R_{16}$        & HIGH            & HIGH            & $C_{L}[H,H]X_L $&+&$ C_{R}[H,H]X_R$   \\ \hline
+\end{tabular}
+\caption{Design fuzzy system to fuseTakagi-Sugeno rules. $X$ is input, $A$ is a matrix of fuzzy numbers, $b$ is a matrix of fuzzy coefficients.\label{table:fuzzyfusion} \cite{InsightIntoFuzzyModelling}}
+\end{center}
+\end{table}
+
+For three sectors as in the figure \ref{fig:3pir_area} the situation is analogous. The table also depends
+on whether the areas of the side sensors overlap or not. Or they can be merged successively.
+
+\subsection*{Defuzzification}
 
 To get the results in a form of coordinate(s) of classified objects a cluster analysis is done. It calculates
 a clusters of high membership values, for optimalization $\alpha$-cut on a certain level or tresholded
