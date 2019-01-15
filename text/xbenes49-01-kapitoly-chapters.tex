@@ -36,16 +36,12 @@ Especially when more sensors are used.
 
 
 
-\chapter{Abstract}
-\label{abstract}
-
-10 lines 
-
-Description of problem
-
-Solution and focus
-
-Maybe brief conclusion and application
+%\chapter{Abstract}
+%\label{abstract}
+%10 lines 
+%Description of problem
+%Solution and focus
+%Maybe brief conclusion and application
 
 
 
@@ -127,93 +123,6 @@ Radiance            & $L$             & $W\cdot sr^{-1}\cdot m^{-2}$  & $I$ per 
 
 
 
-
-\newpage
-\section{Radiation processed by organisms}
-This~thesis describes a~particular way how to use the~infrared radiation. Very important beginning of such
-work is always studying existing applications. Unforgettable one is a~nature -- how evolution enabled 
-various organisms to~use it.
-
-Many animals can process parts of electromagnetic spectrum. Eyes enables mammals, cephalopods and arthropods
-to sense a visible light, some insects can even see a~part of UV. Additionally organisms including human often
-have thermoreceptors in~their skin so they can get information about intensity of infrared radiation around them.
-
-
-\subsection*{Visible light}
-\label{subsection:eye}
-PIR~sensor structure is obviously inspired by a~human eye. Human eyes can process radiation
-$\lambda \in \langle 380~nm;760~nm \rangle$ called visible light, one of the~bands of an~electromagnetic spectrum.
-Seeing means receiving a light from a~light source reflected by the~surface of an~observed object to our retina.
-A~biological system composed of~light-sensitive cells {\it rods} and {\it cones} propagates the~information
-through nerves to brain.
-
-A~ray coming to an~eye is going through a~converging lens, which changes its~trajectory aiming to~the~retina,
-in~the~best case to~the~most sensitive place with a~lot~of~the~rods and cons called {\it Fovea~centralis}.
-\cite{LightEyeVision}
-
-\begin{figure}[h!]
-\begin{center}
-\includegraphics[width=0.3\textwidth]{obrazky-figures/eye.png}
-\caption{Structure of an eye. \cite{Eye}\label{fig:eye}}
-\end{center}    
-\end{figure}
-
-
-\subsection*{Heat}
-The~infrared rays surrounds us during our whole life, we sense it as~heat. The~heat receptors called
-{\it thermoreceptors} in our body are located on its~surface (in the~skin), but also in~organs.
-The~structure of~a~skin is shown in the figure \ref{fig:skin}. 
-
-There is a~difference between sensing a~visible light and an~infrared radiation. Visible light comes
-mostly reflected from the surface, while the IR can originate only from the~primary source -- warm item.
-
-Our skin contains two types of~thermoreceptors: sensing cold, colder than a~body temperature and
-hot, hotter than a~body temperature. The~skin structure is shown in~the~figure \ref{fig:skin}.
-This is already well described, on the~other hand the~evaluation center of~these receptors in~the~brain
-and its~mechanisms is~not fully understanded yet and a~matter of current research. \cite{BodilySenses}
-
-\begin{figure}[h!]
-\begin{center}
-\includegraphics[width=0.5\textwidth]{obrazky-figures/skin.jpg}
-\caption{Structure of a~skin. \cite{SkinStructure}\label{fig:skin}}
-\end{center}    
-\end{figure}
-
-Some animals even use sensing the heat as~a~primary way how to~survive. Several groups of~snakes
-(pythons, rattlesnakes, boas and others) use it when hunting warm-blooded animals (mouses, rats, rabbits etc.).
-Blood-eating organisms (vampire bats, south-american heteroptera {\it Triatoma infestans})
-have IR receptors to~look for a~vein under the skin.\cite{SnakeInfrared}
-
-%\begin{figure}
-%\begin{center}
-%\includegraphics[width=0.4\textwidth]{obrazky-figures/python.jpeg}
-%\caption{Thermoreceptors of python. \cite{Python}\label{fig:python}}
-%\end{center}    
-%\end{figure}
-
-
-\subsection*{Discovery}
-For the~first time, the~infrared electromagnetic waves were observed and named in 1800 by German-English
-astronome sir Frederick Harschel. He dispersed light by a~prism and found out that the~temperature
-of~the~light is growing with wavelength, the~red light had the~highest one.
-
-When he measured the~temperature behind the red light, there was no~visible light on~the~table but
-the~thermometer was showing even higher temperature moving beyond~the~red spectrum. Harshel
-pronounced hypothesis that except the~visible light there must be also invisible one which we can~not
-see. \cite{HerschelLife}
-
-\begin{figure}[h!]
-\begin{center}
-\includegraphics[width=0.3\textwidth]{obrazky-figures/herschel.jpg}
-\caption{Sir William Herschel discovering the~infrared radiation.\cite{HerschelLife}\label{fig:herschel}}
-\end{center}    
-\end{figure}
-
-A~great coincidence is that he was an~astronome, he even discovered the~planet Uran, and it is his discovery,
-the~IR waves, which now enables us to~explore and understand the~universe. \cite{NasaIrVideo}
-
-
-
 \newpage
 \section{Temperature homeostasis}
 The animal bodies require physical and chemical conditions in order to work properly (or at all). One of
@@ -252,13 +161,92 @@ $$\lambda_{max}=\frac{b}{T}=\frac{2.8977729 \cdot 10^{-3}}{310.15} = 9.3431~\mu 
 
 
 \newpage
-\section{Infrared radiation processed by machines}
+\section{Radiation perception}
+
+\subsection*{Radiation processed by organisms}
+This~thesis describes a~particular way how to use the~infrared radiation. Very important beginning of such
+work is always studying existing applications. Unforgettable one is a~nature -- how evolution enabled 
+various organisms to~use it.
+
+Many animals can process parts of electromagnetic spectrum. Eyes enables mammals, cephalopods and arthropods
+to sense a visible light, some insects can even see a~part of UV. Additionally organisms including human often
+have thermoreceptors in~their skin so they can get information about intensity of infrared radiation around them.
+
+
+\paragraph{Visible light}
+\label{subsection:eye}
+PIR~sensor structure is obviously inspired by a~human eye. Human eyes can process radiation
+$\lambda \in \langle 380~nm;760~nm \rangle$ called visible light, one of the~bands of an~electromagnetic spectrum.
+Seeing means receiving a light from a~light source reflected by the~surface of an~observed object to our retina.
+A~biological system composed of~light-sensitive cells {\it rods} and {\it cones} propagates the~information
+through nerves to brain.
+
+A~ray coming to an~eye is going through a~converging lens, which changes its~trajectory aiming to~the~retina,
+in~the~best case to~the~most sensitive place with a~lot~of~the~rods and cons called {\it Fovea~centralis}.
+\cite{LightEyeVision}
+
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[width=0.3\textwidth]{obrazky-figures/eye.png}
+\caption{Structure of an eye. \cite{Eye}\label{fig:eye}}
+\end{center}    
+\end{figure}
+
+
+\paragraph{Heat}
+The~infrared rays surrounds us during our whole life, we sense it as~heat. The~heat receptors called
+{\it thermoreceptors} in our body are located on its~surface (in the~skin), but also in~organs.
+The~structure of~a~skin is shown in the figure \ref{fig:skin}. 
+
+There is a~difference between sensing a~visible light and an~infrared radiation. Visible light comes
+mostly reflected from the surface, while the IR can originate only from the~primary source -- warm item.
+
+Our skin contains two types of~thermoreceptors: sensing cold, colder than a~body temperature and
+hot, hotter than a~body temperature. The~skin structure is shown in~the~figure \ref{fig:skin}.
+This is already well described, on the~other hand the~evaluation center of~these receptors in~the~brain
+and its~mechanisms is~not fully understanded yet and a~matter of current research. \cite{BodilySenses}
+
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[width=0.55\textwidth]{obrazky-figures/skin.jpg}
+\caption{Structure of a~skin. \cite{SkinStructure}\label{fig:skin}}
+\end{center}    
+\end{figure}
+
+Some animals even use sensing the heat as~a~primary way how to~survive. Several groups of~snakes
+(pythons, rattlesnakes, boas and others) use it when hunting warm-blooded animals (mouses, rats, rabbits etc.).
+Blood-eating organisms (vampire bats, south-american heteroptera {\it Triatoma infestans})
+have IR receptors to~look for a~vein under the skin.\cite{SnakeInfrared}
+
+
+\paragraph{Discovery}
+For the~first time, the~infrared electromagnetic waves were observed and named in 1800 by German-English
+astronome sir Frederick Harschel. He dispersed light by a~prism and found out that the~temperature
+of~the~light is growing with wavelength, the~red light had the~highest one.
+
+When he measured the~temperature behind the red light, there was no~visible light on~the~table but
+the~thermometer was showing even higher temperature moving beyond~the~red spectrum. Harshel
+pronounced hypothesis that except the~visible light there must be also invisible one which we can~not
+see. \cite{HerschelLife}
+
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[width=0.4\textwidth]{obrazky-figures/herschel.jpg}
+\caption{Sir William Herschel discovering the~infrared radiation.\cite{HerschelLife}\label{fig:herschel}}
+\end{center}    
+\end{figure}
+
+A~great coincidence is that he was an~astronome, he even discovered the~planet Uran, and it is his discovery,
+the~IR waves, which now enables us to~explore and understand the~universe. \cite{NasaIrVideo}
+
+
+
+\subsection*{Infrared radiation processed by machines}
 \label{IRsensing}
 PIR ({\it passive infrared}) sensor is an electronic device that scans electromagnetic
 radiation at~wavelength $\lambda\in \langle 700~nm;2.5~mm \rangle$ aka frequency $f\in \langle 120~MHz;430~THz \rangle$. \cite{an2105}
 
-
-\subsection*{Principles of PIR sensor}
+\paragraph{Principles of PIR sensor}
 There is a~number of approaches how to~construct such a~sensor. The~point is to~convert the electromagnetic
 energy in~electric voltage and send it away via wire to~be processed by~hardware or~software.
 
@@ -280,7 +268,7 @@ changing during the~temperature change. \cite{DetectorsBook}
 \end{figure}
 
 
-\subsection*{Sensing of the infrared radiation}
+\paragraph{Sensing of the infrared radiation}
 The~structure of~PIR sensor is inspirated by structure of an~eye described in~subsection \ref{subsection:eye}.
 An infrared ray incoming to the~sensor first goes through~{\it Fresnel lens} aiming it onto~a~pyroelectric sensor
 as you can see in the~figure \ref{fig:fresnellens}. Then the~ray is transformed in an~electric voltage.
@@ -412,12 +400,6 @@ Results might be displayed in the visualization program. The data are being sent
 over network. In the implementation, LAN is used, but it could be possible to
 use the Internet and send the data to the remote visualizer.
 
-\begin{figure}[h!]
-\begin{center}
-\includegraphics[width=0.6\textwidth]{obrazky-figures/design.png}
-\caption{Geometry for three PIR sensors.\label{fig:design}}
-\end{center}
-\end{figure}
 
 \section{Sensor module}
 
@@ -427,6 +409,20 @@ classification process described in subsection \ref{label:dataprocessing}.
 The sensors signal is at the end fused together and the results are classified objects
 with coordinates in polar coordinate system relative to the module position. These
 coordinates are sent to the client.
+
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[width=0.5\textwidth]{obrazky-figures/design.png}
+\caption{Geometry for three PIR sensors.\label{fig:design}}
+\end{center}
+\end{figure}
+
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[width=0.5\textwidth]{obrazky-figures/3pir_geometry.png}
+\caption{Geometry for three PIR sensors.\label{fig:3pir_geometry}}
+\end{center}
+\end{figure}
 
 
 \section{Data Processing pipeline}
@@ -448,13 +444,6 @@ board construction.
 The key here is to find the best value for $\Omega$ to minimize $r$, but maximize
 $\varphi$. Low $r$ means more reliable results. High $\varphi$ increases measurable range.
 Unfortunatelly these parameters are inversely propotional, a compromise needs to be done.
-
-\begin{figure}[h!]
-\begin{center}
-\includegraphics[width=0.6\textwidth]{obrazky-figures/3pir_geometry.png}
-\caption{Geometry for three PIR sensors.\label{fig:3pir_geometry}}
-\end{center}
-\end{figure}
 
 Now let's express both observed parameters with $\Omega$. A sensor has $250~mm$ to $250~mm$,
 $o$ is a size of empty space on the sides of sensor, equation substituted $L = (12.5 + o)$.
