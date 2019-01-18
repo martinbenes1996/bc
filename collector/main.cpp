@@ -23,6 +23,7 @@ int main(int argc, char *argv[]) {
     
     // main loop
     do {
+
         try {
         
             // calculate

@@ -41,8 +41,55 @@ namespace Recog {
     /** @brief Recognized object in polar coordinates. */
     typedef Geo::Coords::Polar Object;
 
+    /** @brief Representation of wavelet. */
+    class Wavelet {
+        public:
+            /** @brief Wavelet constructor. */
+            Wavelet(std::function<double(double)> f): f_(f) {}
+
+            /** @brief Convolution operator. */
+            double operator*(const cv::Mat& x) {
+                std::cerr << "Operator * called!\n";
+                return 0.;
+            }
+
+        private:
+            std::function<double(double)> f_ = [](double){return 0.;}; /**< Wavelet core function. */
+
+    };
+
     /** @brief Features extracted from the signal. */
-    typedef cv::Mat Features;
+    class Features: public cv::Mat {
+        public:
+            Features(cv::Mat x, Recog::Wavelet w) { extract(x,w); }
+            Features() {}
+
+            void extract(cv::Mat x, Recog::Wavelet w) {
+                // CWT
+                unsigned N = x.cols;
+                unsigned S = scales_.size();
+                cv::Mat features = cv::Mat::zeros(S, N, CV_32F);
+
+                // iterate over shifts (rows)
+                for(unsigned n = 0; n < N; n++) {
+                    // iterate over scales (columns)
+                    for(auto& s: scales_) {
+                    
+                        // convolution
+                        features.at<double>(n,s) = w*x;
+                    }
+
+                }
+            }
+
+            Features& operator=(const Features&) {
+                // rewrite
+                return *this;
+            }
+        
+        private:
+            const std::vector<unsigned> scales_ = {1,2,3};
+    };
     
     /** @brief Result of recognition (objects) to send. */
     struct Result {
@@ -139,7 +186,9 @@ namespace HW {
             Recog::Features readFeatures() {
                 featureLock.lock();
                 Recog::Features f;
-                std::swap(f, features_);
+                //std::swap(f, features_);
+                f = features_;
+                features_ = Recog::Features();
                 return (featureLock.unlock(), f);
             }
             
@@ -159,7 +208,7 @@ namespace HW {
 
                 // publish the features
                 featureLock.lock();
-                std::swap(newfeatures, features_);
+                features_ = newfeatures;
                 featureLock.unlock();
             }
 
@@ -183,56 +232,21 @@ namespace Recog {
     class Fusion {
         public:
             /** @brief Constructor. */
-            Fusion() {
-                const int OMEGA = 50;
-                // central sensor
-                sensors_.emplace( "C", std::make_shared<HW::Sensor>("C") );
-                // left sensor
-                sensors_.emplace("L", std::make_shared<HW::Sensor>(
-                    "L", // name
-                    50,  // orientation
-                    Geo::Coords::Polar ( // position
-                        90+((180-OMEGA)/2.), // azimuth
-                        sqrt(2*25*25 - 2*25*25*cos(OMEGA/360.*M_PI)) // distance
-                    )
-                ));
-                // right sensor
-                sensors_.emplace("R", std::make_shared<HW::Sensor>(
-                    "R", // name
-                    -50, // orientation
-                    Geo::Coords::Polar( // position
-                        -90-((180-OMEGA)/2.), // azimuth
-                        sqrt(2*25*25 - 2*25*25*cos(-OMEGA/360.*M_PI)) // distance
-                    )
-                ));
-            }
+            Fusion();
+
             /**
              * @brief Getter of actualizer of certain sensor.
              *        Used by Comm, when data arrives.
              * @param sensorkey     Sensor specifying (L,R,C).
              * @retuns Function handeling new segment.
              */
-            std::function<void(std::array<int,SEGMENT_SIZE>)> getActualizer(std::string sensorkey) {
-                std::shared_ptr<HW::Sensor> s = sensors_.at(sensorkey);
-                return [s](std::array<int,SEGMENT_SIZE> data){ s->actualizeData(data); };
-            }
+            std::function<void(std::array<int,SEGMENT_SIZE>)> getActualizer(std::string);
 
             /**
              * @brief Fusion algorithm.
              * @returns Result of the fusion.
              */
-            Result calculate() {
-                // read features from sensors
-                Features fc = sensors_.at("C")->readFeatures();
-                Features fl = sensors_.at("L")->readFeatures();
-                Features fr = sensors_.at("R")->readFeatures();
-
-                Result r;
-                /* Do calculations (Features -> Object). */
-                /* Not refreshed features are empty. */
-
-                return r;
-            }
+            Result calculate();
 
         private:
             std::map<std::string, std::shared_ptr<HW::Sensor>> sensors_; /**< Sensor map. */
