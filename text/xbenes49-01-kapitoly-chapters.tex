@@ -32,7 +32,10 @@ PIR sensors offer even more than stating a presence of person. It is possible to
 output signal to~get more information about~sensed space - a~position of~person, a~number of~people.
 Especially when more sensors are used.
 
-
+In the localization of object this attitude is not very common. In the last few years researchers
+are interested by this area and a number of articles was written about it. It is still a matter
+of research though. This thesis focuses on {\it (the focus and purpose will be discussed with
+prof. Kemptner personally)} \dots .
 
 
 
@@ -61,7 +64,9 @@ we measure it.
 
 As it was already mentioned in the~chapter \ref{chapter:introduction}, every object whose temperature
 is higher than absolute zero emits an~electromagnetic radiation.
-$$T_{obj}>0~K\equiv -273.15^{\circ}C$$
+\begin{equation}
+T_{obj}>0~K\equiv -273.15^{\circ}C
+\end{equation}
 It is caused by a~charged subatomical particles (electrons, protons) that are undergoing an~acceleration,
 emitting an~energy in a~form of photon -- electromagnetic radiation.
 
@@ -71,7 +76,9 @@ The~electromagnetic radiation have a~number of measurable characteristics. The~m
 are {\it frequency} $f$ and {\it wavelength} $\lambda$. Due to the~constant speed of the radiation $v$
 aka speed of light $c = v = 3\cdot10^{8}~m\cdot s^{-1}$ not dependent on the frequency, they are
 propotional and mutually transferrable.
-$$f=\frac{v}{\lambda}=\frac{c}{\lambda}=\frac{3\cdot10^{8}}{\lambda}$$
+\begin{equation}
+f=\frac{v}{\lambda}=\frac{c}{\lambda}=\frac{3\cdot10^{8}}{\lambda}
+\end{equation}
 
 Electromagnetic waves are being divided into categories according to their usage by the wavelength
 $\lambda$. With increasing wavelength~$\lambda$ it is gamma, X-rays, ultraviolet (UV), visible light,
@@ -88,25 +95,39 @@ infrared (IR) and radio waves. This is called electromagnetic spectrum and it is
 Another measurable characteristic is an~energy of the~radiation $Q$,$E$ or $W$. It is linearly dependend
 on its frequency $f$ and can be computed using Planck constant $h=6.63\cdot10^{-34}~J\cdot s $.
 \cite{NasaEMSpectrum}
-$$W = h\cdot f$$
+\begin{equation}
+W = h\cdot f
+\end{equation}
 
 The~power of the~radiation $\Phi$ is called {\it radiant power} or rather {\it radiant flux}. As a~regular
 power it is energy per time, since the radiation is four-dimentional, partial derivations must be used.
-$$\Phi = \frac{\partial W}{\partial t}$$
+\begin{equation}
+\Phi = \frac{\partial W}{\partial t}
+\end{equation}
 
 The radiant power per unit surface is a~flux density. It is called either {\it radiant exitance} $M$
 when emitting or {\it irradiance} $E$ when receiving.
-$$M = \frac{\partial \Phi_{emitted}}{\partial S_{sender}}$$
-$$E = \frac{\partial \Phi_{received}}{\partial S_{receiver}}$$
+\begin{subequations}
+\begin{align}
+M = \frac{\partial \Phi_{emitted}}{\partial S_{sender}}
+E = \frac{\partial \Phi_{received}}{\partial S_{receiver}}
+\end{align}
+\end{subequations}
 The~Stefan-Boltzmann law defines irradiance of electromagnetic radiation as
-$$I = \sigma \cdot T^4$$
+\begin{equation}
+I = \sigma \cdot T^4
+\end{equation}
 where $\sigma = 5.6704\cdot 10^{-8} Wm^{-2}K^{-4}$ is the~Stefan-Boltzmann constant and $T$ is a~thermodynamic
 temperature.
 
 Power per unit solid angle $I$ is called {\it radiant intensity}. With dividing by an~area of the~item
 projected from certain direction we get an~amount of power emitted in that~direction called {\it radiance} $L$.
-$$I = \frac{\partial \Phi}{\partial \Omega}$$
-$$L = \frac{\partial I}{\partial S \cos{\theta}}$$ 
+\begin{subequations}
+\begin{align}
+I = \frac{\partial \Phi}{\partial \Omega}
+L = \frac{\partial I}{\partial S \cos{\theta}}
+\end{align}
+\end{subequations}
 Other characteristics of radiation can be seen in the~table \ref{table:units}. \cite{iso800007} \cite{TemperatureMeasuring}
 
 \begin{table}
@@ -140,14 +161,16 @@ it with basking in the sun. The thermal characteristics of these groups can be s
 \begin{figure}[h!]
 \begin{center}
 \includegraphics[width=0.4\textwidth]{obrazky-figures/thermoregulatory.png}
-\caption{Thermal regulation graph.\label{fig:thermoregulatory}}
+\caption{Thermal regulation graph.\label{fig:thermoregulatory}\cite{thermoregulatory}}
 \end{center}    
 \end{figure}
 
 Human body temperature $T_{HB}$ varies in $\langle 36^{\circ}C; 38^{\circ}C \rangle$, in the hyperthermia
 it can rise up to $40^{\circ}C$. The figure \ref{fig:bodywavelength} shows the radiation wavelength composition.
 The peak wavelength (temperature $37^{\circ}C$ or $310.15~K$) can be calculated with the Wien's displacement law.
-$$\lambda_{max}=\frac{b}{T}=\frac{2.8977729 \cdot 10^{-3}}{310.15} = 9.3431~\mu m$$
+\begin{equation}
+\lambda_{max}=\frac{b}{T}=\frac{2.8977729 \cdot 10^{-3}}{310.15} = 9.3431~\mu m
+\end{equation}
 
 \begin{figure}[h!]
 \begin{center}
@@ -229,12 +252,12 @@ the~thermometer was showing even higher temperature moving beyond~the~red spectr
 pronounced hypothesis that except the~visible light there must be also invisible one which we can~not
 see. \cite{HerschelLife}
 
-\begin{figure}[h!]
-\begin{center}
-\includegraphics[width=0.4\textwidth]{obrazky-figures/herschel.jpg}
-\caption{Sir William Herschel discovering the~infrared radiation.\cite{HerschelLife}\label{fig:herschel}}
-\end{center}    
-\end{figure}
+%\begin{figure}[h!]
+%\begin{center}
+%\includegraphics[width=0.4\textwidth]{obrazky-figures/herschel.jpg}
+%\caption{Sir William Herschel discovering the~infrared radiation.\cite{HerschelLife}\label{fig:herschel}}
+%\end{center}    
+%\end{figure}
 
 A~great coincidence is that he was an~astronome, he even discovered the~planet Uran, and it is his discovery,
 the~IR waves, which now enables us to~explore and understand the~universe. \cite{NasaIrVideo}
@@ -276,7 +299,7 @@ as you can see in the~figure \ref{fig:fresnellens}. Then the~ray is transformed 
 \begin{figure}[h!]
 \begin{center}
 \includegraphics[width=0.4\textwidth]{obrazky-figures/fresnellens.png}
-\caption{Frensel lens.\label{fig:fresnellens}}
+\caption{Fresnel lens.\label{fig:fresnellens}}
 \end{center}
 \end{figure}
 
@@ -403,7 +426,9 @@ abrupt changes.
 
 The wavelet transformation uses 
 
-$$F(s,k) = \sum_{n=1}^{N} x[n] \Psi_{(s,k)}^{*}[n]$$
+\begin{equation}
+F(s,k) = \sum_{n=1}^{N} x[n] \Psi_{(s,k)}^{*}[n]
+\end{equation}
 
 {\it Origin of data, description, training.}
 
@@ -468,9 +493,12 @@ Unfortunatelly these parameters are inversely propotional, a compromise needs to
 
 Now let's express both observed parameters with $\Omega$. A sensor has $250~mm$ to $250~mm$,
 $o$ is a size of empty space on the sides of sensor, equation substituted $L = (12.5 + o)$.
-$$\varphi = 230 + \Omega$$
-$$r = \frac{\sin{(\frac{\Omega}{2})}L}{\tg{(\frac{\Omega}{2}-40)}} - \cos{(\frac{\Omega}{2})}L$$
-
+\begin{subequations}
+\begin{align}
+\varphi = 230 + \Omega
+r = \frac{\sin{(\frac{\Omega}{2})}L}{\tg{(\frac{\Omega}{2}-40)}} - \cos{(\frac{\Omega}{2})}L
+\end{align}
+\end{subequations}
 
 \subsection*{Segmentation}
 The size of segments has a great influence on processing speed. And since the
@@ -585,7 +613,9 @@ a clusters of high membership values, for optimalization $\alpha$-cut on a certa
 matrix can be used. Algorithm PAM (Partitioning Around Medoids is used), similar to k-means, where item called
 medoid is used to represent the cluster instead of mean.
 
-$$ \mathit{PAM}(k, data) = argmin \left( \sum_{i=1}^{k} \sum_{j=1}^{k} ||data_{i} data_{j}||  \right) $$
+\begin{equation}
+\mathit{PAM}(k, data) = argmin \left( \sum_{i=1}^{k} \sum_{j=1}^{k} ||data_{i} data_{j}||  \right)
+\end{equation}
 
 \begin{lstlisting}[style=python]
 def PAM(k,data):
@@ -628,14 +658,18 @@ function elbow(data):
 To estimate the $k$, elbow method can be used: calculating k-means for different k values and taking the one with
 minimal within-cluster sum of square (WCSS).\cite{ClusterAnalysis} \cite{VagueNatureInformation}
 
-$$\mathit{WCSS} = \sum_{i=1}^{k} \sum_{x \in S_i} ||x - \mu_i||^2$$
+\begin{equation}
+\mathit{WCSS} = \sum_{i=1}^{k} \sum_{x \in S_i} ||x - \mu_i||^2
+\end{equation}
 
 Very important is computing a distance of two segments. Since the original circular sector segmentation
 is not homogenous, the distances varies with each distance. It can be calculated though using
 cosine law. $P = (d, \alpha)$ is a segment given by polar coordinates, $d$ is distance and $\alpha$ is
 azimuth.
 
-$$|P_{1} P_{2}| = \sqrt{(d_{1})^{2} + (d_{2})^{2} - 2d_{1}d_{2}(\alpha_1 - \alpha_2)}$$
+\begin{equation}
+|P_{1} P_{2}| = \sqrt{(d_{1})^{2} + (d_{2})^{2} - 2d_{1}d_{2}(\alpha_1 - \alpha_2)}
+\end{equation}
 
 
 
