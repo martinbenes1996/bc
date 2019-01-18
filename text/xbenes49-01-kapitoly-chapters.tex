@@ -380,9 +380,30 @@ the simpliest way is using treshold.
 \begin{figure}[h!]
 \begin{center}
 \includegraphics[width=0.85\textwidth]{obrazky-figures/signal_walk.png}
-\caption{Signal of person walking around.\label{fig:signalcalm}}
+\caption{Signal of person walking around.\label{fig:signalwalk}}
 \end{center}
 \end{figure}
+
+A output of a sensor as you can see in the figures \ref{fig:signalcalm} and \ref{fig:signalwalk}
+is very discriminative -- with a bare eye a movement from no movement is distinguishable.
+A detection of presence used in light sensors can be implemented with tresholding, this attitude is
+not very suitable for classification of anything else except the presence itself.
+
+In a calm state the sensor sends a constant signal\footnote{Constant signal in the terms
+of electricity, slightly polluted with a background noise etc.}. Movement in the sensed area causes
+abrupt changes of output. When the object either leaves the area, or stays completely calm, the signal
+changes are getting slower and after a little while the output voltage gets in the calm state again.
+
+Therefore, the nature of the signal does not seem to need a complicated method to perform a classification on it.
+{\it Fourier transformation} and {\it wavelet transformation} were considered for feature
+extraction. The abrupt changes in the signal could be problem for FT, because it can not represent
+it efficiently\cite{SinglePIR}, % youtube video
+but unlike sinusoids, the wavelets exist for a finite duration and they are suitable for representing
+abrupt changes.
+
+The wavelet transformation uses 
+
+$$F(s,k) = \sum_{n=1}^{N} x[n] \Psi_{(s,k)}^{*}[n]$$
 
 {\it Origin of data, description, training.}
 

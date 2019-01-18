@@ -2,7 +2,7 @@
 # compile settings
 cc = g++
 defines = -DDEBUG_MODE #-DCOLOR_MODE #-DUSE_SYSLOG
-linkings = -lpthread -lm -ldl -lrt
+linkings = -lpthread -lm -ldl -lrt -lopencv_core -lopencv_highgui -lopencv_imgproc
 flags = $(defines) -O2 -g -std=c++17 -pedantic -Wall -Wextra
 
 # source settings
@@ -35,8 +35,9 @@ $(output): $(obj)
 
 # compiling
 %.o : %.cpp
-	@echo "Compiling $@.";\
-	$(cc) $(flags) $(defines) -c $< -o $@
+	#@echo "Compiling $@.";\
+	
+	$(cc) $(flags) $(defines) -c $< -o $@ $(linkings)
 
 # clean
 .PHONY: clean
