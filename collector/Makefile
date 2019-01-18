@@ -35,8 +35,7 @@ $(output): $(obj)
 
 # compiling
 %.o : %.cpp
-	#@echo "Compiling $@.";\
-	
+	@echo "Compiling $@.";\
 	$(cc) $(flags) $(defines) -c $< -o $@ $(linkings)
 
 # clean
