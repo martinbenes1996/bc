@@ -44,18 +44,35 @@ namespace Recog {
     /** @brief Representation of wavelet. */
     class Wavelet {
         public:
-            /** @brief Wavelet constructor. */
-            Wavelet(std::function<double(double)> f): f_(f) {}
-
-            /** @brief Convolution operator. */
-            double operator*(const cv::Mat& x) {
-                std::cerr << "Operator * called!\n";
-                return 0.;
+            /**
+             * @brief Wavelet constructor.
+             * @param fGenerator        Generator of wavelet function with given scale (generator parameter).
+             */
+            Wavelet(std::function<std::function<double(long)>(unsigned)> fGenerator): fGenerator_(fGenerator) {
+                generateWavelet();
             }
 
-        private:
-            std::function<double(double)> f_ = [](double){return 0.;}; /**< Wavelet core function. */
+            /**
+             * @brief Convolution operator.
+             * @param x         Input signal.
+             * @returns Convolution with x.
+             */
+            double operator*(const cv::Mat& x);
 
+            void setScale(unsigned s) {
+                s_ = s;
+                generateWavelet();
+            }
+
+            void setShift(long n) { shift_ = n; }
+
+        private:
+            std::function<std::function<double(long)>(unsigned)> fGenerator_;
+            void generateWavelet() { f_ = fGenerator_(s_); }
+
+            std::function<double(long)> f_; /**< Wavelet core function. */
+            unsigned s_ = 1;
+            long shift_ = 0;
     };
 
     /** @brief Features extracted from the signal. */
@@ -64,31 +81,35 @@ namespace Recog {
             Features(cv::Mat x, Recog::Wavelet w) { extract(x,w); }
             Features() {}
 
-            void extract(cv::Mat x, Recog::Wavelet w) {
-                // CWT
-                unsigned N = x.cols;
-                unsigned S = scales_.size();
-                cv::Mat features = cv::Mat::zeros(S, N, CV_32F);
+            /**
+             * @brief Performs CWF as feature extraction over input.
+             * @param x         Input for CWF.
+             * @param w         Used wavelet for transformation.
+             * @returns CWF matrix (time x frequency).
+             */
+            void extract(cv::Mat x, Recog::Wavelet w);
 
-                // iterate over shifts (rows)
-                for(unsigned n = 0; n < N; n++) {
-                    // iterate over scales (columns)
-                    for(auto& s: scales_) {
-                    
-                        // convolution
-                        features.at<double>(n,s) = w*x;
-                    }
-
-                }
-            }
-
-            Features& operator=(const Features&) {
-                // rewrite
+            Features& operator=(const Features& o) {
+                auto p = o.copyData();
+                features_ = p.first;
+                extracted_ = p.second;
                 return *this;
             }
-        
+            std::pair<cv::Mat,bool> copyData() const { return std::make_pair(features_, extracted_); }
+
+            cv::Mat get() {
+                if(!extracted_) { throw Exception("Features::get: features not extracted yet"); }
+                return features_;
+            }
+
+            
+
+
         private:
-            const std::vector<unsigned> scales_ = {1,2,3};
+            const std::vector<unsigned> scales_ = {1,2,3}; /**< Scales for CWF. */
+
+            cv::Mat features_;
+            bool extracted_ = false;
     };
     
     /** @brief Result of recognition (objects) to send. */
