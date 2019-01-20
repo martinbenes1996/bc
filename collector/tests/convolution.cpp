@@ -12,7 +12,5 @@ int main() {
     m.at<float>(2) = 3;
 
     double c = w*m;
-    //std::cerr << "Matrix m is " << m << "\n";
-
-    std::cerr << "Convolution is " << c << "\n";
+    assert(c == 10);
 }
