@@ -20,6 +20,8 @@ int main(int argc, char *argv[]) {
     // fusion engine
     Recog::Fusion fusion;
     listener.listen_async( fusion.getActualizer("C") );
+
+
     
     // main loop
     do {

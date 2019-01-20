@@ -41,14 +41,32 @@ namespace Recog {
     /** @brief Recognized object in polar coordinates. */
     typedef Geo::Coords::Polar Object;
 
+    typedef std::function<double(long)> MotherWavelet;
+    typedef std::function<MotherWavelet(unsigned)> Generator;
     /** @brief Representation of wavelet. */
     class Wavelet {
+        // static methods
+        public:
+            static MotherWavelet Haar(unsigned s) {
+                return [s](long x) {
+                    if(x < 0) { return 0; }
+                    else if(x < (s/2.)) { return 1; }
+                    else if(x < (s)) { return -1; }
+                    else { return 0; }
+                };
+            }
+            static MotherWavelet Morlet(unsigned s) {
+                return [s](long) {
+                    return 0;
+                };
+            }
+        // instantional methods
         public:
             /**
              * @brief Wavelet constructor.
              * @param fGenerator        Generator of wavelet function with given scale (generator parameter).
              */
-            Wavelet(std::function<std::function<double(long)>(unsigned)> fGenerator): fGenerator_(fGenerator) {
+            Wavelet(Generator fGenerator): fGenerator_(fGenerator) {
                 generateWavelet();
             }
 
@@ -67,10 +85,10 @@ namespace Recog {
             void setShift(long n) { shift_ = n; }
 
         private:
-            std::function<std::function<double(long)>(unsigned)> fGenerator_;
+            Generator fGenerator_;
             void generateWavelet() { f_ = fGenerator_(s_); }
 
-            std::function<double(long)> f_; /**< Wavelet core function. */
+            MotherWavelet f_; /**< Wavelet core function. */
             unsigned s_ = 1;
             long shift_ = 0;
     };
@@ -205,11 +223,13 @@ namespace HW {
              * @returns Feature vector.
              */
             Recog::Features readFeatures() {
-                featureLock.lock();
                 Recog::Features f;
-                //std::swap(f, features_);
-                f = features_;
-                features_ = Recog::Features();
+
+                // swap features <-> empty
+                featureLock.lock();
+                    //std::swap(f, features_);
+                    f = features_;
+                    features_ = Recog::Features();
                 return (featureLock.unlock(), f);
             }
             
@@ -221,15 +241,15 @@ namespace HW {
                 #ifdef DEBUG_SENSOR
                     DebugPrompt(); std::cerr << "Data actualized.\n";
                 #endif
-                Recog::Features newfeatures;
 
-                /* Feature extraction */
-                /* samples -> newfeatures */
-                (void)samples;
+                // feature extraction
+                cv::Mat x(1, SEGMENT_SIZE, CV_32S, samples.data());
+                Recog::Wavelet w(Recog::Wavelet::Haar); 
+                Recog::Features newfeatures(x, w);
 
                 // publish the features
                 featureLock.lock();
-                features_ = newfeatures;
+                    features_ = newfeatures;
                 featureLock.unlock();
             }
 
