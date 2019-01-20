@@ -107,10 +107,12 @@ power it is energy per time, since the radiation is four-dimentional, partial de
 The radiant power per unit surface is a~flux density. It is called either {\it radiant exitance} $M$
 when emitting or {\it irradiance} $E$ when receiving.
 \begin{subequations}
-\begin{align}
+\begin{equation}
 M = \frac{\partial \Phi_{emitted}}{\partial S_{sender}}
+\end{equation}
+\begin{equation}
 E = \frac{\partial \Phi_{received}}{\partial S_{receiver}}
-\end{align}
+\end{equation}
 \end{subequations}
 The~Stefan-Boltzmann law defines irradiance of electromagnetic radiation as
 \begin{equation}
@@ -122,10 +124,12 @@ temperature.
 Power per unit solid angle $I$ is called {\it radiant intensity}. With dividing by an~area of the~item
 projected from certain direction we get an~amount of power emitted in that~direction called {\it radiance} $L$.
 \begin{subequations}
-\begin{align}
+\begin{equation}
 I = \frac{\partial \Phi}{\partial \Omega}
+\end{equation}
+\begin{equation}
 L = \frac{\partial I}{\partial S \cos{\theta}}
-\end{align}
+\end{equation}
 \end{subequations}
 Other characteristics of radiation can be seen in the~table \ref{table:units}. \cite{iso800007} \cite{TemperatureMeasuring}
 
@@ -493,10 +497,12 @@ Unfortunatelly these parameters are inversely propotional, a compromise needs to
 Now let's express both observed parameters with $\Omega$. A sensor has $250~mm$ to $250~mm$,
 $o$ is a size of empty space on the sides of sensor, equation substituted $L = (12.5 + o)$.
 \begin{subequations}
-\begin{align}
+\begin{equation}
 \varphi = 230 + \Omega
+\end{equation}
+\begin{equation}
 r = \frac{\sin{(\frac{\Omega}{2})}L}{\tg{(\frac{\Omega}{2}-40)}} - \cos{(\frac{\Omega}{2})}L
-\end{align}
+\end{equation}
 \end{subequations}
 
 \subsection*{Segmentation}
