@@ -517,6 +517,31 @@ and fuzzification is implemented in the program {\it collector}.
 The input is a vector of N samples and the process transforms them into the vector of
 F features on the output.
 
+\begin{figure}[!ht]
+\begin{equation}
+\Psi_s(x) = \begin{cases}
+-1    & x \in \langle 0 ; \frac{s}{2} ) \\ 
+1     & x \in \langle \frac{s}{2} ; s ) \\
+0     & \text{otherwise}
+\end{cases}
+\end{equation}
+\caption{Haar Wavelet.}
+\end{figure}
+
+\begin{figure}[!ht]
+\begin{equation}
+\Psi(x) = e^{-\frac{x^2}{2}} cos(5x)
+\end{equation}
+\caption{Morlet Wavelet.}
+\end{figure}
+
+\begin{figure}[!ht]
+\begin{equation}
+\Psi(x) = \frac{2^{\frac{5}{4}}}{\sqrt{3}}(1 + e^{2\pi x^2})e^{-\pi x^2}
+\end{equation}
+\caption{Mexican Hat Wavelet.}
+\end{figure}
+
 {\it Wavelet transformation for feature extraction}
 
 \subsection*{Fuzzification and classification}

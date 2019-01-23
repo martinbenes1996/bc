@@ -6,6 +6,7 @@
 #include <cstdlib>
 #include <functional>
 #include <map>
+#include <cmath>
 #include <memory>
 #include <mutex>
 #include <string>
@@ -56,8 +57,13 @@ namespace Recog {
                 };
             }
             static MotherWavelet Morlet(unsigned s) {
-                return [s](long) {
-                    return 0;
+                return [s](long x) {
+                    return exp(-(x*x)/2.) * cos(5*x);
+                };
+            }
+            static MotherWavelet MexicanHat(unsigned s) {
+                return [s](long x) {
+                    return pow(2, 5/4.) / sqrt(3) * (1 + exp(2*M_PI*x*x)) * exp(-M_PI*x*x);
                 };
             }
         // instantional methods
@@ -217,7 +223,6 @@ namespace HW {
              */
             std::string name() { return name_; }
 
-            
             /**
              * @brief Reads last data from sensor.
              * @returns Feature vector.
@@ -244,7 +249,7 @@ namespace HW {
 
                 // feature extraction
                 cv::Mat x(1, SEGMENT_SIZE, CV_32S, samples.data());
-                Recog::Wavelet w(Recog::Wavelet::Haar); 
+                Recog::Wavelet w(Recog::Wavelet::MexicanHat); 
                 Recog::Features newfeatures(x, w);
 
                 // publish the features
