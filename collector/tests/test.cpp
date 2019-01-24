@@ -1,6 +1,19 @@
+#define BOOST_TEST_MODULE collector
+#include <boost/test/included/unit_test.hpp>
 
-#include "../model.h"
+#include "model.h"
 
+BOOST_AUTO_TEST_CASE(foo) {
+    int i = 1;
+    BOOST_TEST(i);
+    BOOST_TEST(i == 2);
+
+    Recog::Object r;
+
+}
+
+
+/*
 int main() {
     Recog::Wavelet w ( [](unsigned){
         return [](long t) { return (double)(t+1); };
@@ -14,3 +27,4 @@ int main() {
     double c = w*m;
     assert(c == 10);
 }
+*/

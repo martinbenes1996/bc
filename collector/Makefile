@@ -6,8 +6,8 @@ linkings = -lpthread -lm -ldl -lrt -lopencv_core -lopencv_highgui -lopencv_imgpr
 flags = $(defines) -O2 -g -std=c++17 -pedantic -Wall -Wextra
 
 # source settings
-src = $(wildcard *.cpp)
-head = $(wildcard *.h)
+src = $(wildcard ./*.cpp)
+head = $(wildcard ./*.h)
 
 dep = $(src:.cpp=.dep)
 obj = $(src:.cpp=.o) 
@@ -18,8 +18,25 @@ all: $(output)
 	@echo > /dev/null
 
 ifneq ($(MAKECMDGOALS),clean)
+ifneq ($(MAKECMDGOALS),test)
 -include $(dep)
 endif
+endif
+
+# static library
+.PHONY: lib
+lib: $(output).a
+$(output).a: $(filter-out %main.o,$(obj))
+	@echo "Creating static library $@.";\
+	ar -cvq $@ $^ > /dev/null
+
+.PHONY: test
+test:
+	@printf "";\
+	$(MAKE) -C tests/ -s
+	@printf "";\
+	$(MAKE) run -C tests/ -s
+
 
 # linking
 $(output): $(obj)
@@ -41,5 +58,7 @@ $(output): $(obj)
 # clean
 .PHONY: clean
 clean:
-	@echo "Cleaning.";\
-	rm -rf *~ *.o *.gch *.dep $(output) > /dev/null 2> /dev/null
+	@echo "Cleaning collector files.";\
+	rm -rf *~ *.o *.gch *.dep $(output) $(output).a collector.a > /dev/null 2> /dev/null
+	@printf "";\
+	$(MAKE) clean -C tests/ -s
