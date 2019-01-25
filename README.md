@@ -1,6 +1,7 @@
-# bc
+# Bio
 
-Bachelor thesis of Martin Benes.
+Project focusing on classification of situation (count of people etc.) using PIR sensors. Done as bachelor thesis
+of Martin Benes, student of Faculty of Information Technologies, Brno University of Technology.
 
 # Structure of the project #
 
