@@ -1,16 +1,18 @@
 #ifndef _MODEL_H_
 #define _MODEL_H_
 
+#include <cmath>
+#include <cstdlib>
+#include <time.h>
+
 #include <algorithm>
 #include <array>
-#include <cstdlib>
+#include <chrono>
 #include <functional>
 #include <map>
-#include <cmath>
 #include <memory>
 #include <mutex>
 #include <string>
-#include <time.h>
 #include <vector>
 
 #include <opencv2/opencv.hpp>
@@ -100,10 +102,10 @@ namespace Recog {
     };
 
     /** @brief Features extracted from the signal. */
-    class Features: public cv::Mat {
+    class Features {
         public:
             Features(cv::Mat x, Recog::Wavelet w) { extract(x,w); }
-            Features() {}
+            Features(bool valid = false): valid_(valid) {}
 
             /**
              * @brief Performs CWF as feature extraction over input.
@@ -126,6 +128,8 @@ namespace Recog {
                 return features_;
             }
 
+            bool valid() { return valid_; }
+
             
 
 
@@ -134,6 +138,7 @@ namespace Recog {
 
             cv::Mat features_;
             bool extracted_ = false;
+            bool valid_ = false;
     };
     
     /** @brief Result of recognition (objects) to send. */
@@ -211,7 +216,7 @@ namespace HW {
                 azimuth_(orientation), position_(position), name_(name) {
                 
                 #ifdef DEBUG_SENSOR
-                    DebugPrompt(); std::cerr << "Created. "
+                    DebugPrompt(); std::cerr << "Sensor(): Created. "
                                              << "Orientation [" << azimuth_ << "]. "
                                              << "Position "; position_.log(); std::cerr << ".\n";
                 #endif
@@ -230,12 +235,16 @@ namespace HW {
             Recog::Features readFeatures() {
                 Recog::Features f;
 
-                // swap features <-> empty
                 featureLock.lock();
-                    //std::swap(f, features_);
-                    f = features_;
-                    features_ = Recog::Features();
-                return (featureLock.unlock(), f);
+                    #ifdef DEBUG_FEATURES
+                        DebugPrompt(); std::cerr << "readFeatures(): Features " << ((featuresValid())?"":"in") << "valid.\n";
+                    #endif
+                    if(featuresValid()) {
+                        f = features_;
+                    }
+                featureLock.unlock();
+
+                return f;
             }
             
             /**
@@ -255,6 +264,7 @@ namespace HW {
                 // publish the features
                 featureLock.lock();
                     features_ = newfeatures;
+                    endFeatureUpdate();
                 featureLock.unlock();
             }
 
@@ -264,6 +274,21 @@ namespace HW {
 
             std::mutex featureLock; /**< Lock of features for simultaneous access. */
             Recog::Features features_; /**< Features. */
+
+            std::chrono::milliseconds lastUpdate;
+            bool notUpdatedYet_ = true;
+            bool featuresValid() {
+                using namespace std::chrono;
+                milliseconds now = duration_cast< milliseconds >( system_clock::now().time_since_epoch() );
+                if(notUpdatedYet_) { return false; }
+                if( duration_cast< milliseconds >(now-lastUpdate).count() > 500 ) { return false; }
+                return true;
+            }
+            void endFeatureUpdate() {
+                using namespace std::chrono;
+                lastUpdate = duration_cast< milliseconds >( system_clock::now().time_since_epoch() );
+                notUpdatedYet_ = false;
+            }
 
             std::string name_; /**< Name of the sensor (for logging). */
             /** @brief Prints out prompt of sensor. */

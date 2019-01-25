@@ -9,14 +9,15 @@ void Recog::Features::extract(cv::Mat x, Recog::Wavelet w) {
     // iterate over shifts (rows)
     for(unsigned n = 0; n < N; n++) {
         // iterate over scales (columns)
-        for(auto& s: scales_) {
-            w.setScale(s);
+        for(unsigned s = 0; s < S; s++) {
+            w.setScale(scales_[s]);
             w.setShift(n);
             // convolution
             features.at<int>(s,n) = w*x;
         }
     }
     extracted_ = true;
+    valid_ = true;
 }
 
 double Recog::Wavelet::operator*(const cv::Mat& x) {
@@ -24,8 +25,6 @@ double Recog::Wavelet::operator*(const cv::Mat& x) {
     double sum = 0;
     for(unsigned t = 0; t < T; t++) {
         unsigned sigPos = T-(t+1);
-        // std::cerr << "x[T - t] = " << x.at<float>(sigPos) << "\n";
-        // std::cerr << "Psi[t] = " << f_(t) << "\n";
         sum += x.at<int>(sigPos) * f_(t + shift_);
     }
     return sum;

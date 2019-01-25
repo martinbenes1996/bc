@@ -44,7 +44,7 @@ void checkInited() { if(!init_) throw::std::runtime_error("Config::init() not ca
 
 const std::vector<std::string>& Config::getSensorKeys() {
     static std::vector<std::string> v;
-    v.empty();
+    v.clear();
     for(auto &it: sensors_) { v.push_back(it.first); }
     return v;
 }

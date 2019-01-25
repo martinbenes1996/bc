@@ -53,10 +53,17 @@ std::function<void(std::array<int,SEGMENT_SIZE>)> Fusion::getActualizer(std::str
 }
 
 Result Fusion::calculate() {
+    #ifdef DEBUG_FUSION
+        std::cerr << "Recog::Fusion::calculate(): called with sensors " << Config::getSensorKeys().size() << "\n";
+    #endif
+    
     // read features from sensors
-    Features fc = sensors_.at("C")->readFeatures();
-    Features fl = sensors_.at("L")->readFeatures();
-    Features fr = sensors_.at("R")->readFeatures();
+    std::map<std::string, Features> features;
+    for(auto& key: Config::getSensorKeys()) {
+        Features f = sensors_.at(key)->readFeatures();
+        if(!f.valid()) { continue; }
+        features.insert( make_pair(key,f) );
+    }
 
     Result r;
     /* Do calculations (Features -> Object). */

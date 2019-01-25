@@ -10,6 +10,7 @@ int main(int argc, char *argv[]) {
     (void)argc;
     (void)argv;
 
+    // load configuration of module
     Config::init();
 
     // initialize multicast server
@@ -23,26 +24,21 @@ int main(int argc, char *argv[]) {
 
     // initialize listener
     Comm::Listener listener;
-
-
     
     // main loop
     do {
-
         try {
-        
+            
             // calculate
-            /*
             Recog::Result result = fusion.calculate();
-            std::cerr << result.bufferSize() << "\n";
+            //std::cerr << result.bufferSize() << "\n";
             server.send(result.toBuffer(), result.bufferSize());
-            */
 
             /* --- DELETE --- */
-            int sampledata[] = { 2/* two objects */,
-                                    /* first: azimuth 0, distance 10 */0,100,
-                                    /* second: azimuth 90, distance 15 */-45,150, };
-            server.send(sampledata, 5*sizeof(int));
+            //int sampledata[] = { 2/* two objects */,
+            //                        /* first: azimuth 0, distance 10 */0,100,
+            //                        /* second: azimuth 90, distance 15 */-45,150, };
+            //server.send(sampledata, 5*sizeof(int));
             /* -------------- */
 
         // error

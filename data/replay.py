@@ -4,10 +4,37 @@ import socket
 import sys
 import time
 
-if len(sys.argv) == 3 and sys.argv[1] == '-f':
-    filename = sys.argv[2]
-else:
-    filename = 'file.dat'
+
+def proc2Args(l):
+    if l[0] == '-d':
+        return 'file.dat',l[1]
+    elif l[0] == '-f':
+        return l[1],'center'
+    else:
+        raise Exception('Invalid parameters.')
+
+def proc4Args(arg):
+    f,d = proc2Args(arg[1:3])
+    if arg[1] == '-f':
+        _,d = proc2Args(arg[3:])
+        if arg[3] == '-f':
+            raise Exception('Invalid parameters.')
+    else:
+        f,_ = proc2Args(arg[3:])
+        if arg[3] == '-d':
+            raise Exception('Invalid parameters.')
+    return f,d
+
+def procArgs(arg):
+    if len(sys.argv) == 3:
+        f,d = proc2Args(arg[1:])
+    elif len(sys.argv) == 5:
+        f,d = proc4Args(arg[1:])
+    else:
+        raise Exception('Invalid parameters.')
+    return f,d
+
+filename,device = procArgs(sys.argv)
 
 f = open(filename, 'rb')
 data = f.read()

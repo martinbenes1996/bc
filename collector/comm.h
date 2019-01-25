@@ -93,9 +93,11 @@ namespace Comm {
             }
 
             void send(void * d, size_t size) {
-                std::cout << "Comm::MCastServer: sending update to " << inet_ntoa(server_.sin_addr) << ":" << ntohs(server_.sin_port) << "\n";
+                #ifdef DEBUG_COMM
+                    std::cout << "Comm::MCastServer: sending update to " << inet_ntoa(server_.sin_addr) << ":" << ntohs(server_.sin_port) << "\n";
+                #endif
                 int sent = sendto(sock_, d, size, 0, (struct sockaddr*)&server_, sizeof(server_));
-                if(sent < 0) { std::cerr << errno << "\n"; throw Exception("Comm:MCastServer: sendto() failed."); }
+                if(sent < 0) { throw Exception("Comm:MCastServer: sendto() failed."); }
             }
 
         private:
@@ -131,8 +133,10 @@ namespace Comm {
                 if(bindstatus < 0) { throw Exception("Comm::Server: bind() failed."); }
 
                 char segment[2*SEGMENT_SIZE + 16];
-                std::cout << "Comm::Listener: UDP waiting for connection.\n";
-
+                #ifdef DEBUG_COMM
+                    std::cout << "Comm::Listener: UDP waiting for connection.\n";
+                #endif
+                
                 while(true) {
                     
                     unsigned recvsize = recvfrom(sock_, segment, 2*SEGMENT_SIZE + 16, 0, (struct sockaddr *)&from, &fromsize);
@@ -154,8 +158,11 @@ namespace Comm {
                     } catch(const std::exception& e) {
                         std::cerr << "Invalid data!\n"; continue;
                     }
-                    
-                    std::cout << "Comm::Listener: Received " << recvsize << " B.\n";
+                    #ifdef DEBUG_COMM
+                        std::cout << "Comm::Listener: Received " << recvsize << " B.\n";
+                    #endif
+
+                    usleep(10);
                 }
             }
 
