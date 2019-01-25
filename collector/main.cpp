@@ -3,11 +3,14 @@
 #include <unistd.h>
 
 #include "comm.h"
+#include "config.h"
 #include "model.h"
 
 int main(int argc, char *argv[]) {
     (void)argc;
     (void)argv;
+
+    Config::init();
 
     // initialize multicast server
     Comm::MCastServer server;
@@ -15,11 +18,11 @@ int main(int argc, char *argv[]) {
     o.azimuth = -50;
     o.distance = 35;
 
-    // initialize listener
-    Comm::Listener listener;
     // fusion engine
     Recog::Fusion fusion;
-    listener.listen_async( fusion.getActualizer("C") );
+
+    // initialize listener
+    Comm::Listener listener;
 
 
     

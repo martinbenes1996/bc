@@ -244,7 +244,7 @@ namespace HW {
             void actualizeData(std::array<int, SEGMENT_SIZE> samples) {
                 
                 #ifdef DEBUG_SENSOR
-                    DebugPrompt(); std::cerr << "Data actualized.\n";
+                    DebugPrompt(); std::cerr << "actualizeData(): data actualized.\n";
                 #endif
 
                 // feature extraction
@@ -267,7 +267,7 @@ namespace HW {
 
             std::string name_; /**< Name of the sensor (for logging). */
             /** @brief Prints out prompt of sensor. */
-            void DebugPrompt() { std::cerr << "Sensor " << name_ << ": "; }
+            void DebugPrompt() { std::cerr << "HW::Sensor[" << name_ << "]::"; }
     };
 
 }

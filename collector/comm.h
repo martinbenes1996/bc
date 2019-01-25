@@ -13,6 +13,7 @@
 #include <sys/socket.h>
 #include <thread>
 
+#include "config.h"
 #include "model.h"
 
 namespace Comm {
@@ -107,12 +108,13 @@ namespace Comm {
             Listener() {
                 sock_ = socket(AF_INET, SOCK_DGRAM, 0);
                 if(sock_ < 0) { throw Exception("Comm::Server: socket() failed."); }
+
+                listen_async();
             }
 
             ~Listener() { if(!listener_) listener_->join(); }
 
-            void listen_async(std::function<void(std::array<int,SEGMENT_SIZE>)> actualizer) {
-                actualizer_ = actualizer;
+            void listen_async() {
                 listener_ = new std::thread([this](){ this->listen(); });
             }
 
@@ -128,20 +130,31 @@ namespace Comm {
                 int bindstatus = bind(sock_, (struct sockaddr *)&server, sizeof(server));
                 if(bindstatus < 0) { throw Exception("Comm::Server: bind() failed."); }
 
-                char segment[2*SEGMENT_SIZE];
+                char segment[2*SEGMENT_SIZE + 16];
                 std::cout << "Comm::Listener: UDP waiting for connection.\n";
 
                 while(true) {
                     
-                    unsigned recvsize = recvfrom(sock_, segment, 2*SEGMENT_SIZE, 0, (struct sockaddr *)&from, &fromsize);
+                    unsigned recvsize = recvfrom(sock_, segment, 2*SEGMENT_SIZE + 16, 0, (struct sockaddr *)&from, &fromsize);
                     if(recvsize < 2*SEGMENT_SIZE) { throw Exception("Comm::Server: recvfrom() failed."); }
+
+                    char sensorname[16];
+                    strncpy(sensorname, segment, 16);
+                    if(sensorname[15] != 0) { std::cerr << "Invalid data!\n"; continue; }
+                    char *data = segment + strlen(sensorname)+1;
 
                     std::array<int, SEGMENT_SIZE> a;
                     for(int i = 0; i < SEGMENT_SIZE*2; i += 2) {
-                        unsigned r = (segment[0] << 8) | (0xFF & segment[1]);
+                        unsigned r = (data[0] << 8) | (0xFF & data[1]);
                         a.at(i/2) = r;                        
                     }
-                    actualizer_(a);
+
+                    try {
+                        Config::getSensorActualizer( std::string(sensorname) )( a );
+                    } catch(const std::exception& e) {
+                        std::cerr << "Invalid data!\n"; continue;
+                    }
+                    
                     std::cout << "Comm::Listener: Received " << recvsize << " B.\n";
                 }
             }
@@ -149,8 +162,6 @@ namespace Comm {
         private:
             int sock_;
             std::thread * listener_;
-
-            std::function<void(std::array<int,SEGMENT_SIZE>)> actualizer_;
     };
 }
 

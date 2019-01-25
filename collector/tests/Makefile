@@ -2,8 +2,8 @@
 # compile settings
 cc = g++
 defines = -DDEBUG_MODE #-DCOLOR_MODE #-DUSE_SYSLOG
-linkings = -lpthread -lm -ldl -lrt -lopencv_core -lopencv_highgui -lopencv_imgproc
-flags = $(defines) -O2 -g -std=c++17 -pedantic -Wall -Wextra -L. -I.. -I.
+linkings = -lpthread -lm -ldl -lrt $(shell pkg-config opencv --cflags --libs)
+flags = $(defines) -O2 -g -std=c++17 -pedantic -Wall -Wextra -I.. -I. -pthread
 
 # source settings
 src = $(wildcard *.cpp)
@@ -35,7 +35,7 @@ endif
 # linking
 $(output): $(obj)
 	@echo "Linking test.";\
-	$(cc) $(flags) -static collector.a $^ -o $@ $(linkings)
+	$(cc) $(flags) $^ collector.a -o $@ $(linkings) 
 
 # dependencies generating
 %.dep: %.cpp

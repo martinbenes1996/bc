@@ -1,0 +1,16 @@
+{
+    "center" : {
+        "position" : { "distance": 0, "azimuth": 0},
+        "orientation"  : 0
+    },
+
+    "left"  : {
+        "position"      : { "distance": 10, "azimuth": 40 },
+        "orientation"   : 50
+    },
+
+    "right"  : {
+        "position"      : { "distance": 10, "azimuth": -40 },
+        "orientation"   : -50
+    }
+}

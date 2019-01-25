@@ -473,6 +473,40 @@ coordinates are sent to the client.
 \end{center}
 \end{figure}
 
+The interior angle of module $\Omega$ is a parameter of the module construction. Using this parameter
+orientation $\lambda$ and position $p_X = (d_X,\varphi _X)$\footnote{Position uses polar coordinates
+with the origin in the central sensor.} of sensors can be expressed. Parameter $r$ is length
+of module edges with sensor in the center. Sensor PIR-STD by B+B Sensors has $250\times 250\times 200~\text{mm}$;
+therefore $r > 250~\text{mm}$.
+
+
+\begin{subequations}
+\begin{equation}
+\lambda_C = 0
+\end{equation}
+\begin{equation}
+\lambda_L = -\lambda_R = 180 - \Omega
+\end{equation}
+\end{subequations}
+
+\begin{subequations}
+\begin{equation}
+\varphi_C = 0
+\end{equation}
+\begin{equation}
+\varphi_L = -\varphi_R = 90 + \frac{180 - \Omega}{2}
+\end{equation}
+\end{subequations}
+
+\begin{subequations}
+\begin{equation}
+d_C = 0
+\end{equation}
+\begin{equation}
+d_L = d_R = \frac{r}{2} (r - 4\cos{\Omega})
+\end{equation}
+\end{subequations}
+
 
 \section{Data Processing pipeline}
 \label{label:dataprocessing}
