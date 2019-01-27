@@ -36,6 +36,18 @@ BOOST_AUTO_TEST_CASE(Recog_Object) {
     BOOST_TEST( (cartese.x - 43.30127) < 0.00001 );
     BOOST_TEST( (cartese.y - 24.999998) < 0.00001 );
 
+    o.azimuth = 90;
+    o.distance = 5;
+    cartese = o.toCartesian(20);
+    BOOST_TEST( (cartese.x - 0) < 0.00001 );
+    BOOST_TEST( (cartese.y - 100) < 0.00001 );
+
+    o.azimuth = 180;
+    o.distance = 9;
+    cartese = o.toCartesian(10);
+    BOOST_TEST( (cartese.x - (-90)) < 0.00001 );
+    BOOST_TEST( (cartese.y - 0) < 0.00001 );
+
 }
 
 BOOST_AUTO_TEST_CASE(Recog_Wavelet) {
@@ -47,7 +59,18 @@ BOOST_AUTO_TEST_CASE(Recog_Features) {
 }
 
 BOOST_AUTO_TEST_CASE(Recog_Result) {
+    Recog::Result r;
+    r.data = { Recog::Object(1,2), Recog::Object(3,4), Recog::Object(5,6) };
+    r.timestamp = 5;
 
+    int * b = (int *)r.toBuffer();
+    unsigned buffsize = r.bufferSize();
+
+    BOOST_TEST( buffsize == 7*sizeof(int) );
+    BOOST_TEST( b[0] == 3 );
+    for(int i = 1; i < 6; i++) {
+        BOOST_TEST( b[i] == i );
+    }
 }
 
 BOOST_AUTO_TEST_CASE(HW_Exception) {
