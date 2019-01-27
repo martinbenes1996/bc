@@ -30,15 +30,17 @@ int main(int argc, char *argv[]) {
         try {
             
             // calculate
+            /*
             Recog::Result result = fusion.calculate();
             //std::cerr << result.bufferSize() << "\n";
             server.send(result.toBuffer(), result.bufferSize());
-
+            */
             /* --- DELETE --- */
-            //int sampledata[] = { 2/* two objects */,
-            //                        /* first: azimuth 0, distance 10 */0,100,
-            //                        /* second: azimuth 90, distance 15 */-45,150, };
-            //server.send(sampledata, 5*sizeof(int));
+            int sampledata[] = { 3/* two objects */,
+                                    /* first: azimuth 0, distance 10 */0,100,
+                                    /* second: azimuth 90, distance 15 */45,150,
+                                    /* third:  */};
+            server.send(sampledata, 5*sizeof(int));
             /* -------------- */
 
         // error

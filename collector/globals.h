@@ -11,8 +11,8 @@ namespace Geo {
          * @brief Cartesian coordinates.
          */
         struct Cartesian {
-            int x = 0;  /**< X coordinate. */
-            int y = 0;  /**< Y coordinate. */
+            double x = 0;  /**< X coordinate. */
+            double y = 0;  /**< Y coordinate. */
         };
 
         /**
@@ -30,8 +30,8 @@ namespace Geo {
              */
             struct Cartesian toCartesian(int scale) {
                 struct Cartesian c;
-                c.x = cos(azimuth/360. * M_PI)*distance*scale;
-                c.y = sin(azimuth/360. * M_PI)*distance*scale;
+                c.x = cos(azimuth/360. * 2*M_PI)*distance*scale;
+                c.y = sin(azimuth/360. * 2*M_PI)*distance*scale;
                 return c;
             }
 

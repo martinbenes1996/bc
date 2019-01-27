@@ -31,6 +31,7 @@ namespace Recog {
              * @param msg       Description of exception.
              */
             Exception(const char *msg): msg_(msg) {}
+            Exception(std::string msg): msg_(msg.c_str()) {}
             /**
              * @brief Description getter.
              * @returns Description of exception.
@@ -129,6 +130,9 @@ namespace Recog {
             }
 
             bool valid() { return valid_; }
+
+            int rows() { return features_.rows; }
+            int cols() { return features_.cols; }
 
             
 
@@ -322,6 +326,55 @@ namespace Recog {
         private:
             std::map<std::string, std::shared_ptr<HW::Sensor>> sensors_; /**< Sensor map. */
     };
+}
+
+namespace Fuzzy {
+
+    /** @brief */
+    class Exception: public Recog::Exception {
+        public:
+            Exception(const char* msg): Recog::Exception(msg) {}
+            Exception(std::string msg): Recog::Exception(msg) {}
+    };
+
+    struct Index {
+        Index(int r, int c): row(r), col(c) {}
+        int row; /**< Row index. */
+        int col; /**< Column index. */
+
+    };
+
+    class Matrix {
+        public:
+            Matrix(Recog::Features f): rowCount(f.rows()), colCount(f.cols()) {}
+    
+            double distance(Index i1, Index i2) {
+                if(isInside(i1) && isInside(i2)) {
+                    Geo::Coords::Polar i1p = toPolar(i1);
+                    Geo::Coords::Polar i2p = toPolar(i2);
+
+                    return pow(i1p.distance, 2) + pow(i2p.distance, 2) - 2*i1p.distance*i2p.distance*cos( abs(i1p.azimuth - i2p.azimuth) ); 
+                } else { throw Exception("Fuzzy::Matrix::distance(): index out of range!"); }
+            }
+
+        private:
+            const int rowCount;
+            const int colCount;
+            bool isInside(Index i) {
+                return (i.row >= 0) && (i.row < rowCount) && (i.col >= 0) && (i.col < colCount);
+            }
+
+            const int rowCoef = 10; /**< Coefficient to calculate distance from row index. */
+            const int colCoef = 10; /**< Coefficient to calculate azimuth from col index. */
+            Geo::Coords::Polar toPolar(Index i) {
+                Geo::Coords::Polar c;
+                c.distance = i.row * rowCoef;
+                c.azimuth = i.col * colCoef;
+                return c;
+            }
+
+    };
+
 }
 
 

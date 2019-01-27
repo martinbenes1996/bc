@@ -24,13 +24,9 @@ collector.a:
 	cp ../collector.a .
 
 .PHONY: run
-run: $(OUTPUT)
+run: $(output)
 	@printf "";\
 	./$^
-
-ifneq ($(MAKECMDGOALS),clean)
--include $(dep)
-endif
 
 # linking
 $(output): $(obj)
