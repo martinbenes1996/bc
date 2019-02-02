@@ -1092,6 +1092,22 @@ Management}{\@fit@EN}%
   morekeywords={function},
 }
 
+\lstdefinestyle{matlab}{language=Matlab,
+  showspaces=false,
+  showtabs=false,
+  breaklines=true,
+  showstringspaces=false,
+  breakatwhitespace=true,
+  commentstyle=\color{greencomments},
+  keywordstyle=\color{bluekeywords},
+  stringstyle=\color{redstrings},
+  basicstyle=\ttfamily,
+  captionpos=b,
+  numbers=left,
+  frame=single,
+  morekeywords={function},
+}
+
 
 % Příkazy pro TODO (3 alternativy - lze zvolit preferovanou)
 % commands for TODO (3 alternatives - preferred one can be selected)

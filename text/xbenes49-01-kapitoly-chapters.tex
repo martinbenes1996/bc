@@ -51,7 +51,7 @@ sensor's outputs.
 
 
 
-\chapter{Theory}
+\chapter{State of the art}
 \label{theory}
 
 
@@ -394,50 +394,6 @@ the simpliest way is using treshold.
 
 
 
-\chapter{Data}
-
-\begin{figure}[h!]
-\begin{center}
-\includegraphics[width=0.85\textwidth]{obrazky-figures/signal_calm.png}
-\caption{Signal of zero movement.\label{fig:signalcalm}}
-\end{center}
-\end{figure}
-
-\begin{figure}[h!]
-\begin{center}
-\includegraphics[width=0.85\textwidth]{obrazky-figures/signal_walk.png}
-\caption{Signal of person walking around.\label{fig:signalwalk}}
-\end{center}
-\end{figure}
-
-A output of a sensor as you can see in the figures \ref{fig:signalcalm} and \ref{fig:signalwalk}
-is very discriminative -- with a bare eye a movement from no movement is distinguishable.
-A detection of presence used in light sensors can be implemented with tresholding, this attitude is
-not very suitable for classification of anything else except the presence itself.
-
-In a calm state the sensor sends a constant signal\footnote{Constant signal in the terms
-of electricity, slightly polluted with a background noise etc.}. Movement in the sensed area causes
-abrupt changes of output. When the object either leaves the area, or stays completely calm, the signal
-changes are getting slower and after a little while the output voltage gets in the calm state again.
-
-Therefore, the nature of the signal does not seem to need a complicated method to perform a classification on it.
-{\it Fourier transformation} and {\it wavelet transformation} were considered for feature
-extraction. The abrupt changes in the signal could be problem for FT, because it can not represent
-it efficiently\cite{SinglePIR}, % youtube video
-but unlike sinusoids, the wavelets exist for a finite duration and they are suitable for representing
-abrupt changes.
-
-The wavelet transformation uses 
-
-\begin{equation}
-F(s,k) = \sum_{n=1}^{N} x[n] \Psi_{(s,k)}^{*}[n]
-\end{equation}
-
-{\it Origin of data, description, training.}
-
-
-
-
 \chapter{Design Description}
 
 The design of the whole project is separated in two modules - sensor module
@@ -508,7 +464,7 @@ d_L = d_R = \frac{r}{2} (r - 4\cos{\Omega})
 \end{subequations}
 
 
-\section{Data Processing pipeline}
+\section{Data processing pipeline}
 \label{label:dataprocessing}
 
 The data path in the design is slightly inspired by classification phases except
@@ -737,6 +693,70 @@ azimuth.
 
 
 
+\chapter{Data}
+
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[width=0.85\textwidth]{obrazky-figures/signal_calm.png}
+\caption{Signal of zero movement.\label{fig:signalcalm}}
+\end{center}
+\end{figure}
+
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[width=0.85\textwidth]{obrazky-figures/signal_walk.png}
+\caption{Signal of person walking around.\label{fig:signalwalk}}
+\end{center}
+\end{figure}
+
+A output of a sensor as you can see in the figures \ref{fig:signalcalm} and \ref{fig:signalwalk}
+is very discriminative -- with a bare eye a movement from no movement is distinguishable.
+A detection of presence used in light sensors can be implemented with tresholding, this attitude is
+not very suitable for classification of anything else except the presence itself.
+
+In a calm state the sensor sends a constant signal\footnote{Constant signal in the terms
+of electricity, slightly polluted with a background noise etc.}. Movement in the sensed area causes
+abrupt changes of output. When the object either leaves the area, or stays completely calm, the signal
+changes are getting slower and after a little while the output voltage gets in the calm state again.
+
+Therefore, the nature of the signal does not seem to need a complicated method to perform a classification on it.
+{\it Fourier transformation} and {\it wavelet transformation} were considered for feature
+extraction. The abrupt changes in the signal could be problem for FT, because it can not represent
+it efficiently\cite{SinglePIR}, % youtube video
+but unlike sinusoids, the wavelets exist for a finite duration and they are suitable for representing
+abrupt changes.
+
+The wavelet transformation is defined as a function F(s,k). Parameters s,k are scale and shift, changing
+them in predefined unit and interval creates a matrix, as you can see in the figure \ref{fig:walk03}.
+
+\begin{equation}
+F(s,k) = \sum_{n=1}^{N} x[n] \Psi_{(s,k)}^{*}[n]
+\end{equation}
+
+Firstly The data were offline analysed using {\it Matlab}, which has implemented wavelet transformation.
+The Matlab is not used because it is proprietary software and the program would be dependent on it.
+During the analysis it was found, that the data are very well separable using continuous wavelet tranformation.
+
+\begin{figure}[h!]
+\begin{lstlisting}[style=matlab]
+data = csvread('walk02.csv');
+wscalogram('image', cwt(data));
+\end{lstlisting}
+\caption{Matlab code performing cwt.\label{list:cwtmatlab}}
+\end{figure}
+
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[width=0.6\textwidth]{obrazky-figures/walk03.png}
+\caption{Matlab {\it cwt()} output of {\it walk03.csv}.\label{fig:walk03}}
+\end{center}
+\end{figure}
+
+
+{\it Origin of data, description, training.}
+
+
+
 
 \chapter{Implementation}
 
@@ -761,6 +781,21 @@ The design of user interface is described in chapter \ref{Label:UI}.
 
 
 
+\chapter{Experiments}
+Unit tests were created to verify the program components. It uses {\it Boost.Test},
+framework for creating unit tests which is part of {\it C++ Boost} library set.
+The testing program placed in folder {\it collector/tests/} is linked with
+{\it collector} transformed in static library.
+
+{\it
+Metodika a vysledky. Muze zahrnovat i matematicke dukazu, postupy...
+
+Interpretace vysledku a moznosti nasazeni v praxi.
+
+HW narocnost -- CPU, pamet, chovani pri paralelizaci apod.
+}
+
+
 
 
 \chapter{User Interface}
@@ -776,19 +811,7 @@ The design of user interface is described in chapter \ref{Label:UI}.
 \end{figure}
 
 
-\chapter{Testing}
-Unit tests were created to verify the program components. It uses {\it Boost.Test},
-framework for creating unit tests which is part of {\it C++ Boost} library set.
-The testing program placed in folder {\it collector/tests/} is linked with
-{\it collector} transformed in static library.
 
-{\it
-Metodika a vysledky. Muze zahrnovat i matematicke dukazu, postupy...
-
-Interpretace vysledku a moznosti nasazeni v praxi.
-
-HW narocnost -- CPU, pamet, chovani pri paralelizaci apod.
-}
 
 
 
