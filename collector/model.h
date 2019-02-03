@@ -45,28 +45,28 @@ namespace Recog {
     /** @brief Recognized object in polar coordinates. */
     typedef Geo::Coords::Polar Object;
 
-    typedef std::function<double(long)> MotherWavelet;
+    typedef std::function<float(long)> MotherWavelet;
     typedef std::function<MotherWavelet(unsigned)> Generator;
     /** @brief Representation of wavelet. */
     class Wavelet {
         // static methods
         public:
             static MotherWavelet Haar(unsigned s) {
-                return [s](long x) {
-                    if(x < 0) { return 0; }
-                    else if(x < (s/2.)) { return 1; }
-                    else if(x < (s)) { return -1; }
-                    else { return 0; }
+                return [s](long x)->float {
+                    if(x < 0) { return 0.; }
+                    else if(x < (s/2.)) { return 1.; }
+                    else if(x < (s)) { return -1.; }
+                    else { return 0.; }
                 };
             }
             static MotherWavelet Morlet(unsigned s) {
-                return [s](long x) {
-                    return exp(-(x*x)/2.) * cos(5*x);
+                return [s](long x)->float {
+                    return exp(-(x*x)/2.) * cos(5.*x);
                 };
             }
             static MotherWavelet MexicanHat(unsigned s) {
-                return [s](long x) {
-                    return pow(2, 5/4.) / sqrt(3) * (1 + exp(2*M_PI*x*x)) * exp(-M_PI*x*x);
+                return [s](long x)->float {
+                    return pow(2., 5./4.) / sqrt(3.) * (1. + exp(2.*M_PI*x*x)) * exp(-M_PI*x*x);
                 };
             }
         // instantional methods
@@ -84,7 +84,7 @@ namespace Recog {
              * @param x         Input signal.
              * @returns Convolution with x.
              */
-            double operator*(const cv::Mat& x);
+            float operator*(const cv::Mat& x);
 
             void setScale(unsigned s) {
                 s_ = s;
@@ -134,11 +134,8 @@ namespace Recog {
             int rows() { return features_.rows; }
             int cols() { return features_.cols; }
 
-            
-
-
         private:
-            const std::vector<unsigned> scales_ = {1,2,3}; /**< Scales for CWF. */
+            const std::vector<unsigned> scales_ = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70}; /**< Scales for CWF. */
 
             cv::Mat features_;
             bool extracted_ = false;

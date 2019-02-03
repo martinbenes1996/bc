@@ -48,4 +48,4 @@ for segment in segments:
 
     sock.sendto(b"center\0"+segment, ("127.0.0.1", 5005))
     print("Replay: sent", len(b"center\0"+segment),"B.")
-    time.sleep(0.2)
+    time.sleep(0.5)
