@@ -87,7 +87,7 @@ Segments readFile(const char * filename) {
     return r;
 }
 BOOST_AUTO_TEST_CASE(Recog_Wavelet) {
-    Segments segments = readFile("../../data/walk03.dat");
+    Segments segments = readFile("../../data/calm03.dat");
 
     int k = 1;
     for(auto& seg: segments) {
@@ -109,7 +109,7 @@ BOOST_AUTO_TEST_CASE(Recog_Wavelet) {
 
         FILE * f;
         char filename[60];
-        sprintf(filename, "walk03_segment%d_cwt.csv", k++);
+        sprintf(filename, "calm03_segment%d_cwt.csv", k++);
         f = fopen(filename, "w");
         for(int i = 0; i < r.rows(); i++) {
             for(int j = 0; j < r.cols(); j++) {
