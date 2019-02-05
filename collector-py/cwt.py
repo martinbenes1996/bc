@@ -17,6 +17,7 @@ class Transformer:
         self.ax.set_xlabel("Samples")
         self.ax.set_ylabel("Frequency")
         self.ax.set_ylim(1,31)
+        #self.fig.colorbar()
         #self.ax.set_yscale('log', basey=10)
         self.x, self.y = np.meshgrid(np.arange(0,240), np.logspace(np.log10(self.widths[-1]), np.log10(self.widths[0]), np.size(self.widths)))
         self.cwtcnt = np.size(self.x,1)
@@ -39,13 +40,13 @@ class Transformer:
     def generateScalogram(self, m):
         rCnt = np.size(m, 1)
         cCnt = np.size(m, 0)
-        m = m**2 / self.cwtcnt
         m = np.flip(m,0)
         for r in range(0,rCnt):
             for c in range(0,cCnt):
                 if self.crop(r,c):
                     m[c,r] = 0
         m = np.flip(m,0)
+        m = 100 * np.abs(m**2) / np.sum(m)
         return m
 
 
@@ -56,7 +57,7 @@ class Transformer:
         if show:
             scalogram = self.generateScalogram(cwtmatr)
             
-            self.ax.pcolormesh(self.x, self.y, scalogram, cmap='PRGn')
+            c = self.ax.pcolormesh(self.x, self.y, scalogram, cmap='PRGn')
             plt.pause(10e-9)
             
             
