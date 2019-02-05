@@ -10,6 +10,7 @@ import math
 
 
 class Transformer:
+    """ Transforms signal to CWT coefficients. """
     def __init__(self):
         self.widths = np.arange(1,31)
         self.fig = plt.figure()
