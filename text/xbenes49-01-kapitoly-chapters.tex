@@ -6,12 +6,12 @@
 
 
 Our~body as same as everything surrounding us emits some radiation. The~dominant wavelengths
-belong to the~infrared spectrum and our body sense it as a heat. If we pass its significance
+belong to the~infrared spectrum and our body senses it as a heat. If we pass its significance
 for living creatures and the~fact that the~presence of the~right amount of infrared radiation
 is essencial for all the~life as we know it, there is also a~lot of usage in the~industry or
 generally -- technology.
 
-Infrared waves are used in various devices. From nightvision devices, astronomy to personal
+Infrared waves are used in various devices. From nightvision devices, astronomical telescopes to personal
 electronics (infraport, TV remote controller). This thesis focuses on the usage in PIR
 sensors -- electronic devices that changes its output based on the amount of received infrared
 radiation.
@@ -277,8 +277,17 @@ There is a~number of approaches how to~construct such a~sensor. The~point is to~
 energy in~electric voltage and send it away via wire to~be processed by~hardware or~software.
 
 First way how to do it is {\it a~bolometer}. It uses the fact that resistance of a~resistor is different
-when changing a~temperature. So with using the~same voltage it measures the~electric current and
-with the~Ohm law $R = \frac{U}{I}$ the~sensor computes instantaneus resistance.
+when changing a~temperature, as shown in the equation \ref{eq:bolo} for temperature difference $\Delta T$
+and resistor with original resistance $R_0$ and new resistance $R_t$ and with temperature coefficient $\alpha$.
+So with using the~same voltage it measures the~electric current and with the~Ohm law $R = \frac{U}{I}$
+the~sensor computes instantaneus resistance.
+
+\begin{figure}[!ht]
+\begin{equation}
+R_t = R_0 (1 + \alpha\Delta T)
+\end{equation}
+\caption{Relationship of resistance and temperature.\label{eq:bolo}}
+\end{figure}
 
 Another type is {\it a thermoelectric sensor} reacting to the different thermoelectric resistance of
 exposed wire and comparative wire.
@@ -305,6 +314,11 @@ as you can see in the~figure \ref{fig:fresnellens}. Then the~ray is transformed 
 \caption{Fresnel lens.\label{fig:fresnellens}}
 \end{center}
 \end{figure}
+
+Before the output the signal is being processed. For vast majority of application we are interested in
+people sensing emitting radiation characterized in the figure \ref{fig:bodywavelength}.
+Therefore the signal is amplified and filtered to well discriminate their presence and absence.
+An example is a scheme \ref{fig:pirstd} of product {\it PIR STD} made by {\it B+B Sensors}.
 
 {\it Description of fresnel len of PIR STD.}
 
@@ -759,6 +773,64 @@ wscalogram('image', cwt(data));
 
 
 \chapter{Implementation}
+
+\section{Module}
+
+Nowadays most of the PIR sensors sold have only a binary output.
+When signal reaches a set treshold output is set to logic "1" for a unit of time.
+This mechanism is suitable for a light sensor or door sonsor, completely useless
+for the needs of this project though.
+
+The only found sensor that offers an analog output was {\it PIR STD} by
+{\it B+B Sensors}. {\it Add documentation to appendix.}
+
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[width=0.8\textwidth]{obrazky-figures/pirstd.png}
+\caption{Scheme of PIR STD.\label{fig:pirstd}}
+\end{center}
+\end{figure}
+
+The {\it PIR STD} scheme shown in the figure \ref{fig:pirstd} processes the signal
+in three stages going from left to right. The first one starts at S of the PIR sensor,
+following with noise filter consisting of the amplifier $U1A$ and the feedback components
+$R3$, $C4$, $C8$, $R14$, $C9$, $R14$. There is also highpass filter done by $R6$ and $C3$.
+The output of this stage is a signal with frequency between $f_{L1}$ and $f_{H1}$ amplified
+$A_{U1A}$ times.
+
+\begin{equation}
+f_{H1} = \frac{1}{2 \pi R_3 C_4}
+\end{equation}
+
+\begin{equation}
+f_{L1} = \frac{1}{2 \pi R_6 C_3}
+\end{equation}
+
+\begin{equation}
+A_{U1A} = 1 + \frac{R_3}{R_2}
+\end{equation}
+
+The second processing stage focuses on amplification. It also includes lowpass filtering done
+by $C5$ and $R4$ and highpass filter performed by the feedback of amplifier $U1B$. The greater
+amplification is also made by the divider bridge ($R8$, $R9$, $R10$, $R11$) connected to the
+positive input. The output of frequency between $max(f_{L1}, f_{L2})$ and $min(f_{H1}, f_{H2})$
+amplified $A_{U1A} \cdot A_{U1B}$ times is an analog output connected to the pin 1.
+
+\begin{equation}
+f_{H2} = \frac{1}{2 \pi R_5 C_6}
+\end{equation}
+
+\begin{equation}
+f_{L2} = \frac{1}{2 \pi R_4 C_5}
+\end{equation}
+
+\begin{equation}
+A_{U1B} = -\frac{R_5}{R_4}
+\end{equation}
+
+The third phase performs top-bottom tresholding generating binary output.
+{\it Phase three description.}
+
 
 \section{Collector}
 {\it Collector} is a program, as the name says, that collects data from sensors and implements
