@@ -32,8 +32,8 @@ class Transformer:
 
     @staticmethod
     def crop(x,y):
-        leftUntil = 110
-        rightFrom = 130
+        leftUntil = 105
+        rightFrom = 135
         topLimit = 33
         c = (topLimit/(240-rightFrom))
         return (y < (-topLimit/leftUntil)*x + topLimit) or (y < c*x - c*rightFrom)
@@ -47,7 +47,7 @@ class Transformer:
                 if self.crop(r,c):
                     m[c,r] = 0
         m = np.flip(m,0)
-        m = 100 * np.abs(m**2) / np.sum(m)
+        #m = 100 * np.abs(m**2) / np.sum(m)
         return m
 
 
@@ -58,7 +58,7 @@ class Transformer:
         if show:
             scalogram = self.generateScalogram(cwtmatr)
             
-            c = self.ax.pcolormesh(self.x, self.y, scalogram, cmap='PRGn', vmin=-50, vmax=50)
+            c = self.ax.pcolormesh(self.x, self.y, scalogram, cmap='PRGn', vmin=-100, vmax=100)
             if self.cb != None:
                 self.cb.remove()
             self.cb = self.fig.colorbar(c)
