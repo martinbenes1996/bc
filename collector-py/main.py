@@ -2,6 +2,7 @@
 
 import comm
 import cwt
+import log
 
 
 
@@ -14,10 +15,14 @@ import cwt
 def main():
     client = comm.Client()
     transformer = cwt.Transformer()
+    view = log.Viewer()
 
     while True:
         data = client.get()
-        cwtCoefs = transformer.process(data, show=True)
+        cwtCoefs = transformer.process(data)
+
+        # view cwt coefficients
+        view.cwt(cwtCoefs)
 
 
 

@@ -1,0 +1,8 @@
+{
+    "period" : 500,
+    
+    "segment" : {
+        "samples" : 60,
+        "overlap" : 10
+    }
+}
