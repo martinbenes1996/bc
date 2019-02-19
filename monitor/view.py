@@ -1,10 +1,18 @@
 
 import fnmatch
 import math
+import numpy as np
 import os
 import re
 import tkinter as tk
+from tkinter import ttk
 import time
+
+from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg)
+from matplotlib.figure import Figure
+from matplotlib.backend_bases import key_press_handler
+import matplotlib.pyplot as plt
+
 
 class App:
     """View of the client and window at once. Singleton.
@@ -24,12 +32,17 @@ class App:
         w,h = self.root.winfo_screenwidth(), self.root.winfo_screenheight()
         #self.root.overrideredirect(1)
         self.root.geometry("%dx%d+0+0" % (w,h))
+
         # fill and display window
         self.create_window()
         # run timer for painting
         self.update_window()
+        self.updaters = []
 
-    
+        # create variables
+        self.readers = {}
+        self.cwt = {}
+
     @classmethod
     def get(cls):
         """Instance getter."""
@@ -43,6 +56,7 @@ class App:
         self.window = tk.Frame(self.root)
         self.create_menu()
         self.create_serial()
+        self.create_main()
     
     def create_menu(self):
         menubar = tk.Menu(self.root)
@@ -74,39 +88,151 @@ class App:
         self.serialfiles = sorted(allfiles, key=sortByNumericAppendix)
 
         for f in self.serialfiles:
-                check = tk.Checkbutton(self.root, text=f)
-                check.grid(column=0, sticky=tk.W+tk.S)
-                self.serials.append(check)
-                
-    def create_tab(self):
-        pass
+            checkbutton = MyCheckButton(self.root, f, self.checkSerial, self.uncheckSerial)
+            checkbutton.button.grid(column=0, sticky=tk.W+tk.S, padx=30)
+            self.serials.append(checkbutton)
+
+    
+
+    def create_main(self):
+        self.tabControl = ttk.Notebook(self.root)
+        self.tabControl.grid(row=0, column=1, sticky=tk.W+tk.N,rowspan=30)
+        self.tabs = {}
+
+    def checkSerial(self, name):
+        self.create_tab("/dev/" + name)
+
+    def uncheckSerial(self, name):
+        self.close_tab("/dev/" + name)
+
+    def create_tab(self, name):
+        if name in self.tabs:
+            raise Exception("Opening existing tab!")
+        tab = tk.Frame(self.tabControl)
+        reader = lambda:[0 for _ in range(0,60)]
+        cwt = lambda:[[0 for _ in range(0,60)] for _ in range(0,500)]
+
+        if name in self.readers:
+            print("Reader assigned.")
+            reader = self.readers[name]
+        else:
+            print(name, "is not in", self.cwt)
+        if name in self.cwt:
+            print("Cwt assigned.")
+            cwt = self.cwt[name]
+        else:
+            print(name, "is not in", self.cwt)
+
+        self.create_signalview(tab, reader)
+        self.create_cwtview(tab,cwt)
+        self.tabControl.add(tab, text=name)
+        self.tabs[name] = tab
+
+    def close_tab(self, name):
+        if name not in self.tabs:
+            raise Exception("Closing not existing tab!")
+        self.tabControl.forget(self.tabs[name])
+        self.tabs[name].destroy()
+        del self.tabs[name]
+    
+    def create_signalview(self, master, reader):
+        sv = SignalView(self.root, master, reader)
+        sv.canvas.get_tk_widget().grid(row=0, column=1, rowspan=30)
+    def create_cwtview(self, master, cwt):
+        cv = CwtView(self.root, master, cwt)
+        cv.canvas.get_tk_widget().grid(row=0, column=2, rowspan=30)
 
     def showAbout(self):
         pass
-
-
-
     
     def update_window(self):
-        # hide and delete all drawn objects
-        #for o in self.objects:
-        #    self.itemconfigure(o, state='hidden')
-        #    self.delete(o)
-        #self.objects = []
-        # draw the new objects
-        #print("App.update: objects", self.getData())
-        #for o in self.getData():
-        #    self.objects.append( self.add_object(*o) )
+
         self.root.after(500, self.update_window)
-    
-    def add_object(self, azimuth, distance):
-        #print("App.create_object: azimuth", azimuth, "distance", distance)
-        #r = 10
-        #x0,y0 = self.polar2global(azimuth, distance)
-        #x1,y1 = self.polar2global(azimuth, distance)
-        #print("App.create_object: [",x0,y0,"] [",x1, y1,"]")
-        #return self.create_oval(x0-r, y0+r, x1+r, y1-r, fill="#ffffff")
-        pass
     
     def mainloop(self):
         self.root.mainloop()
+
+
+
+class MyCheckButton:
+    def __init__(self, master, text, callCheck, callUncheck):
+        self.master = master
+        self.text = text
+        self.callCheck, self.callUncheck = callCheck, callUncheck
+        self.var = tk.IntVar()
+        self.button = tk.Checkbutton(self.master, text=self.text, command=self.changed, variable=self.var)
+
+    def changed(self):
+        if self.var.get():
+            self.callCheck(self.text)
+        else:
+            self.callUncheck(self.text)
+
+
+class SignalView:
+    def __init__(self, root, master, reader):
+        self.master = master
+        self.fig = Figure(figsize=(5,4), dpi=100)
+        self.subplt = self.fig.add_subplot(111)
+        self.subplt.set_ylim(0, 1027)
+        self.canvas = FigureCanvasTkAgg(self.fig, master=self.master)
+        self.canvas.draw()
+        self.canvas.mpl_connect("key_press_event", self.onMouseClick)
+        self.getData = reader
+
+        self.afterId = None
+        self.update()
+    
+    def __del__(self):
+        if self.afterId:
+            self.master.after_cancel(self.afterId)
+        
+    
+    def show(self, data):
+        print("SignalView: update")
+        self.subplt.cla()
+        self.subplt.set_ylim(0, 1027)
+        self.subplt.plot(data, color='magenta')
+        self.canvas.draw()
+        self.canvas.flush_events()
+        
+    def update(self):
+        self.show( self.getData() )
+        self.afterId = self.master.after(500, self.update)
+    
+    def onMouseClick(self):
+        pass
+    
+    
+
+class CwtView:
+    def __init__(self, root, master, cwt):
+        self.master = master
+        self.fig = Figure(figsize=(5,4), dpi=100)
+        self.subplt = self.fig.add_subplot(111)
+        self.subplt.set_ylim(0,4)
+        self.canvas = FigureCanvasTkAgg(self.fig, master=self.master)
+        self.canvas.draw()
+        self.canvas.mpl_connect("key_press_event", self.onMouseClick)
+        self.getData = cwt
+
+        self.afterId = None
+        #self.update()
+    
+    def show(self, data):
+        print("CwtView: update")
+        self.subplt.cla()
+        self.subplt.set_ylim(0, 4)
+        self.subplt.plot(data, color='magenta')
+        self.canvas.draw()
+        self.canvas.flush_events()
+        
+    def update(self):
+        self.show( self.getData() )
+        self.afterId = self.master.after(500, self.update)
+    
+    def onMouseClick(self):
+        pass
+
+
+    

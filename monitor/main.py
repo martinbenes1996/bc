@@ -1,12 +1,23 @@
 #!/usr/bin/env python3
 
+import hw
+import model
 import view
 
 
 
 
 def main():
+    # create window
     v = view.App.get()
+    # create sensor reader
+    s1 = hw.Reader("/dev/ttyS3")
+    # create model
+    m = model.Extractor(s1.indicate, s1.getSegment)
+    # connect callbacks
+    v.readers["/dev/ttyS3"] = s1.getSegment
+    v.cwt["/dev/ttyS3"] = m.getBuffer
+
     v.mainloop()
     
 
