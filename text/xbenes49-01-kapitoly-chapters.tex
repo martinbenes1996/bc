@@ -801,17 +801,42 @@ amplifier $U1A$ and the feedback components $R3$, $C4$, $C8$, $R14$, $C9$, $R14$
 There is also highpass filter done by $R6$ and $C3$. The output of this stage is a signal
 with frequency between $f_{L1}$ and $f_{H1}$ amplified $A_{U1A}$ times.
 
+\begin{subequations}
 \begin{equation}
-f_{H1} = \frac{1}{2 \pi R_3 C_4}
+f_{H1} = \frac{1}{2 \pi R_{3,14} C_{4,8}}
 \end{equation}
+
+\begin{equation}
+f_{H1}^{'} = \frac{1}{2 \pi R_{3,15} C_{4,9}}
+\end{equation}
+\end{subequations}
+
+The choice of resistor $R_{3,14} / R_{3,15}$ and capacitator $C_{4,8} / C_{4,9}$
+is done by connected switch. The value of resistance and capacitance of the
+components can be counted with formula for parallel connection.
+
+\begin{equation}
+R_{A,B}^{p} = \frac{1}{R_A} + \frac{1}{R_B}
+\end{equation}
+
+\begin{equation}
+C_{A,B}^{p} = C_A + C_B
+\end{equation}
+
+The same for the resistors $R_{5,16}$ and $R_{5,17}$ and capacitators $C_{6,10}$ and $C_{6,11}$.
 
 \begin{equation}
 f_{L1} = \frac{1}{2 \pi R_6 C_3}
 \end{equation}
 
+\begin{subequations}
 \begin{equation}
-A_{U1A} = 1 + \frac{R_3}{R_2}
+A_{U1A} = 1 + \frac{R_{3,14}}{R_2}
 \end{equation}
+\begin{equation}
+A_{U1A} = 1 + \frac{R_{3,15}}{R_2}
+\end{equation}
+\end{subequations}
 
 \paragraph{II. stage}
 The second processing stage focuses on amplification. It also includes lowpass filtering done

@@ -38,10 +38,10 @@ filename,device = procArgs(sys.argv)
 
 f = open(filename, 'rb')
 data = f.read()
-end = len(data) - (len(data)-480)%360
+end = len(data)
 data = data[0:end]
 
-segments = [data[i:i+480] for i in range(0,end-480+1,360)]
+segments = [data[i:i+120] for i in range(0,end-120+1,100)]
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, 0)  
 for segment in segments:

@@ -14,10 +14,11 @@ class Transformer:
 
     @staticmethod
     def crop(x,y):
-        leftUntil = 105
-        rightFrom = 135
-        topLimit = 33
-        c = (topLimit/(240-rightFrom))
+        leftUntil = 15
+        rightFrom = 45
+        topLimit = len(conf.Config.cwtCoefs()) * 1.3
+        segSize,_ = conf.Config.segment()
+        c = (topLimit/(segSize-rightFrom))
         return (y < (-topLimit/leftUntil)*x + topLimit) or (y < c*x - c*rightFrom)
 
     def postprocess(self, m):

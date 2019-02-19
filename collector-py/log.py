@@ -11,10 +11,11 @@ class Viewer:
         self.cwt_ax = self.cwt_fig.add_subplot(111)
         self.cwt_ax.set_xlabel("Samples")
         self.cwt_ax.set_ylabel("Frequency")
-        self.cwt_ax.set_ylim(1,31)
-        self.cwt_cb = None
         coefs = conf.Config.cwtCoefs()
-        self.cwt_x, self.cwt_y = np.meshgrid(np.arange(0,240), np.logspace(np.log10(coefs[-1]), np.log10(coefs[0]), np.size(coefs)))
+        self.cwt_ax.set_ylim(coefs[0],coefs[-1])
+        self.cwt_cb = None
+        N,overlap = conf.Config.segment()
+        self.cwt_x, self.cwt_y = np.meshgrid(np.arange(0,N), np.logspace(np.log10(coefs[-1]), np.log10(coefs[0]), np.size(coefs)))
 
     def cwt(self, X):
         c = self.cwt_ax.pcolormesh(self.cwt_x, self.cwt_y, X, cmap='PRGn', vmin=-100, vmax=100)

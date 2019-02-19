@@ -11,7 +11,7 @@ class Config:
             self.samples = data["segment"]["samples"]
             self.overlap = data["segment"]["overlap"]
 
-            self.cwtcoefs = np.arange(1,31)
+            self.cwtcoefs = np.arange(1,4,0.05)
 
             print("Config read.")
             print(self.samples, "samples,", self.overlap, "overlap,", self.period, "period")
