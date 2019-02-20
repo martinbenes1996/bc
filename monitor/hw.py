@@ -7,8 +7,10 @@ import sys
 
 
 class Reader:
+    readers = {}
     def __init__(self, devicename):
-        self.device = serial.Serial(devicename)
+        self.devicename = devicename
+        self.readers[self.devicename] = serial.Serial(devicename)
         self.segment = []
         self.segmentLock = _thread.allocate_lock()
         self.started = False
@@ -37,7 +39,7 @@ class Reader:
             l = self.mem
             self.mem = ''
         while l == '':
-            l = self.device.readline()[:-2]
+            l = self.readers[self.devicename].readline()[:-2]
 
         if len(l) > 3 and l[3] == b'\r':
             self.mem = l[4:]
@@ -63,6 +65,13 @@ class Reader:
         s = self.change
         self.change = swapper
         return s
+    
+    @classmethod
+    def getReader(cls, name):
+        if name not in cls.readers:
+            return serial.Serial(name)
+        else:
+            return cls.readers[name]
     
 
 

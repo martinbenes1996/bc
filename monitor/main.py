@@ -8,12 +8,12 @@ import view
 
 
 def main():
-    # create window
-    v = view.App.get()
     # create sensor reader
     s1 = hw.Reader("/dev/ttyS3")
     # create model
     m = model.Extractor(s1.indicate, s1.getSegment)
+    # create window
+    v = view.App.get()
     # connect callbacks
     v.readers["/dev/ttyS3"] = s1.getSegment
     v.cwt["/dev/ttyS3"] = m.getBuffer

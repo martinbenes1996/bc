@@ -1,5 +1,6 @@
 
 import sys
+import time
 import _thread
 
 sys.path.insert(0, '../collector-py/')
@@ -24,6 +25,8 @@ class Extractor:
                 b = self.engine.process( self.getData() )
                 with self.bufferLock:
                     self.buffer = b
+            else:
+                time.sleep(0.1)
     
     def getBuffer(self):
         with self.bufferLock:

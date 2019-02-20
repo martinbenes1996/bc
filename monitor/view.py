@@ -4,6 +4,8 @@ import math
 import numpy as np
 import os
 import re
+import serial
+import sys
 import tkinter as tk
 from tkinter import ttk
 import time
@@ -12,6 +14,11 @@ from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg)
 from matplotlib.figure import Figure
 from matplotlib.backend_bases import key_press_handler
 import matplotlib.pyplot as plt
+
+import hw
+sys.path.insert(0, '../collector-py/')
+import log
+import conf
 
 
 class App:
@@ -87,8 +94,10 @@ class App:
 
         self.serialfiles = sorted(allfiles, key=sortByNumericAppendix)
 
+        tk.Label(self.root, text=u"Ports", font=30).grid(column=0, sticky=tk.W+tk.S, padx=30)
+
         for f in self.serialfiles:
-            checkbutton = MyCheckButton(self.root, f, self.checkSerial, self.uncheckSerial)
+            checkbutton = MyCheckButton(self.root, "/dev/"+f, self.checkSerial, self.uncheckSerial)
             checkbutton.button.grid(column=0, sticky=tk.W+tk.S, padx=30)
             self.serials.append(checkbutton)
 
@@ -100,10 +109,10 @@ class App:
         self.tabs = {}
 
     def checkSerial(self, name):
-        self.create_tab("/dev/" + name)
+        self.create_tab(name)
 
     def uncheckSerial(self, name):
-        self.close_tab("/dev/" + name)
+        self.close_tab(name)
 
     def create_tab(self, name):
         if name in self.tabs:
@@ -160,13 +169,30 @@ class MyCheckButton:
         self.text = text
         self.callCheck, self.callUncheck = callCheck, callUncheck
         self.var = tk.IntVar()
+        self.afterId = None
         self.button = tk.Checkbutton(self.master, text=self.text, command=self.changed, variable=self.var)
+        self.update()
+
+    def __del__(self):
+        if not self.afterId:
+            self.master.after_cancel(self.afterId)
 
     def changed(self):
         if self.var.get():
             self.callCheck(self.text)
         else:
             self.callUncheck(self.text)
+    
+    def update(self):
+        try:
+            device = hw.Reader.getReader(self.text)
+        except serial.serialutil.SerialException:
+            #self.button.config(fg="red")
+            self.button.config(state=tk.DISABLED)
+        else:
+            #self.button.config(fg="green")
+            self.button.config(state=tk.NORMAL)
+        self.afterId = self.master.after(30000, self.update)
 
 
 class SignalView:
@@ -177,7 +203,7 @@ class SignalView:
         self.subplt.set_ylim(0, 1027)
         self.canvas = FigureCanvasTkAgg(self.fig, master=self.master)
         self.canvas.draw()
-        self.canvas.mpl_connect("key_press_event", self.onMouseClick)
+        self.fig.canvas.mpl_connect("button_press_event", self.onMouseClick)
         self.getData = reader
 
         self.afterId = None
@@ -198,41 +224,72 @@ class SignalView:
         
     def update(self):
         self.show( self.getData() )
-        self.afterId = self.master.after(500, self.update)
+        self.afterId = self.master.after(200, self.update)
     
-    def onMouseClick(self):
-        pass
+    def onMouseClick(self, event):
+        print("Signal click!", event.button)
+        # left
+        if event.button == 1:
+            if self.afterId:
+                self.master.after_cancel(self.afterId)
+            self.update()
+        # middle
+        elif event.button == 2:
+            pass
+        # right
+        elif event.button == 3:
+            pass
     
     
 
 class CwtView:
     def __init__(self, root, master, cwt):
         self.master = master
-        self.fig = Figure(figsize=(5,4), dpi=100)
-        self.subplt = self.fig.add_subplot(111)
-        self.subplt.set_ylim(0,4)
-        self.canvas = FigureCanvasTkAgg(self.fig, master=self.master)
+        #self.fig = Figure(figsize=(5,4), dpi=100)
+        #self.subplt = self.fig.add_subplot(111)
+        #self.subplt.set_ylim(0,4)
+        self.viewer = log.Viewer(inline=True)
+        self.canvas = FigureCanvasTkAgg(self.viewer.cwt_fig, master=self.master)
         self.canvas.draw()
-        self.canvas.mpl_connect("key_press_event", self.onMouseClick)
+        self.viewer.cwt_fig.canvas.mpl_connect("button_press_event", self.onMouseClick)
         self.getData = cwt
 
         self.afterId = None
-        #self.update()
+        self.update()
     
+    def __del__(self):
+        if self.afterId:
+            self.master.after_cancel(self.afterId)
+
     def show(self, data):
         print("CwtView: update")
-        self.subplt.cla()
-        self.subplt.set_ylim(0, 4)
-        self.subplt.plot(data, color='magenta')
+        #self.subplt.cla()
+        #self.subplt.set_ylim(0, 4)
+        #self.subplt.plot(data, color='magenta')
+        self.viewer.cwt(data)
         self.canvas.draw()
         self.canvas.flush_events()
         
     def update(self):
         self.show( self.getData() )
-        self.afterId = self.master.after(500, self.update)
+        self.afterId = self.master.after(200, self.update)
     
-    def onMouseClick(self):
-        pass
+    def onMouseClick(self, event):
+        print("CWT click!", event.button)
+        # left
+        if event.button == 1:
+            if self.afterId:
+                self.master.after_cancel(self.afterId)
+            self.update()
+        # middle
+        elif event.button == 2:
+            pass
+        # right
+        elif event.button == 3:
+            pass
+
+
+        
 
 
     
