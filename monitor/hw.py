@@ -1,4 +1,5 @@
 
+import csv
 import datetime
 import serial
 import _thread
@@ -15,6 +16,7 @@ class Reader:
         self.segmentLock = _thread.allocate_lock()
         self.started = False
         self.mem = ''
+        self.filename = ""
         self.change = False
         self.setStatus = lambda _: None
         _thread.start_new_thread(self.read, ())
@@ -29,8 +31,28 @@ class Reader:
                 self.indicate(True)
                 #self.setStatus("Update received.")
                 #print("Reader: Read ", i)
+            self.write(s)
             self.started = True
             time.sleep(0.3)
+    
+    def record(self, filename=None):
+        if not filename:
+            if self.filename:
+                print("Recording to", self.filename, "ended.")
+                self.filename = ''
+                return
+            filename = "PIR " + str(datetime.datetime.now()) + ".csv"
+        self.filename = filename
+        print("Recording to", self.filename, "started.")
+        f = open(self.filename, 'w')
+
+    def write(self, segment):
+        if not self.filename:
+            return
+        with open(self.filename, "a", newline='') as f:
+            csvwriter = csv.writer(f)
+            csvwriter.writerow(segment)
+
 
     def readSegment(self):
         return [self.readSample() for _ in range(0,60)]

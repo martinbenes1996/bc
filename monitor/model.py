@@ -1,4 +1,5 @@
 
+import datetime
 import sys
 import time
 import _thread
@@ -17,6 +18,8 @@ class Extractor:
         self.buffer = []
         self.bufferLock = _thread.allocate_lock()
 
+        self.filename = ''
+
         _thread.start_new_thread(self.process, ())
 
     def process(self):
@@ -31,5 +34,18 @@ class Extractor:
     def getBuffer(self):
         with self.bufferLock:
             return self.buffer
+    
+    def record(self, name=None):
+        if not name:
+            if self.filename:
+                print("Recording to", self.filename, "ended.")
+                self.filename = ''
+                return
+            name = "CWT " + str(datetime.datetime.now()) + ".dat"
+        self.filename = name
+        print("Recording to", self.filename, "started.")
+        f = open(self.filename, 'w')
+    def write(self, data):
+        pass
 
 

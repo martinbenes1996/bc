@@ -49,6 +49,8 @@ class App:
         # create variables
         self.readers = {}
         self.cwt = {}
+        self.signalrecorders = {}
+        self.cwtrecorders = {}
 
     @classmethod
     def get(cls):
@@ -121,6 +123,8 @@ class App:
         tab = tk.Frame(self.tabControl)
         reader = lambda:[0 for _ in range(0,60)]
         cwt = lambda:[[0 for _ in range(0,60)] for _ in range(0,500)]
+        signalrecorder = lambda _:None
+        cwtrecorder = lambda _:None
 
         if name in self.readers:
             print("Reader assigned.")
@@ -132,9 +136,19 @@ class App:
             cwt = self.cwt[name]
         else:
             print(name, "is not in", self.cwt)
+        if name in self.signalrecorders:
+            print("SignalRecorder assigned.")
+            signalrecorder = self.signalrecorders[name]
+        else:
+            print(name, "is not in", self.signalrecorders)
+        if name in self.cwtrecorders:
+            print("CwtRecorder assigned.")
+            cwtrecorder = self.cwtrecorders[name]
+        else:
+            print(name, "is not in", self.cwtrecorders)
 
-        self.create_signalview(tab, reader)
-        self.create_cwtview(tab,cwt)
+        self.create_signalview(tab, reader, signalrecorder)
+        self.create_cwtview(tab,cwt, cwtrecorder)
         self.tabControl.add(tab, text=name)
         self.tabs[name] = tab
 
@@ -145,12 +159,12 @@ class App:
         self.tabs[name].destroy()
         del self.tabs[name]
     
-    def create_signalview(self, master, reader):
-        sv = SignalView(self.root, master, reader)
-        sv.canvas.get_tk_widget().grid(row=0, column=1, rowspan=30)
-    def create_cwtview(self, master, cwt):
-        cv = CwtView(self.root, master, cwt)
-        cv.canvas.get_tk_widget().grid(row=0, column=2, rowspan=30)
+    def create_signalview(self, master, reader, recorder):
+        sv = SignalView(self.root, master, reader, recorder)
+        sv.canvas.get_tk_widget().grid(row=0, column=1, rowspan=30, sticky=tk.N)
+    def create_cwtview(self, master, cwt, recorder):
+        cv = CwtView(self.root, master, cwt, recorder)
+        cv.canvas.get_tk_widget().grid(row=0, column=2, rowspan=30, sticky=tk.N)
     
     def create_statusbar(self):
         self.status = tk.Label(self.root, text="Loading...", width=100, bd=1, relief=tk.SUNKEN, anchor=tk.W)
@@ -219,7 +233,7 @@ class MyCheckButton:
 
 
 class SignalView:
-    def __init__(self, root, master, reader):
+    def __init__(self, root, master, reader, recorder):
         self.master = master
         self.fig = Figure(figsize=(5,4), dpi=100)
         self.subplt = self.fig.add_subplot(111)
@@ -228,9 +242,11 @@ class SignalView:
         self.canvas.draw()
         self.canvas.get_tk_widget().bind('<ButtonRelease-1>', self.manualUpdate)
         self.canvas.get_tk_widget().bind('<ButtonRelease-3>', self.showMenu)
+        self.canvas.get_tk_widget().config(highlightcolor='black', highlightbackground='black', highlightthickness=3, bd=0)
         self.getData = reader
+        self.record = recorder
 
-        self.menu = RightMenu(self.master, self.manualUpdate)
+        self.menu = RightMenu(self.master, self.manualUpdate, self.recordMenuHandler)
 
         self.afterId = None
         self.update()
@@ -258,20 +274,28 @@ class SignalView:
     
     def showMenu(self, event):
         self.menu.show(event.x_root, event.y_root)
-    
+        
+    def recordMenuHandler(self, filename, status):
+        if status:
+            self.canvas.get_tk_widget().config(highlightcolor='red', highlightbackground='red')
+        else:
+            self.canvas.get_tk_widget().config(highlightcolor='black', highlightbackground='black')
+        self.record(filename)
     
 
 class CwtView:
-    def __init__(self, root, master, cwt):
+    def __init__(self, root, master, cwt, recorder):
         self.master = master
         self.viewer = log.Viewer(inline=True)
         self.canvas = FigureCanvasTkAgg(self.viewer.cwt_fig, master=self.master)
         self.canvas.draw()
         self.canvas.get_tk_widget().bind('<ButtonRelease-1>', self.manualUpdate)
         self.canvas.get_tk_widget().bind('<ButtonRelease-3>', self.showMenu)
+        self.canvas.get_tk_widget().config(highlightcolor='black', highlightbackground='black', highlightthickness=3, bd=0)
         self.getData = cwt
+        self.record = recorder
 
-        self.menu = RightMenu(self.master, self.manualUpdate)
+        self.menu = RightMenu(self.master, self.manualUpdate, self.recordMenuHandler)
 
         self.afterId = None
         self.update()
@@ -296,19 +320,36 @@ class CwtView:
     
     def showMenu(self, event):
         self.menu.show(event.x_root, event.y_root)
+    
+    def recordMenuHandler(self, filename, status):
+        if status:
+            self.canvas.get_tk_widget().config(highlightcolor='red', highlightbackground='red')
+        else:
+            self.canvas.get_tk_widget().config(highlightcolor='black', highlightbackground='black')
+        self.record(filename)
 
 
 class RightMenu:
-    def __init__(self, master, refresh):
+    def __init__(self, master, refresh, record):
+        self.record = record
+        self.recording = False
         self.popup = tk.Menu(master, tearoff=0)
         self.popup.add_command(label="Refresh", command=refresh)
         self.popup.add_command(label="Pause", command=self.pause)
-        self.popup.add_command(label="Record", command=self.record)
+        self.popup.add_command(label="Record", command=self.switchRecord)
 
     def pause(self):
         print("Pause!")
-    def record(self):
-        print("Record!")
+    def switchRecord(self):
+        self.recording = not self.recording
+        self.record("", self.recording)
+        if self.recording:
+            label = "Stop Recording"
+        else:
+            label = "Record"
+        self.popup.entryconfig(2, label=label)
+
+        
 
     def show(self, x, y):
         try:

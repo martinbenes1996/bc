@@ -17,6 +17,8 @@ def main():
     # connect callbacks
     v.readers["/dev/ttyS3"] = s1.getSegment
     v.cwt["/dev/ttyS3"] = m.getBuffer
+    v.signalrecorders['/dev/ttyS3'] = s1.record
+    v.cwtrecorders['/dev/ttyS3'] = m.record
     s1.setStatus = v.setStatus
 
     v.mainloop()
