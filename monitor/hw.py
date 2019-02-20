@@ -16,6 +16,7 @@ class Reader:
         self.started = False
         self.mem = ''
         self.change = False
+        self.setStatus = lambda _: None
         _thread.start_new_thread(self.read, ())
 
     def read(self):
@@ -26,8 +27,10 @@ class Reader:
             with self.segmentLock:
                 self.segment = s
                 self.indicate(True)
+                #self.setStatus("Update received.")
                 #print("Reader: Read ", i)
             self.started = True
+            time.sleep(0.3)
 
     def readSegment(self):
         return [self.readSample() for _ in range(0,60)]

@@ -64,6 +64,7 @@ class App:
         self.create_menu()
         self.create_serial()
         self.create_main()
+        self.create_statusbar()
     
     def create_menu(self):
         menubar = tk.Menu(self.root)
@@ -150,6 +151,28 @@ class App:
     def create_cwtview(self, master, cwt):
         cv = CwtView(self.root, master, cwt)
         cv.canvas.get_tk_widget().grid(row=0, column=2, rowspan=30)
+    
+    def create_statusbar(self):
+        self.status = tk.Label(self.root, text="Loading...", width=100, bd=1, relief=tk.SUNKEN, anchor=tk.W)
+        self.root.grid_rowconfigure(100, weight=1)
+        self.status.grid(row=100, column=0, columnspan=2, sticky=tk.S+tk.W+tk.E)
+        self.statusmsg = ''
+        #self.updateStatus()
+
+    def setStatus(self, status):
+        self.statusmsg = status
+    
+    def updateStatus(self):
+        if self.statusmsg == '':
+            self.root.after(100, self.updateStatus)
+        self.status.config(text=self.statusmsg)
+        self.statusmsg = ''
+        self.root.after(200, self.emptyStatus)
+
+    def emptyStatus(self):
+        self.status.config(text='')
+        self.updateStatus()
+        
 
     def showAbout(self):
         pass
@@ -203,8 +226,11 @@ class SignalView:
         self.subplt.set_ylim(0, 1027)
         self.canvas = FigureCanvasTkAgg(self.fig, master=self.master)
         self.canvas.draw()
-        self.fig.canvas.mpl_connect("button_press_event", self.onMouseClick)
+        self.canvas.get_tk_widget().bind('<ButtonRelease-1>', self.manualUpdate)
+        self.canvas.get_tk_widget().bind('<ButtonRelease-3>', self.showMenu)
         self.getData = reader
+
+        self.menu = RightMenu(self.master, self.manualUpdate)
 
         self.afterId = None
         self.update()
@@ -225,34 +251,27 @@ class SignalView:
     def update(self):
         self.show( self.getData() )
         self.afterId = self.master.after(200, self.update)
+    def manualUpdate(self, event):
+        if self.afterId:
+            self.master.after_cancel(self.afterId)
+        self.update()
     
-    def onMouseClick(self, event):
-        print("Signal click!", event.button)
-        # left
-        if event.button == 1:
-            if self.afterId:
-                self.master.after_cancel(self.afterId)
-            self.update()
-        # middle
-        elif event.button == 2:
-            pass
-        # right
-        elif event.button == 3:
-            pass
+    def showMenu(self, event):
+        self.menu.show(event.x_root, event.y_root)
     
     
 
 class CwtView:
     def __init__(self, root, master, cwt):
         self.master = master
-        #self.fig = Figure(figsize=(5,4), dpi=100)
-        #self.subplt = self.fig.add_subplot(111)
-        #self.subplt.set_ylim(0,4)
         self.viewer = log.Viewer(inline=True)
         self.canvas = FigureCanvasTkAgg(self.viewer.cwt_fig, master=self.master)
         self.canvas.draw()
-        self.viewer.cwt_fig.canvas.mpl_connect("button_press_event", self.onMouseClick)
+        self.canvas.get_tk_widget().bind('<ButtonRelease-1>', self.manualUpdate)
+        self.canvas.get_tk_widget().bind('<ButtonRelease-3>', self.showMenu)
         self.getData = cwt
+
+        self.menu = RightMenu(self.master, self.manualUpdate)
 
         self.afterId = None
         self.update()
@@ -263,33 +282,40 @@ class CwtView:
 
     def show(self, data):
         print("CwtView: update")
-        #self.subplt.cla()
-        #self.subplt.set_ylim(0, 4)
-        #self.subplt.plot(data, color='magenta')
         self.viewer.cwt(data)
         self.canvas.draw()
         self.canvas.flush_events()
-        
+
     def update(self):
         self.show( self.getData() )
         self.afterId = self.master.after(200, self.update)
+    def manualUpdate(self, event):
+        if self.afterId:
+            self.master.after_cancel(self.afterId)
+        self.update()
     
-    def onMouseClick(self, event):
-        print("CWT click!", event.button)
-        # left
-        if event.button == 1:
-            if self.afterId:
-                self.master.after_cancel(self.afterId)
-            self.update()
-        # middle
-        elif event.button == 2:
-            pass
-        # right
-        elif event.button == 3:
-            pass
+    def showMenu(self, event):
+        self.menu.show(event.x_root, event.y_root)
 
 
-        
+class RightMenu:
+    def __init__(self, master, refresh):
+        self.popup = tk.Menu(master, tearoff=0)
+        self.popup.add_command(label="Refresh", command=refresh)
+        self.popup.add_command(label="Pause", command=self.pause)
+        self.popup.add_command(label="Record", command=self.record)
+
+    def pause(self):
+        print("Pause!")
+    def record(self):
+        print("Record!")
+
+    def show(self, x, y):
+        try:
+            self.popup.tk_popup(int(x), int(y), 0)
+        finally:
+            self.popup.grab_release()
+
 
 
     
