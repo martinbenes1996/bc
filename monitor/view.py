@@ -16,9 +16,11 @@ from matplotlib.backend_bases import key_press_handler
 import matplotlib.pyplot as plt
 
 import hw
+import record
 sys.path.insert(0, '../collector-py/')
 import log
 import conf
+
 
 
 class App:
@@ -62,6 +64,7 @@ class App:
         self.cwt = {}
         self.signalrecorders = {}
         self.cwtrecorders = {}
+        self.handlers = {}
 
     @classmethod
     def get(cls):
@@ -91,6 +94,7 @@ class App:
         # Menu Items
         # File
         filemenu = tk.Menu(menubar, tearoff=0)
+        filemenu.add_command(label="Record", command=self.startRecordingSession)
         filemenu.add_separator()
         filemenu.add_command(label="Exit", command=self.root.quit)
         menubar.add_cascade(label="File", menu=filemenu)
@@ -135,7 +139,7 @@ class App:
         """Creates main view."""
         # create tab control
         self.tabControl = ttk.Notebook(self.root)
-        self.tabControl.grid(row=0, column=1, sticky=tk.W+tk.N,rowspan=30)
+        self.tabControl.grid(row=0, column=1, sticky=tk.W+tk.N, rowspan=20)
         self.tabs = {}
 
     def create_tab(self, name):
@@ -179,7 +183,9 @@ class App:
         # create signal view
         self.create_signalview(tab, reader, signalrecorder)
         # create CWT view
-        self.create_cwtview(tab,cwt, cwtrecorder)
+        self.create_cwtview(tab, cwt, cwtrecorder)
+        # add handlers
+        self.handlers[name] = (signalrecorder,cwtrecorder)
         # add to tab control
         self.tabControl.add(tab, text=name)
         self.tabs[name] = tab
@@ -196,6 +202,7 @@ class App:
 
         # remove from tab control
         self.tabControl.forget(self.tabs[name])
+        del self.handlers[name]
         # deallocate
         self.tabs[name].destroy()
         del self.tabs[name]
@@ -211,7 +218,7 @@ class App:
         # create view
         sv = SignalView(self.root, master, reader, recorder)
         # place view
-        sv.canvas.get_tk_widget().grid(row=0, column=1, rowspan=30, sticky=tk.N)
+        sv.canvas.get_tk_widget().grid(row=0, column=1, rowspan=20, sticky=tk.N)
 
     def create_cwtview(self, master, cwt, recorder):
         """Creates view of CWT feature matrix.
@@ -224,7 +231,7 @@ class App:
         # create view
         cv = CwtView(self.root, master, cwt, recorder)
         # place view
-        cv.canvas.get_tk_widget().grid(row=0, column=2, rowspan=30, sticky=tk.N)
+        cv.canvas.get_tk_widget().grid(row=0, column=2, rowspan=20, sticky=tk.N)
     
     def create_statusbar(self):
         """Creates statusbar."""
@@ -259,7 +266,87 @@ class App:
                 self.statusmsg = ''
                 time.sleep(0.2)
                 self.status.config(text='')
-        
+
+    def startRecordingSession(self):
+        # disable view
+        tabid = self.tabControl.select()
+        tabName = self.tabControl.tab(tabid, "text")
+        if not tabName:
+            return
+        activeTab = self.tabs[tabName]
+        signalRecorder, cwtRecorder = self.handlers[tabName]
+        self.switchRecording(True)
+        print(tabid)
+        self.tabControl.tab(tabid, state=tk.NORMAL)
+
+        self.recorder = record.Recorder(signalRecorder, cwtRecorder)
+
+        self.recordFrame = tk.Frame(self.root, highlightcolor='black', highlightbackground='black', highlightthickness=3, bd=0)
+        self.recordFrame.grid(row=0, column=3, rowspan=100, sticky=tk.N+tk.S+tk.E)
+        self.headerFrame = tk.Label(self.recordFrame, text=u"Recording: "+tabName, font=30).grid(sticky=tk.N)
+        self.recordingSessionName = tk.Text(self.recordFrame, height=1, width=40)
+        self.recordingSessionName.insert(tk.INSERT, self.recorder.generateSessionName())
+        self.recordingSessionName.grid(sticky=tk.N+tk.W)
+        self.recordBtn = tk.Button(self.recordFrame, text="Record", command=self.startRecording)
+        self.recordBtn.grid(sticky=tk.N+tk.E+tk.W)
+
+        self.loadBtn = tk.Button(self.recordFrame, text="Load from file", command=self.loadSession)
+        self.loadBtn.grid(sticky=tk.N+tk.E+tk.W)
+        self.addBtn = tk.Button(self.recordFrame, text="Add measurement", command=self.addMeasurement)
+        self.addBtn.grid(sticky=tk.N+tk.E+tk.W)
+        self.saveBtn = tk.Button(self.recordFrame, text="Save to file", command=self.saveSession)
+        self.saveBtn.grid(sticky=tk.N+tk.E+tk.W)
+    
+    def startRecording(self):
+        self.recordBtn.config(text='Stop Recording', command=self.stopRecording)
+        self.recordFrame.config(highlightcolor='red', highlightbackground='red')
+        self.recorder.start()
+    
+    def stopRecording(self):
+        self.recordBtn.config(text='Record', command=self.startRecording)
+        self.recordFrame.config(highlightcolor='black', highlightbackground='black')
+
+    def addMeasurement(self):
+        self.addBtn.grid_forget()
+        self.saveBtn.grid_forget()
+
+        # add measurement to the session
+        # ...
+
+        tk.Label(self.recordFrame, text=u"Measurement").grid(sticky=tk.N)
+
+        self.addBtn.grid(sticky=tk.N+tk.E+tk.W)
+        self.saveBtn.grid(sticky=tk.N+tk.E+tk.W)
+
+    def loadSession(self):
+        filename = 'file.json'
+        # open dialog and get name
+        # ...
+
+        session = self.recorder.loadSession(filename)
+
+        # show file content in view
+        # ...
+    
+    def saveSession(self):
+        filename = 'file.json'
+        # get filename (from text input)
+        # ...
+
+        session = {}
+        # save view elements
+        # ...
+
+        self.recorder.saveSession(filename, session)
+    
+    def switchRecording(self, recording):
+        if recording:
+            for chb in self.serials:
+                chb.disable()
+        else:
+            for chb in self.serials:
+                chb.manualUpdate()
+
 
     def showAbout(self):
         """Shows help."""
@@ -335,6 +422,15 @@ class MyCheckButton:
             self.button.config(state=tk.NORMAL)
         # do again in 30s
         self.afterId = self.master.after(30000, self.update)
+    
+    def manualUpdate(self):
+        if not self.afterId:
+            self.master.after_cancel(self.afterId)
+        self.update()
+    def disable(self):
+        if not self.afterId:
+            self.master.after_cancel(self.afterId)
+        self.button.config(state=tk.DISABLED)
 
 
 class SignalView:
@@ -365,8 +461,10 @@ class SignalView:
         self.afterId = None
 
         # initiate MatPlotLib view
-        self.fig = Figure(figsize=(5,4), dpi=100)
+        self.fig = Figure(figsize=(6,4), dpi=100)
         self.subplt = self.fig.add_subplot(111)
+        self.subplt.set_xlabel("Samples")
+        self.subplt.set_ylabel("Signal value")
         self.subplt.set_ylim(0, 1027)
         self.canvas = FigureCanvasTkAgg(self.fig, master=self.master)
         self.canvas.draw()
@@ -396,6 +494,8 @@ class SignalView:
         # clear view
         self.subplt.cla()
         # set view
+        self.subplt.set_xlabel("Samples")
+        self.subplt.set_ylabel("Signal value")
         self.subplt.set_ylim(0, 1027)
         # plot data
         self.subplt.plot(data, color='magenta')

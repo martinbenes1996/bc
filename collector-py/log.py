@@ -10,12 +10,12 @@ class Viewer:
         self.inline = inline
         self.cwt_widths = np.arange(1,31)
         if inline:
-            self.cwt_fig = Figure(figsize=(5,4), dpi=100)
+            self.cwt_fig = Figure(figsize=(6,4), dpi=100)
         else:
             self.cwt_fig = plt.figure()
         self.cwt_ax = self.cwt_fig.add_subplot(111)
         self.cwt_ax.set_xlabel("Samples")
-        self.cwt_ax.set_ylabel("Frequency")
+        self.cwt_ax.set_ylabel("CWT Coeffs")
         coefs = conf.Config.cwtCoefs()
         self.cwt_ax.set_ylim(coefs[0],coefs[-1])
         self.cwt_cb = None
