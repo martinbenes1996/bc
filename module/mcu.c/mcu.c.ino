@@ -1,52 +1,75 @@
 
+/* -------- PARAMETERS --------- */
+#define SEGMENT 60                /* segment size */
+#define OVERLAP 10                /* overlap size */
+#define SAMPLE_FREQUENCY 100      /* sampling frequency */
+#define SEND_FREQUENCY 2          /* sending frequency  */
+/* ---------------------------- */
+
+
+
+
+
+// derived parameters
+#define SAMPLE_PERIOD (1000/SAMPLE_FREQUENCY)
+#define SEND_PERIOD (1000/SEND_FREQUENCY)
+
+// globals
 int lastRead;
 int lastSend;
-int mem[60];
+int mem[SEGMENT];
 int memIt = 0;
 
+// SETUP
 void setup() {
   analogReference(DEFAULT);
   Serial.begin(9600);        // initialize serial
 
-  for(int i = 0; i < 10; i++) {
+  // preread overlap
+  for(int i = 0; i < OVERLAP; i++) {
     readSample();
-    delay(10);
+    delay(SAMPLE_PERIOD);
   }
   lastSend = lastRead = millis();
-  memIt = 10;
+  memIt = OVERLAP;
 }
 
+// LOOP
 void loop(){
+  // read
   int now = millis();
-  if( abs(now-lastRead) > 10 ) {
+  if( abs(now-lastRead) > SAMPLE_PERIOD ) {
     readSample();
   }
-
+  // send
   now = millis();
-  if( abs(now-lastSend) > 500 ) {
+  if( abs(now-lastSend) > SEND_PERIOD ) {
     sendSegment();
     lastSend = millis();
   }
-  
 }
 
+// READ SAMPLE
 void readSample() {
-  if(memIt >= 60) return;
+  if(memIt >= SEGMENT) return;
   mem[memIt++] = analogRead(A0);
   lastRead = millis();
 }
 
+// SEND SEGMENT
 void sendSegment() {
-  for(int i = memIt; i < 60; i++) {
+  // read missing
+  for(int i = memIt; i < SEGMENT; i++) {
     readSample();
-    delay(10);
+    delay(SAMPLE_PERIOD);
   }
+  // send
   for(int i = 0; i < memIt; i++) {
     Serial.println(mem[i]);
   }
-
-  memcpy(mem, &mem[50], 10*sizeof(int));
-  memIt = 10;
+  // move overlap
+  memcpy(mem, &mem[SEGMENT - OVERLAP], OVERLAP*sizeof(int));
+  memIt = OVERLAP;
 }
 
 
