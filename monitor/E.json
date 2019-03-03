@@ -1,0 +1,1 @@
+{"measurements": [{"delay": 20, "name": "E_1", "time": 10, "signal": true, "cwt": false}, {"delay": 10, "name": "E_2", "time": 10, "signal": true, "cwt": false}, {"delay": 10, "name": "E_3", "time": 10, "signal": true, "cwt": false}], "name": "E"}

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import csv
 import socket
 import sys
 import time
@@ -12,19 +13,29 @@ if len(sys.argv) == 3 and sys.argv[1] == '-f':
 else:
     filename = 'file.dat'
 
-f = open(filename, 'rb')
-data = f.read() 
+l = []
+with open(filename, 'r') as csv_file:
+    csv_reader = csv.reader(csv_file, delimiter=',')
+    line_count = 0
+    for row in csv_reader:
+        if line_count == 1:
+            l = [int(i) for i in row]
+        else:
+            for i in row[10:]:
+                l.append(int(i))
+        line_count += 1
 
-l = [int.from_bytes(data[i:i+2],byteorder='big') for i in range(0,len(data)-1,2)]
+print(l)
+#l = [int.from_bytes(data[i:i+2],byteorder='big') for i in range(0,len(data)-1,2)]
 
 fig = plt.figure()
 ax = fig.add_subplot(111)
 ax.plot(l, color='magenta')
 ax.set_xlabel('samples')
-ax.set_ylabel('signal [ADC to 10bit]')
+ax.set_ylabel('signal')
 
-lines = plt.legend().get_lines()
-plt.setp(lines, linewidth='1')
+#lines = plt.legend().get_lines()
+#plt.setp(lines, linewidth='1')
 
-plt.ylim(0,1027)
+#plt.ylim(0,1027)
 plt.show()
