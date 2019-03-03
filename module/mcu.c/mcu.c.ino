@@ -52,7 +52,7 @@ void loop(){
 // READ SAMPLE
 void readSample() {
   if(memIt >= SEGMENT) return;
-  mem[memIt++] = analogRead(A0);
+  mem[memIt++] = analogRead(A1);
   lastRead = millis();
 }
 
