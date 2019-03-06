@@ -552,6 +552,102 @@ F features on the output.
 The classifier fuzzifies received a F-sized feature vector representing a segment of samples sensed by a sensor
 into a 2D fuzzy values array. These values express fuzzy membership value of presence of a person.
 
+...
+
+Classifier is built on the observation ...
+
+\begin{subequations}
+\begin{equation}
+    \alpha_A = \frac{2b_A}{r} = \frac{5}{11} = \underline{0.4545}
+\end{equation}
+\begin{equation}
+    \alpha_B = \frac{2b_A + 2b_B}{r} = \frac{5 + 10}{11} = \underline{1.3636}
+\end{equation}
+\begin{equation}
+    \alpha_C = \frac{2b_A + 2b_B + 2b_C}{r} = \frac{5 + 10 + 8}{11} = \underline{2.0909}
+\end{equation}
+\end{subequations}
+
+\begin{subequations}
+\begin{equation}
+    \varphi_1 = \frac{\alpha_C - \alpha_B}{2} = \frac{2.0909 - 1.3636}{2} = 0.36365
+\end{equation}
+\begin{equation}
+    \varphi_2 = \frac{\alpha_B - \alpha_A}{2} = \frac{1.3636 - 0.4545}{2} = 0.45455
+\end{equation}
+\begin{equation}
+    \varphi_3 = \frac{\alpha_A}{2} = \frac{0.4545}{2} = 0.22725
+\end{equation}
+\end{subequations}
+
+During the movement around the sensor with circular trajectory of radius $r_X$,
+the sectors are being crossed in the order $\varphi_1$, $\varphi_2$, $\varphi_3$,
+$\varphi_3^{'}$, $\varphi_2^{'}$, $\varphi_1^{'}$. The length of a sector $l$ is
+
+\begin{equation}
+  l = \varphi r
+\end{equation}
+
+The measurement was done in a room with width $w = 7.63~m$, $w_R = 4.25~m$ on the right
+and $w_L = 3.38~m$ from the left. The radiuses of circular trajectories were $3~m$, $6~m$, $9~m$ and $12~m$.
+
+To calculate maximal possible angle equation at figure \ref{fig:maxangle} can be used, $w$ is a distance of
+the sensor and a side wall, $r$ is a distance of the object we want to calculate the maximal angle of.
+
+\begin{figure}[ht!]
+\begin{equation}
+\varphi_{max}(w, r) = \text{min}(\frac{\alpha_C}{2}, 
+  \begin{cases}
+    \text{arcsin}(\frac{w}{r}) & \frac{w}{r} \in (0 ; 1) \\ 
+    \infty                      & \text{otherwise}
+  \end{cases}
+)
+\end{equation}
+\caption{Instantaneous maximal angle. \label{fig:maxangle}}
+\end{figure}
+
+\begin{subequations}
+\begin{equation}
+\varphi_{max}(3.38~m, 3~m) = \text{min}(\frac{2.0909}{2}, \infty) =  1.04545
+\end{equation}
+\begin{equation}
+\varphi_{max}(4.25~m, 3~m) = \text{min}(1.04545, \infty) =  1.04545
+\end{equation}
+\end{subequations}
+
+\begin{subequations}
+\begin{equation}
+\varphi_{max}(3.38~m, 6~m) = \text{min}(1.04545, \text{arcsin}(\frac{3.38}{6})) = 0.59841
+\end{equation}
+\begin{equation}
+\varphi_{max}(4.25~m, 6~m) = \text{min}(1.04545, \text{arcsin}(\frac{4.25}{6})) = 0.78713
+\end{equation}
+\end{subequations}
+
+\begin{subequations}
+\begin{equation}
+\varphi_{max}(3.38~m, 9~m) = \text{min}(1.04545, \text{arcsin}(\frac{3.38}{9})) = 0.385
+\end{equation}
+\begin{equation}
+\varphi_{max}(4.25~m, 9~m) = \text{min}(1.04545, \text{arcsin}(\frac{4.25}{9})) = 0.49181
+\end{equation}
+\end{subequations}
+
+%\begin{subequations}
+%\begin{equation}
+%\varphi_{max}(3.38~m, 12~m) = \text{min}(1.04545, \text{arcsin}(\frac{3.38}{12})) = 0.28553
+%\end{equation}
+%\begin{equation}
+%\varphi_{max}(4.25~m, 12~m) = \text{min}(1.04545, \text{arcsin}(\frac{4.25}{12})) = 0.36202
+%\end{equation}
+%\end{subequations}
+
+This means, that walking around the circle should generate signal that will be scaled with
+the distance of the object from the sensor.
+
+
+...
+
 Representation of the space in front of a sensor is inspired by cellular automata - carved into
 segments. These segments are given by azimuth (phase) with a center in the sensor and by
 the distance zone - deltas in polar coordinates.
@@ -704,6 +800,7 @@ azimuth.
 \begin{equation}
 |P_{1} P_{2}| = \sqrt{(d_{1})^{2} + (d_{2})^{2} - 2d_{1}d_{2}(\alpha_1 - \alpha_2)}
 \end{equation}
+
 
 
 
@@ -893,6 +990,55 @@ resulting with $2B$ sample in throughput $N$
 \begin{equation}
 N = F_s * |\text{sample}| * 8\frac{bit}{byte} = 100 * 2 * 8 = 1.6~kbps
 \end{equation}
+
+
+\subsection*{Connecting the sensor}
+PIR sensor is connected to the MCU. Except for source, ground and output which are connected directly,
+{\it PIR STD} has also reference voltage input, that should be approximately $\frac{V_cc}{2}~V$.
+To ensure that a voltage divider is used with two resistors of the same resistance $R_X$.
+During the testing $100~k\Omega$ resistors were used. The circuit is shown in the figure \ref{fig:PIRcircuit}.
+
+\begin{figure}[h!]
+\begin{center}
+\begin{circuitikz}
+\ctikzset{bipoles/generic/height=0.2}
+\ctikzset { label/align = straight }
+\draw %(2,0)
+
+  %to[V=$V_{Th}$] (0,2)
+  %to[R=$R_{Th}$] (2.5,2)
+  %to[short,i=$I$, -o] (4,2)
+  %to[short] (4.5,2)
+  % ref
+  (0,2) to[short, l={\tiny $REF$}, o-]
+  (1,2) to[short]
+  (2,2) to[R={\tiny $R_{X}$}]
+  (4,2) to[R={\tiny $R_{X}$}]
+  (6,2) to[short,-*] (6,0.5)
+  
+  (4,2) to[short,*-*] (4,1.5)
+  % vcc
+  (0,1.5) to[short, l={\tiny $VCC$}, o-]
+  (1,1.5) to[short]
+  (7,1.5) to[short, l={\tiny $5~V$}, -o] (8,1.5)
+  % signal
+  (0,1) to[short, l={\tiny $ANA$}, o-] 
+  (1,1) to[short]
+  (7,1) to[short, l={\tiny $A1$}, -o] (8,1)
+  % gnd
+  (0,0.5) to[short, l={\tiny $GND$}, o-]
+  (1,0.5) to[short]
+  (7,0.5) to[short, l={\tiny $GND$}, -o] (8,0.5)
+
+;
+\node[draw,minimum width=2.5cm,minimum height=2.5cm,anchor=south east] at (0,0){PIR};
+\node[draw,minimum width=2.5cm,minimum height=2.5cm,anchor=south west] at (8,0){MCU};
+\end{circuitikz}
+\caption{Connection of PIR and MCU.\label{fig:PIRcircuit}}
+\end{center}
+\end{figure}
+
+
 
 
 \section{Collector}

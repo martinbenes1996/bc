@@ -969,6 +969,7 @@ Management}{\@fit@EN}%
 
 \usepackage{blindtext}
 \usepackage{listings}
+\usepackage[european,cuteinductors]{circuitikz}
 \usepackage[toc,page,header]{appendix}
 \RequirePackage{titletoc}
 \ifczech
