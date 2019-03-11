@@ -5,12 +5,12 @@
 #define SAMPLE_FREQUENCY 100        /* sampling frequency */
 #define SEND_FREQUENCY 0.5          /* sending frequency  */
 
-//const char * WiFi_ssid = "Serepetička";
-//const char * WiFi_password = "17222813";
+const char * WiFi_ssid = "Serepetička";
+const char * WiFi_password = "17222813";
 //const char * WiFi_ssid = "KOLPING1";
 //const char * WiFi_password = "XZ8T7UK5KAs";
-const char * WiFi_ssid = "iPhone";
-const char * WiFi_password = "17222813";
+//const char * WiFi_ssid = "iPhone";
+//const char * WiFi_password = "17222813";
 /* ---------------------------- */
 
 
