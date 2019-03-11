@@ -15,8 +15,11 @@ from matplotlib.figure import Figure
 from matplotlib.backend_bases import key_press_handler
 import matplotlib.pyplot as plt
 
-import hw
+import comm
+import comm_serial
+import comm_mcast
 import record
+import ui
 sys.path.insert(0, '../collector-py/')
 import log
 import conf
@@ -29,10 +32,8 @@ class App:
     Attributes:
         app_                Main app to call mainloop() on.
         root                Master element.
-        readers             Callbacks for getting data from serial port. Mapped {portname : function}.
-        cwt                 Callbacks for getting cwt coefficients. Mapped {portname : function}.
-        signalrecorders     Callbacks for controlling recording of dataflow on serial port. Mapped {portname : function}.
-        cwtrecorders        Callbacks for controlling recording of cwt coefficients. Mapped {portname : function}.
+        getReader           Callback for getting reader instance.
+        getRecorder         Callback for getting recorder instance.
         window              Main window of app.
         serials             Serial port checkbuttons.
         serialfiles         Serial port names.
@@ -67,10 +68,8 @@ class App:
         self.update_window()
 
         # create variables
-        self.readers = {}
-        self.cwt = {}
-        self.signalrecorders = {}
-        self.cwtrecorders = {}
+        self.getReader = lambda _ : None
+        self.getRecorder = lambda _ : None
         self.handlers = {}
 
     @classmethod
@@ -87,12 +86,13 @@ class App:
         self.window = tk.Frame(self.root)
         # menu
         self.create_menu()
-        # serial ports
+        # sources
+        self.create_multicast()
         self.create_serial()
         # main view
         self.create_main()
         # status bar
-        self.create_statusbar()
+        #self.create_statusbar()
     
     def create_menu(self):
         """Creates top menu."""
@@ -112,6 +112,15 @@ class App:
         # add menu to window
         self.root.config(menu=menubar)
     
+    def create_multicast(self):
+        tk.Label(self.root, text=u"Multicast channel", font=30).grid(column=0, sticky=tk.W+tk.N, padx=30)
+        btnname = "M:"+str(conf.Config.channel())
+        self.checkbutton_mcast = ui.CheckButton(self.root, btnname)
+        self.checkbutton_mcast.checked, self.checkbutton_mcast.unchecked = self.create_tab, self.close_tab
+        self.checkbutton_mcast.button.grid(column=0, sticky=tk.W+tk.N, padx=30)
+        self.checkbutton_mcast.run()
+
+
     def create_serial(self):
         """Creates serial port view."""
         # look up serials
@@ -138,10 +147,13 @@ class App:
         tk.Label(self.root, text=u"Ports", font=30).grid(column=0, sticky=tk.W+tk.S, padx=30)
         # generate checkbutons
         for f in self.serialfiles:
-            checkbutton = MyCheckButton(self.root, "/dev/" + f, self.create_tab, self.close_tab)
+            checkbutton = ui.CheckButton(self.root, "S:/dev/" + f)
+            checkbutton.checked, checkbutton.unchecked = self.create_tab, self.close_tab
+            checkbutton.alive = comm_serial.Reader.getReader
             checkbutton.button.grid(column=0, sticky=tk.W+tk.S, padx=30)
+            checkbutton.run()
             self.serials.append(checkbutton)
-
+            
     def create_main(self):
         """Creates main view."""
         # create tab control
@@ -162,37 +174,11 @@ class App:
         # create frame
         tab = tk.Frame(self.tabControl)
         # get handlers
-        reader = lambda:[0 for _ in range(0,60)]
-        cwt = lambda:[[0 for _ in range(0,60)] for _ in range(0,500)]
-        signalrecorder = lambda _:None
-        cwtrecorder = lambda _:None
-        if name in self.readers:
-            print("Reader assigned.")
-            reader = self.readers[name]
-        else:
-            print(name, "is not in", self.cwt)
-        if name in self.cwt:
-            print("Cwt assigned.")
-            cwt = self.cwt[name]
-        else:
-            print(name, "is not in", self.cwt)
-        if name in self.signalrecorders:
-            print("SignalRecorder assigned.")
-            signalrecorder = self.signalrecorders[name]
-        else:
-            print(name, "is not in", self.signalrecorders)
-        if name in self.cwtrecorders:
-            print("CwtRecorder assigned.")
-            cwtrecorder = self.cwtrecorders[name]
-        else:
-            print(name, "is not in", self.cwtrecorders)
+        reader,recorder = self.getReader(name).getSegment, self.getReader(name).record
+
 
         # create signal view
-        self.create_signalview(tab, reader, signalrecorder)
-        # create CWT view
-        self.create_cwtview(tab, cwt, cwtrecorder)
-        # add handlers
-        self.handlers[name] = (signalrecorder,cwtrecorder)
+        self.create_signalview(tab, reader, recorder)
         # add to tab control
         self.tabControl.add(tab, text=name)
         self.tabs[name] = tab
@@ -209,7 +195,6 @@ class App:
 
         # remove from tab control
         self.tabControl.forget(self.tabs[name])
-        del self.handlers[name]
         # deallocate
         self.tabs[name].destroy()
         del self.tabs[name]
@@ -227,52 +212,51 @@ class App:
         # place view
         sv.canvas.get_tk_widget().grid(row=0, column=1, rowspan=20, sticky=tk.N)
 
-    def create_cwtview(self, master, cwt, recorder):
-        """Creates view of CWT feature matrix.
-
-        Keyword arguments:
-            master      Element to show in.
-            cwt         Callback for getting data.
-            recorder    Callback to control recording. 
-        """
-        # create view
-        cv = CwtView(self.root, master, cwt, recorder)
-        # place view
-        cv.canvas.get_tk_widget().grid(row=0, column=2, rowspan=20, sticky=tk.N)
+    #def create_cwtview(self, master, cwt, recorder):
+    #   """Creates view of CWT feature matrix.
+    #   Keyword arguments:
+    #       master      Element to show in.
+    #       cwt         Callback for getting data.
+    #       recorder    Callback to control recording. 
+    #   """
+    #   # create view
+    #   cv = CwtView(self.root, master, cwt, recorder)
+    #   # place view
+    #   cv.canvas.get_tk_widget().grid(row=0, column=2, rowspan=20, sticky=tk.N)
     
-    def create_statusbar(self):
-        """Creates statusbar."""
-        # create statusbar
-        self.status = tk.Label(self.root, text="Loading...", width=100, bd=1, relief=tk.SUNKEN, anchor=tk.W)
-        # place
-        self.root.grid_rowconfigure(100, weight=1)
-        self.status.grid(row=100, column=0, columnspan=2, sticky=tk.S+tk.W+tk.E)
-        # initiate
-        self.statusmsg = ''
-        #self.updateStatus()
+    #def create_statusbar(self):
+    #    """Creates statusbar."""
+    #    # create statusbar
+    #    self.status = tk.Label(self.root, text="Loading...", width=100, bd=1, relief=tk.SUNKEN, anchor=tk.W)
+    #    # place
+    #    self.root.grid_rowconfigure(100, weight=1)
+    #    self.status.grid(row=100, column=0, columnspan=2, sticky=tk.S+tk.W+tk.E)
+    #    # initiate
+    #    self.statusmsg = ''
+    #    #self.updateStatus()
 
-    def setStatus(self, status):
-        """Sets status. Actualized by separate thread.
-
-        Keyword arguments:
-            status      Message to show.
-        """
-        # set status
-        self.statusmsg = status
+    #def setStatus(self, status):
+    #    """Sets status. Actualized by separate thread.
+    #
+    #    Keyword arguments:
+    #        status      Message to show.
+    #    """
+    #    # set status
+    #    self.statusmsg = status
     
-    def updateStatus(self):
-        """Actualizes status. Runs in separate thread."""
-        # no status to show
-        while True:
-            # nothing to show
-            if self.statusmsg == '':
-                time.sleep(0.1)
-            # show status
-            else:
-                self.status.config(text=self.statusmsg)
-                self.statusmsg = ''
-                time.sleep(0.2)
-                self.status.config(text='')
+    #def updateStatus(self):
+    #    """Actualizes status. Runs in separate thread."""
+    #    # no status to show
+    #    while True:
+    #        # nothing to show
+    #        if self.statusmsg == '':
+    #            time.sleep(0.1)
+    #        # show status
+    #        else:
+    #            self.status.config(text=self.statusmsg)
+    #            self.statusmsg = ''
+    #            time.sleep(0.2)
+    #            self.status.config(text='')
 
     def startRecordingSession(self):
         # disable view
@@ -451,75 +435,7 @@ class App:
 
 
 
-class MyCheckButton:
-    """Checkbutton of serial port.
-    
-    Attributes:
-        master          Item to show in.
-        text            Displayed text.
-        callCheck       Callback to call when checked.
-        callUncheck     Callback to call when unchecked.
-        var             State of checkbutton.
-        afterId         TKinter ID of planned call.
-        button          Checkbutton.
-    """
-    def __init__(self, master, text, callCheck, callUncheck):
-        """Constructs object.
-        
-        Arguments:
-            master      Item to show in.
-            text        Displayed text.
-            callCheck   Callback to call when checked.
-            callUncheck Callback to call when unchecked
-        """
-        # create variables
-        self.master = master
-        self.text = text
-        self.callCheck, self.callUncheck = callCheck, callUncheck
-        self.var = tk.IntVar()
-        self.afterId = None
-        # create button
-        self.button = tk.Checkbutton(self.master, text=self.text, command=self.changed, variable=self.var)
-        # run update in separate thread
-        self.update()
 
-    def __del__(self):
-        """Destructs object."""
-        # finish separate thread
-        if not self.afterId:
-            self.master.after_cancel(self.afterId)
-
-    def changed(self):
-        """Handles check/uncheck event."""
-        # checked
-        if self.var.get():
-            self.callCheck(self.text)
-        # unchecked
-        else:
-            self.callUncheck(self.text)
-    
-    def update(self):
-        """Updates checkbutton availability status."""
-        # try to connect
-        try:
-            device = hw.Reader.getReader(self.text)
-        # failed
-        except serial.serialutil.SerialException:
-            self.button.config(state=tk.DISABLED)
-        # connected
-        else:
-            self.button.config(state=tk.NORMAL)
-        # do again in 30s
-        self.afterId = self.master.after(30000, self.update)
-    
-    def manualUpdate(self):
-        if not self.afterId:
-            self.master.after_cancel(self.afterId)
-        self.update()
-    def disable(self):
-        if not self.afterId:
-            self.master.after_cancel(self.afterId)
-        self.button.config(state=tk.DISABLED)
 
 
 class SignalView:

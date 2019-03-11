@@ -1,8 +1,13 @@
 {
-    "period" : 500,
+    "period" : 2000,
     
     "segment" : {
-        "samples" : 60,
-        "overlap" : 10
+        "samples" : 220,
+        "overlap" : 20
+    },
+
+    "channel" : {
+        "address" : "224.0.0.1",
+        "port" : 1234
     }
 }

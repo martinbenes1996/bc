@@ -54,12 +54,12 @@ elif bestshift > 0:
 
 x = [i/100. for i in range(0, len(data1))]
 
-wt = csv.writer(sys.stdout)
-wt.writerow([file1, file2, int(maxscore)])
+#wt = csv.writer(sys.stdout)
+#wt.writerow([file1, file2, int(maxscore)])
 
-#plt.plot(x, data1, x, data2)
+plt.plot(x, data1, x, data2)
 #plt.set_xlabel('time [s]')
 #plt.set_ylabel('signal')
 #plt.set_ylim(0,1027)
 
-#plt.show()
+plt.show()

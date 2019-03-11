@@ -13,6 +13,9 @@ class Config:
 
             self.cwtcoefs = np.arange(1,4,0.05)
 
+            self.channel_address = data["channel"]["address"]
+            self.channel_port = data["channel"]["port"]
+
             print("Config read.")
             print(self.samples, "samples,", self.overlap, "overlap,", self.period, "period")
 
@@ -33,3 +36,7 @@ class Config:
     @classmethod
     def cwtCoefs(cls):
         return cls.get(cls).cwtcoefs
+    
+    @classmethod
+    def channel(cls):
+        return (cls.get(cls).channel_address, cls.get(cls).channel_port)
