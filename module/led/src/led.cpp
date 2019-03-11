@@ -5,7 +5,7 @@
 LED::LED(int pin): _pin(pin) {
 	_t = millis();
 	_mode = Mode::Off;
-	_mode_en = false;
+	on();
 }
 
 
