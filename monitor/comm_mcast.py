@@ -48,18 +48,6 @@ class Reader(comm.Reader):
         _thread.start_new_thread(self.read, ())
 
     
-    def getSegment(self):
-        """Gets segment."""
-        # reader not started
-        if not self.started:
-            print("No data received.", file=sys.stderr)
-            segmentN = conf.Config.segment()[0]
-            return [0 for _ in range(0,segmentN)]
-        # multithread access
-        with self.segmentLock:
-            return self.segment
-
-    
 
     def read(self):
         """Reads multicast channel. Done in separated thread."""

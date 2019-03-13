@@ -1,5 +1,6 @@
 
 import datetime
+import scipy.signal as signal
 import sys
 import time
 import _thread
@@ -88,5 +89,10 @@ class Extractor:
             return
         # save
         pass
+    
+    @classmethod
+    def edges(cls, x):
+        return signal.cwt(x, signal.ricker, [1.5])
+
 
 

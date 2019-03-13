@@ -76,3 +76,14 @@ class CheckButton:
     def disable(self):
         self.stopUpdate()
         self.button.config(state=tk.DISABLED)
+
+
+class Menu():
+    def __init__(self, root):
+        self.menubar = tk.Menu(root)
+        root.config(menu=self.menubar)
+    def addDropdown(self, dropdown):
+        menu = tk.Menu(self.menubar, tearoff=0)
+        for l,c in dropdown['content'].items():
+            menu.add_command(label=l, command=c)
+        self.menubar.add_cascade(label=dropdown['name'], menu=menu)

@@ -1,5 +1,8 @@
 
+import sys
 import _thread
+sys.path.insert(0, '../collector-py/')
+import conf
 
 class Reader:
     """Interface to read data."""
@@ -17,8 +20,15 @@ class Reader:
         raise NotImplementedError
 
     def getSegment(self):
-        """Getter of latest received data."""
-        raise NotImplementedError
+        """Gets segment."""
+        # reader not started
+        if not self.started:
+            print("No data received.", file=sys.stderr)
+            segmentN = conf.Config.segment()[0]
+            return [0 for _ in range(0,segmentN)]
+        # multithread access
+        with self.segmentLock:
+            return self.segment
     
     def indicate(self, swapper):
         """Indicates new data in style of Test&Set.

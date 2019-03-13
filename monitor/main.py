@@ -2,11 +2,12 @@
 
 import time
 
+import app
 import comm
 import comm_mcast
 import comm_serial
 import model
-import view
+
 
 
 
@@ -37,7 +38,7 @@ def main():
     m = model.Extractor(m1.indicate, m1.getSegment)
     
     # create window
-    v = view.App.get()
+    v = app.App.get()
 
     time.sleep(2)
     
