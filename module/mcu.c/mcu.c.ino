@@ -17,6 +17,8 @@ const char * WiFi_password = "17222813";
 #include <ESP8266WiFi.h>
 #include <ESP8266WebServer.h>
 #include <WiFiUDP.h>
+#include <WiFiManager.h>
+
 
 // parameters
 int sampleFrequency = SAMPLE_FREQUENCY;
@@ -34,6 +36,7 @@ void setSamplePeriod(int v) { setSampleFrequency(1000/v); }
 void setSendPeriod(int v) { setSendFrequency(1000/v); }
 
 // globals
+bool enabled = false;
 int lastRead = 0;
 int lastSend = 0;
 int lastConnectFail = 0;
@@ -41,6 +44,7 @@ int mem[SEGMENT];
 int memIt = 0;
 
 // comm
+WiFiManager wifiManager;
 ESP8266WebServer server(80);
 WiFiUDP udp;
 bool ucastEn = false, mcastEn = true, bcastEn = false;
@@ -55,7 +59,8 @@ void setup() {
   pinMode(2, OUTPUT); digitalWrite(2, HIGH);
 
   // init
-  WiFi_Init();
+  AP_Init();
+  //WiFi_Init();
   HTTP_Init();
 
   // preread overlap
@@ -65,22 +70,24 @@ void setup() {
 }
 
 void loop() {
+  if(!enabled) { return; }
   server.handleClient();
+  
+  int now = millis();
+  if(WiFi.status() != WL_CONNECTED) {
+    if(abs(now-lastConnectFail) < 100) { digitalWrite(2, LOW); }
+    else if(abs(now-lastConnectFail) < 900) { digitalWrite(2, HIGH); }
+    else { lastConnectFail = millis(); }
+    return;
+  } else { digitalWrite(2, HIGH); }
 
   // read
-  int now = millis();
+  now = millis();
   if(abs(now-lastRead) > samplePeriod) { readSample(); }
   // send
   now = millis();
   if(abs(now-lastSend) > sendPeriod) { sendSegment(); }
   // not connected
-  
-  now = millis();
-  if(WiFi.status() != WL_CONNECTED) {
-    if(abs(now-lastConnectFail) < 100) { digitalWrite(2, LOW); }
-    else if(abs(now-lastConnectFail) < 900) { digitalWrite(2, HIGH); }
-    else { lastConnectFail = millis(); }
-  } else { digitalWrite(2, HIGH); }
   
 }
 
@@ -118,19 +125,6 @@ void sendUCast() {
 }
 void sendBCast() { /*send by broadcast*/ }
 
-void WiFi_Init() {
-  // connect to the network
-  WiFi.begin(WiFi_ssid, WiFi_password); 
-  Serial.print(WiFi_ssid); Serial.println(": Connecting...");
-  
-  // wait till connected
-  while(WiFi.status() != WL_CONNECTED) { 
-    digitalWrite(2, LOW); delay(100);
-    digitalWrite(2, HIGH); delay(900); 
-  }
-  
-}
-
 void HTTP_Init() {
   server.on("/config/mcast", handleMCast);
   server.on("/config/bcast", handleBCast);
@@ -139,6 +133,14 @@ void HTTP_Init() {
   server.on("/config/send", handleSend);
   server.onNotFound([](){ server.send(404, "text/plain", "404: Not found"); });
   server.begin();
+}
+
+void AP_Init() {
+  wifiManager.setSaveConfigCallback(startSending);
+  wifiManager.autoConnect("SensorWiFi");
+}
+void startSending() {
+  enabled = true;
 }
 
 void handleMCast() {
@@ -249,4 +251,21 @@ void handleSend() {
 
 void send400() { server.send(400,"text/plain", "400: Bad request"); }
 void send404() { server.send(404, "text/plain", "404: Not found"); }
+
+// not used with the library
+/*
+void WiFi_Init() {
+  // connect to the network
+  WiFi.begin(WiFi_ssid, WiFi_password); 
+  Serial.print(WiFi_ssid); Serial.println(": Connecting...");
+  
+  // wait till connected
+  int tries = 0;
+  while(WiFi.status() != WL_CONNECTED) { 
+    digitalWrite(2, LOW); delay(100);
+    digitalWrite(2, HIGH); delay(900);
+    if(tries++ > 10) { break; } 
+  }
+}
+*/
 
