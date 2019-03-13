@@ -34,7 +34,8 @@ class Reader(comm.Reader):
         """
         # instantiate
         if name not in cls.readers:
-            return serial.Serial(name)
+            return cls(name)
+            #return serial.Serial(name)
         # return existing
         else:
             return cls.readers[name]
@@ -56,7 +57,8 @@ class Reader(comm.Reader):
         # check if singleton
         assert(self.devicename not in self.readers)
         # connect to serial port
-        self.readers[self.devicename] = serial.Serial(devicename)
+        self.port = serial.Serial(devicename)
+        self.readers[self.devicename] = self
         # start reader thread
         _thread.start_new_thread(self.read, ())
 
@@ -142,7 +144,7 @@ class Reader(comm.Reader):
             l = self.mem
             self.mem = ''
         while l == '':
-            l = self.readers[self.devicename].readline()[:-2]
+            l = self.port.readline()[:-2]
 
         if len(l) > 3 and l[3] == b'\r':
             self.mem = l[4:]

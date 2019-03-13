@@ -49,6 +49,7 @@ class CheckButton:
 
     def changed(self):
         """Handles check/uncheck event."""
+        print(self.var.get())
         # checked
         if self.var.get():
             self.checked(self.name)
