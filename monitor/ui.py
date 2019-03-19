@@ -55,7 +55,7 @@ class CheckButton:
             self.checked(self.name)
         # unchecked
         else:
-            self.checked(self.name)
+            self.unchecked(self.name)
     
     def update(self):
         """Updates checkbutton availability status."""

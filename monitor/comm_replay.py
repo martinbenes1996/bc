@@ -1,6 +1,7 @@
 
 import csv
 import datetime
+import numpy as np
 import sys
 import threading
 import time
@@ -113,6 +114,12 @@ class Reader(comm.Reader):
         with open(self.filename, "a", newline='') as f:
             csvwriter = csv.writer(f)
             csvwriter.writerow(segment)
+    
+    @staticmethod
+    def readFile(name):
+        with open(name, 'r') as f:
+            rd = csv.reader(f)
+            return np.array([int(sample) for line in rd for sample in line])
 
     
         

@@ -7,21 +7,24 @@ success=0
 cd tests
 programs="$(find -name "test-*.py")"
 cd ..
+echo "Running tests..."
+echo "============================="
 for p in $programs; do
     i=$((i + 1))
     
-    printf "Test $i: "
+    echo -e "\e[33mTest $i:\e[0m \c"
     python3 tests/$p
     # get status
     if [ $? == 0 ] ; then
-        echo "SUCCESS"
+        echo -e "\e[1;32mSUCCESS\e[0m"
         success=$((success + 1))
     else
-        echo "FAIL"
+        echo -e "\e[1;31mFAIL\e[0m"
     fi
 
 done
 
+echo "============================="
 echo "$success/$i tests successful."
 
 

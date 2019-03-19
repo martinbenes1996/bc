@@ -1,7 +1,7 @@
 
 import sys
 import _thread
-sys.path.insert(0, '../collector-py/')
+#sys.path.insert(0, '../collector-py/')
 import conf
 
 class Reader:

@@ -9,7 +9,7 @@ import views
 
 
 def main():
-    sm = views.SerialMenu(tk.Tk())
+    sm = views.SerialView(tk.Tk())
     sm.begin(lambda _ : None, lambda _ : None)
 
 
