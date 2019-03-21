@@ -54,26 +54,70 @@ def segVarDeltas(segs):
     return np.array([segvars[i+1]-segvars[i] for i in range(len(segvars)-1)])
 
 
-objectBorderMuCoef = 100
-objectBorderVarCoef = 100
-def isBorder(mu1,mu2):
-    return ( abs(mu2-mu1)/objectBorderMuCoef ) > 1
-def objectBorders(segs):
+toleranceMu = 40
+toleranceVar = 2
+def isBorder(segs, i):
+    def stagnates(segs):
+        return (abs(mu(segs[1])-mu(segs[0]))/toleranceMu) < 1
+    def rises(segs):
+        return not stagnates(segs) and (mu(segs[1])-mu(segs[0])) > 0
+    def falls(segs):
+        return not stagnates(segs) and (mu(segs[1])-mu(segs[0])) < 0
+    def hasSameCharacter(segs):
+        return (var(segs[1])-var(segs[0])) / toleranceVar < 1
+    def wilds(segs):
+        return not hasSameCharacter(segs) and (var(segs[1])-var(segs[0])) > 0
+    def calms(segs):
+        return not hasSameCharacter(segs) and (var(segs[1])-var(segs[0])) < 0
+    def describe(e):
+        if stagnates(e):
+            return "S"
+        elif rises(e):
+            return "R"
+        elif falls(e):
+            return "F"
+        else:
+            return "_"
+    def getDescriptor(edges):
+        return describe(edges[0]) + describe(edges[1]) + describe(edges[2])
+
+    previousEdge = segs[0:2]
+    currentEdge = segs[1:3]
+    nextEdge = segs[2:4]
+
+    descr = getDescriptor( (previousEdge,currentEdge, nextEdge) )
+    print(i, ":", descr)
+
+    val = 0
+    if descr in {"SSS", "FFF", "RRR"}:
+        val = 0
+    # left changes
+    elif descr in {"RFF", "FRR", "SFF", "SRR", "FSS", "RSS"}:
+        val = 1
+    # right changes
+    elif descr in {"SSR", "SSF", "RRF", "RRS", "FFR", "FFS"}:
+        val = 0
+    # center changes
+    elif descr in {"SFS", "RFR", "SRS", "FRF", "RSR", "FSF"}:
+        val = 1
+    # both changes
+    elif descr in {"SRF", "FRS", "FSR", "RSF", "RFS", "SFR"}:
+        val = 0
+    # unhandled
+    else:
+        print("Unhandled: ", descr)
+        val = 1
+
+    return val > 0.5
+
+def getEdges(segs):
     segmus = segMuDeltas(segs)
-    extr = [ i for i in range(1,len(segmus)) if isBorder(segmus[i-1],segmus[i]) ]
-    if len(extr) > 0 and extr[0] != 0:
-        extr = np.concatenate(([0],extr))
-    if extr[-1] != len(segmus) - 1:
-        extr = np.concatenate((extr,[len(segmus) - 1]))
-    #segvars = segVarDeltas(segs)
-    #extr = [ i for i in range(1,len(segvars)) if isBorder(segvars[i-1],segvars[i]) ]
-    #if extr[0] != 0:
-    #    extr = np.concatenate(([0],extr))
-    #if extr[-1] != len(segvars) - 1:
-    #    extr = np.concatenate((extr,[len(segvars) - 1]))
+    return np.array([0] + [i for i in range(2,len(segmus)-1) if isBorder(segs[i-2:i+2], i)] + [len(segmus)-1])
+def objectBorders(segs):
+    extr = getEdges(segs)
     return np.array([ (extr[i-1],extr[i]) for i in range(1,len(extr)) ])
 def objectSegments(segs):
-    return np.array([ segs[b[0]:b[1]] for b in objectBorders(segs)])
+    return np.array([ segs[int(b[0]):int(b[1])] for b in objectBorders(segs) ])
 
 
 
@@ -106,7 +150,7 @@ class Extractor:
         self.buffer = []
         self.bufferLock = _thread.allocate_lock()
         # connect to collector
-        self.engine = cwt.Transformer()
+        self.engine =  cwt.Transformer()
 
         # run processing thread
         _thread.start_new_thread(self.process, ())

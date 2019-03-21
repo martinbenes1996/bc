@@ -77,12 +77,23 @@ def testObjects(name):
     segs = model.segmentize(x)
     segmus = model.segMus(segs)
     segstarts = model.segStarts(segs)
-    print(segstarts)
+    #print(segstarts)
 
     # segment segments
     objectborders = model.objectBorders(segs)
     objectsegments = model.objectSegments(segs)
-    #print(objectborders)
+    print(objectborders)
+
+    mus = model.segMus(segs)
+    replacer = []
+    for it,b in enumerate(model.segBorders(x)):
+        for segIt in range(b[0],b[1]):
+            replacer.append(mus[it])
+    replacer = np.array(replacer)
+    #plt.plot(replacer, c='k')
+
+    
+    
 
     start = 0
     col = 'r'
@@ -101,8 +112,6 @@ def testObjects(name):
             col = 'c'
         elif col == 'c':
             col = 'm'
-        elif col == 'm':
-            col = 'k'
         else:
             col = 'r'
         start += np.size(y)
@@ -112,7 +121,7 @@ def testObjects(name):
     #x = [ segstarts[o[0]] for o in objectborders ]
     #y = [ segmus[o[0]] for o in objectborders ]
     #plt.scatter(x,y,s=50,c='r')
-    plt.show()
+    #plt.show()
 
 
 
