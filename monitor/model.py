@@ -6,56 +6,40 @@ import sys
 import time
 import _thread
 
+import fuzzy
+
 sys.path.insert(0, '../collector-py/')
 import cwt
 
-def mu(x):
-    return np.mean(x)
-def var(x):
-    return np.var(x)
 
-cwtCoef = 1.33846 # 1.3384615384615386
-edgeOrder = 8 # 7.564102564102564
-signalMu = 750 # calibrate!
-
-def waveletTransformation(x):
-    return signal.cwt(x, signal.ricker, [cwtCoef])[0]
-def edges(x):
-    coefs = waveletTransformation(x)
-    extr = signal.argrelextrema(coefs, np.greater, order=edgeOrder)[0]
-    if extr[0] != 0:
-        extr = np.concatenate(([0],extr))
-    if extr[-1] != len(x) - 1:
-        extr = np.concatenate((extr,[len(x) - 1]))
-    return extr
-def segBorders(x):
-    e = edges(x)
-    return np.array([ (e[i-1],e[i]) for i in range(1,len(e)) ])
-def segmentize(x):
-    segmentBorders = segBorders(x)
-    return np.array([ x[b[0]:b[1]] for b in segmentBorders])
-def segLens(segs):
-    return np.array([ np.size(b) for b in segs])
-def segStarts(segs):
-    l,starts = 0,[0]
-    for s in segLens(segs):
-        l += s
-        starts.append(l)
-    return np.array(starts)
-def segMus(segs):
-    return np.array([mu(seg) for seg in segs])
-def segVars(segs):
-    return np.array([var(seg) for seg in segs])
-def segMuDeltas(segs):
-    segmus = segMus(segs)
-    return np.array([segmus[i+1]-segmus[i] for i in range(len(segmus)-1)])
-def segVarDeltas(segs):
-    segvars = segVars(segs)
-    return np.array([segvars[i+1]-segvars[i] for i in range(len(segvars)-1)])
+def scoreSS_(edge):
+    return 1 - Khi["S"](edge[0])*Khi["S"](edge[1])
+def scoreFF_(edge):
+    return 1 - Khi["F"](edge[0])*Khi["F"](edge[1])
+def scoreRR_(edge):
+    return 1 - Khi["R"](edge[0])*Khi["R"](edge[1])
+def scoreRSR(edge):
+    return 
+def scoreBorder(segs, i):
+    edges = segment.Edge.edgify(segs)
+    scores = {}
+    # SS*
+    scores["SSS"] = scoreSS_(edges)
+    scores["SSF"] = scoreSS_(edges)
+    scores["SSR"] = scoreSS_(edges)
+    # FF*
+    scores["FFS"] = scoreFF_(edges)
+    scores["FFF"] = scoreFF_(edges)
+    scores["FFR"] = scoreFF_(edges)
+    # RR*
+    scores["RRS"] = scoreRR_(edges)
+    scores["RRF"] = scoreRR_(edges)
+    scores["RRR"] = scoreRR_(edges)
+    # RSR
+    scores["RSR"] = scoreRSR(edges)
 
 
-toleranceMu = 40
-toleranceVar = 2
+
 def isBorder(segs, i):
     def stagnates(segs):
         return (abs(mu(segs[1])-mu(segs[0]))/toleranceMu) < 1

@@ -8,6 +8,7 @@ import matplotlib.pyplot as plt
 sys.path.insert(0, '.')
 import comm_replay
 import model
+import segment
 
 def testEq(cmp,ref, key):
     dmin = 0.05
@@ -18,110 +19,72 @@ def testEq(cmp,ref, key):
 
 def testGenerator(mu,var):
     x = np.random.normal(mu,var, 1000000)
-    testEq(model.mu(x), mu, "Mean")
-    testEq(model.var(x), var, "Variance")
+    s = segment.Segment(x)
+    testEq(s.mu(), mu, "Mean")
+    testEq(s.var(), var, "Variance")
 
 def testEdges(name):
     x = comm_replay.Reader.readFile(name)
+    segments = segment.Segment.segmentize(x)        
+    replacer = [s.mu() for s in segments for _ in range(s.len())]
 
-    coefs = model.waveletTransformation(x)
-    edges = model.edges(x)
-
-    segments = model.segmentize(x)
-    mus = model.segMus(segments)
-
-    # merging segments
-    #while True:
-    #    mergescore = np.array([(mus[i+1] - mus[i])*(mus[i+2] - mus[i+1]) for i in range(len(mus)-2)])
-    #    print(mergescore)
-    #    if mergescore.max() < 10000:
-    #        break
-    #    index = np.argmax(mergescore)
-    #
-    #    print("Score", mergescore[index], "Merging", mus[index], mus[index+1], mus[index+2])
-    #
-    #    segments[index] = np.concatenate([segments[index],segments[index+1],segments[index+2]])
-    #    segments = np.concatenate([segments[:index+1],segments[index+3:]])
-    #    #del segments[index+2]
-    #    #del segments[index+1]
-    #    mus = model.segMus(segments)
-
-        
-    replacer = []
-    for it,b in enumerate(model.segBorders(x)):
-        for segIt in range(b[0],b[1]):
-            replacer.append(mus[it])
-    replacer = np.array(replacer)
-    
-    #l = 0
-    #xmus = []
-    #for seg in segments:
-    #    xmus.append(l + np.size(seg)/2)
-    #    l += np.size(seg)
-    #xmus = np.array([ model.mu(seg) for seg in segments])
-    xmus = np.array([ model.mu(b) for b in model.segBorders(x)])
-
-
-
-    
     plt.plot(x)
     plt.plot(replacer, c='r')
-    #plt.scatter(xmus,mus,s=50, c='r')
-
-    #plt.scatter(edges,x[edges],s=20, c='r')
     plt.show()
 
 def testObjects(name):
     # read signal
     x = comm_replay.Reader.readFile(name)
-    segs = model.segmentize(x)
-    segmus = model.segMus(segs)
-    segstarts = model.segStarts(segs)
-    #print(segstarts)
+    segments = segment.Segment.segmentize(x)
 
     # segment segments
-    objectborders = model.objectBorders(segs)
-    objectsegments = model.objectSegments(segs)
-    print(objectborders)
+    artefacts = segment.Artefact.parseArtefacts(segments)
 
-    mus = model.segMus(segs)
-    replacer = []
-    for it,b in enumerate(model.segBorders(x)):
-        for segIt in range(b[0],b[1]):
-            replacer.append(mus[it])
-    replacer = np.array(replacer)
-    #plt.plot(replacer, c='k')
+    for i in range( len(segments) - 4 ):
+        print( segment.Edge(segments[i:i+2]).Dmu(), segment.Edge(segments[i+1:i+3]).Dmu(), segment.Edge(segments[i+2:i+4]).Dmu() )
+        for vsorted in list(set(sorted(artefacts[i].values(), key=float))):
+            for k,v in artefacts[i].items():
+                if v == vsorted:
+                    print(k,":",v)
+        #print( sorted(artefacts[i], key = lambda x : float(artefacts[i][x]) ) )
+        ans = input('')
+
+
+    replacer = [s.mu() for s in segments for _ in range(s.len())]
+    
+    plt.plot(x)
+    plt.plot(replacer, c='k')
 
     
     
 
-    start = 0
-    col = 'r'
-    for i,objsegs in enumerate(objectsegments):
-        l = model.segLens(objsegs)
-        y = np.concatenate(objsegs)
-        x = [start+i for i in range(len(y))]
-        plt.plot(x,y,c=col)
-        if col == 'r':
-            col = 'g'
-        elif col == 'g':
-            col = 'b'
-        elif col == 'b':
-            col = 'y'
-        elif col == 'y':
-            col = 'c'
-        elif col == 'c':
-            col = 'm'
-        else:
-            col = 'r'
-        start += np.size(y)
-    plt.show()
+    #start = 0
+    #col = 'r'
+    #for i,objsegs in enumerate(objectsegments):
+    #    l = model.segLens(objsegs)
+    #    y = np.concatenate(objsegs)
+    #    x = [start+i for i in range(len(y))]
+    #    plt.plot(x,y,c=col)
+    #    if col == 'r':
+    #        col = 'g'
+    #    elif col == 'g':
+    #        col = 'b'
+    #    elif col == 'b':
+    #        col = 'y'
+    #    elif col == 'y':
+    #        col = 'c'
+    #    elif col == 'c':
+    #        col = 'm'
+    #    else:
+    #        col = 'r'
+    #    start += np.size(y)
+    #plt.show()
     
-    #plt.plot(x)
+    
     #x = [ segstarts[o[0]] for o in objectborders ]
     #y = [ segmus[o[0]] for o in objectborders ]
     #plt.scatter(x,y,s=50,c='r')
-    #plt.show()
+    plt.show()
 
 
 
