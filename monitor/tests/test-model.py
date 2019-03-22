@@ -42,10 +42,8 @@ def testObjects(name):
 
     for i in range( len(segments) - 4 ):
         print( segment.Edge(segments[i:i+2]).Dmu(), segment.Edge(segments[i+1:i+3]).Dmu(), segment.Edge(segments[i+2:i+4]).Dmu() )
-        for vsorted in list(set(sorted(artefacts[i].values(), key=float))):
-            for k,v in artefacts[i].items():
-                if v == vsorted:
-                    print(k,":",v)
+        for k in sorted(artefacts[i].items(), key=lambda x : -x[1]):
+            print(k[0], ":", k[1])
         #print( sorted(artefacts[i], key = lambda x : float(artefacts[i][x]) ) )
         ans = input('')
 

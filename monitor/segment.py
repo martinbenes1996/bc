@@ -48,7 +48,7 @@ class Segment:
         return segmentList
 
 class Edge:
-    toleranceStagnation = 20
+    toleranceStagnation = 40
     toleranceCharacter = 2
     Khi = { "F": fuzzy.TriangularSet(toleranceStagnation, 0, "L").get,
             "S": fuzzy.TriangularSet(toleranceStagnation).get,
@@ -140,15 +140,18 @@ class Artefact:
         elif key in {"SFF", "SRR", "RSS", "FSS"}:
             return (nAlpha + nBeta) / n
         # FSR, RSF
-        elif key in {"FSR", "RFS"}:
-            return 1
+        elif key in {"FSR", "RSF"}:
+            return (nAlpha + nDelta) / n
         # RF*, FR *
         elif key[0:2] in {"RF","FR"}:
             return 1
+        # SFR, SRF
+        elif key in {"SFR", "SRF"}:
+            return 1
         # ???
         else:
-            return 1
-            #raise Exception("Bad key: " + key)
+            #return 1
+            raise Exception("Bad key: " + key)
 
 
 
