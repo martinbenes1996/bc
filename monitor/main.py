@@ -2,15 +2,16 @@
 
 import time
 
+import app
 import comm
 import comm_mcast
 import comm_serial
 import model
-import view
 
 
 
-def getReader(name, port=None):
+
+def getReaderInstance(name, port=None):
     """Singleton Reader instance getter."""
     if name[0:2] == "S:":
         return comm_serial.Reader.getReader(name[2:])
@@ -20,10 +21,12 @@ def getReader(name, port=None):
         return comm_mcast.Reader.getReader(name, port)
     else:
         raise Exception("Unknown device type: "+name)
-
+def getReader(name, port=None):
+    """Reader callback getter."""
+    return getReaderInstance(name, port).getSegment
 def getRecorder(name, port=None):
     """Recorder callback getter."""
-    return getReader(name, port).record
+    return getReaderInstance(name, port).record
 
 
 def main():
@@ -37,20 +40,12 @@ def main():
     m = model.Extractor(m1.indicate, m1.getSegment)
     
     # create window
-    v = view.App.get()
-
+    v = app.App.get()
     time.sleep(2)
     
     # connect callbacks
     v.getReader = getReader
     v.getRecorder = getRecorder
-    
-    #v.readers["/dev/ttyS3"] = m1.getSegment
-    #v.cwt["/dev/ttyS3"] = m.getBuffer
-    
-    #v.signalrecorders['/dev/ttyS3'] = s1.record
-    #v.cwtrecorders['/dev/ttyS3'] = m.record
-    #s1.setStatus = v.setStatus
 
     # run main loop
     v.mainloop()

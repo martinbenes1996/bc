@@ -5,7 +5,7 @@
 LED::LED(int pin): _pin(pin) {
 	_t = millis();
 	_mode = Mode::Off;
-	_mode_en = false;
+	on();
 }
 
 
@@ -17,6 +17,8 @@ void LED::setMode(Mode mode, long T_on, long T_off) {
 }
 
 void LED::indicate() {
+	if(_mode == Mode::On) { digitalWrite(_pin, LOW); }
+	if(_mode == Mode::Off) { digitalWrite(_pin, HIGH); }
 	if(!_mode_en) { return; }
 	if((millis()-_t) < _T_on) {
 		digitalWrite(_pin, LOW);			
