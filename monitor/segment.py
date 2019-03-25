@@ -116,8 +116,8 @@ class Artefact:
             triade = dict()
             for key in edgeCombinations:
                 fuzzyCoeff = edges[i-1].getKhi(key[0])*edges[i].getKhi(key[1])*edges[i+1].getKhi(key[2])
-                if key == "SSS":
-                    print(fuzzyCoeff, "=", edges[i-1].getKhi(key[0]), edges[i].getKhi(key[1]), edges[i+1].getKhi(key[2]))
+                #if key == "SSS":
+                #    print(fuzzyCoeff, "=", edges[i-1].getKhi(key[0]), edges[i].getKhi(key[1]), edges[i+1].getKhi(key[2]))
                 triade[key] = cls.score(edges[i-1:i+2], key) * fuzzyCoeff
             artefactMatrix.append(triade)
 
