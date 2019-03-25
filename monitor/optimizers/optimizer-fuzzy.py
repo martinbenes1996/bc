@@ -11,7 +11,7 @@ import fuzzy
 class SetViewer:
     colors = ['r','b','g','c','m','y','k']
     colorIterator = 0
-    xmin,xmax = -100, 100
+    xmin,xmax = -50,50
     x = np.linspace(xmin,xmax, 20*(xmax-xmin))
 
     def __init__(self, f):

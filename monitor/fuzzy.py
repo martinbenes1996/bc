@@ -1,5 +1,36 @@
 
+import numpy as np
+
 import math
+
+class Negator:
+    def __init__(self):
+        return NotImplementedError
+    @staticmethod
+    def standard(x):
+        return 1 - x
+    @staticmethod
+    def circle(x):
+        return np.sqrt(1 - np.square(x)) 
+    @staticmethod
+    def parabolic(x):
+        return 1 - np.square(x)
+class TConorm:
+    @staticmethod
+    def maximum(*args):
+        return max(args)
+    @staticmethod
+    def probsum(*args):
+        result = 0
+        for a in args:
+            result = result + a - result*a
+        return result
+    def __init__(self, f):
+        self.f = f
+    def get(self, *args):
+        return self.f(*args)
+
+
 
 class TriangularSet:
     def __init__(self, width=1, xcenter=0, infiniteSide=None):

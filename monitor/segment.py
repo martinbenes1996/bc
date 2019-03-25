@@ -120,7 +120,7 @@ class Artefact:
                 #    print(fuzzyCoeff, "=", edges[i-1].getKhi(key[0]), edges[i].getKhi(key[1]), edges[i+1].getKhi(key[2]))
                 triade[key] = cls.score(edges[i-1:i+2], key) * fuzzyCoeff
             artefactMatrix.append(triade)
-
+        
         return artefactMatrix
 
         #artefactBorders = [ i for i in range(1,len(edges)-1) if cls.isBorder(edges[i-1:i+2])]

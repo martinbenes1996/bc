@@ -321,6 +321,12 @@ Therefore the signal is amplified and filtered to well discriminate their presen
 An example is a scheme \ref{fig:pirstd} of product {\it PIR STD} made by {\it B+B Sensors}.
 
 {\it Description of fresnel len of PIR STD.}
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[width=0.8\textwidth]{obrazky-figures/roomsegments.png}
+\caption{Structure of a~skin. \cite{PIROperationalManual}\label{fig:roomsegments}}
+\end{center}    
+\end{figure}
 
 
 
@@ -408,145 +414,174 @@ the simpliest way is using treshold.
 
 
 
+
 \chapter{Design Description}
 
-The design of the whole project is separated in two modules - sensor module
-and visualization program. Sensor module senses the observed space and does the
-signal processing of outputs of connected PIR sensors. The data are then collected
-and the fusion is made over them.
+The design of the whole project is split in two products - sensing device
+and the processing and visualising program - a server. Sensor measures signal
+sensing the observed space with connected PIR sensor and sends the data. The server
+collects the data from the sensor/sensors and performs the recognition of 
+people and fusion algorithms over the results, if multiple sensors are connected.
 
 Results might be displayed in the visualization program. The data are being sent
 over network. In the implementation, LAN is used, but it could be possible to
 use the Internet and send the data to the remote visualizer.
 
 
-\section{Sensor module}
+\section{Sensor device}
 
-Sensor module is a board with fixed sensors on it and a microcontroller performing the
-classification process described in subsection \ref{label:dataprocessing}.
+Heart of the sensing device is a preprogrammed MCU with PIR connected. Such device
+uses AD convertor to read the signal value from the sensor. The device may also
+perform fixed-sized segmentation in order to increase the effective data speed with
+sending more samples within one chunk, but with regard to preserving {\it real-time}
+nature.
 
-The sensors signal is at the end fused together and the results are classified objects
-with coordinates in polar coordinate system relative to the module position. These
-coordinates are sent to the client.
+One of the great issues, that needs to be solved is determining the position of the sensor,
+or even worse -- mutual position of multiple sensors when used. Unless it is
+known, no fusion can be done. If the intention is to sense the door area and count
+number of incoming/outgoing people, then a position of the door needs to be known
+in advance.
+
+Very elegant solution is suggested in \cite{GestureControl}. Three PIR sensors are
+places in fixed mutual position on a board, as shown in the figure \ref{fig:3pir_geometry}.
+This brings several advantages, not only it increases the sensing angle,
+but also solves problems with position of sensors, which is given by the board construction.
+Such a construction is unsuitable to use in rooms though.
 
 \begin{figure}[h!]
 \begin{center}
-\includegraphics[width=0.5\textwidth]{obrazky-figures/design.png}
-\caption{Geometry for three PIR sensors.\label{fig:design}}
-\end{center}
-\end{figure}
-
-\begin{figure}[h!]
-\begin{center}
-\includegraphics[width=0.5\textwidth]{obrazky-figures/3pir_geometry.png}
+\includegraphics[width=0.4\textwidth]{obrazky-figures/3pir_geometry.png}
 \caption{Geometry for three PIR sensors.\label{fig:3pir_geometry}}
 \end{center}
 \end{figure}
 
-The interior angle of module $\Omega$ is a parameter of the module construction. Using this parameter
-orientation $\lambda$ and position $p_X = (d_X,\varphi _X)$\footnote{Position uses polar coordinates
-with the origin in the central sensor.} of sensors can be expressed. Parameter $r$ is length
-of module edges with sensor in the center. Sensor PIR-STD by B+B Sensors has $250\times 250\times 200~\text{mm}$;
-therefore $r > 250~\text{mm}$.
+More flexible solution is probably inserting the dimension of space measured by the sensors
+and their position directly to the fusion app as parameters. Issue of this is the positioning
+itself. On the other hand, this solution can be easily extended with more parameters:
+position of doors that can persons come or leave, windows and heaters that can have
+unwanted influence and many others.
+
+The device uses a serial communication channel, that can be read by the server. To
+increase effectivity of the communication, the MCU sends the data in fixed period
+as the chunk of fixed number of samples. The right size of the chunk must be chosen
+with regard to the effectivity, but keeping the reaction fast enough. Sampling period and
+sending period could be changed in the MCU configuration using REST API if the MCU
+is reachable in a network and keeps a running web server.
 
 
-\begin{subequations}
-\begin{equation}
-\lambda_C = 0
-\end{equation}
-\begin{equation}
-\lambda_L = -\lambda_R = 180 - \Omega
-\end{equation}
-\end{subequations}
 
-\begin{subequations}
-\begin{equation}
-\varphi_C = 0
-\end{equation}
-\begin{equation}
-\varphi_L = -\varphi_R = 90 + \frac{180 - \Omega}{2}
-\end{equation}
-\end{subequations}
+%classification process described in subsection \ref{label:dataprocessing}.
 
-\begin{subequations}
-\begin{equation}
-d_C = 0
-\end{equation}
-\begin{equation}
-d_L = d_R = \frac{r}{2} (r - 4cos(\Omega))
-\end{equation}
-\end{subequations}
+%The sensors signal is at the end fused together and the results are classified objects
+%with coordinates in polar coordinate system relative to the module position. These
+%coordinates are sent to the client.
+
+%The interior angle of module $\Omega$ is a parameter of the module construction. Using this parameter
+%orientation $\lambda$ and position $p_X = (d_X,\varphi _X)$\footnote{Position uses polar coordinates
+%with the origin in the central sensor.} of sensors can be expressed. Parameter $r$ is length
+%of module edges with sensor in the center. Sensor PIR-STD by B+B Sensors has $250\times 250\times 200~\text{mm}$;
+%therefore $r > 250~\text{mm}$.
+
+%\begin{subequations}
+%\begin{equation}
+%\lambda_C = 0
+%\end{equation}
+%\begin{equation}
+%\lambda_L = -\lambda_R = 180 - \Omega
+%\end{equation}
+%\end{subequations}
+
+%\begin{subequations}
+%\begin{equation}
+%\varphi_C = 0
+%\end{equation}
+%\begin{equation}
+%\varphi_L = -\varphi_R = 90 + \frac{180 - \Omega}{2}
+%\end{equation}
+%\end{subequations}
+
+%\begin{subequations}
+%\begin{equation}
+%d_C = 0
+%\end{equation}
+%\begin{equation}
+%d_L = d_R = \frac{r}{2} (r - 4cos(\Omega))
+%\end{equation}
+%\end{subequations}
 
 
-\section{Data processing pipeline}
-\label{label:dataprocessing}
+\section{Classification server}
+On the used communication medium is running application listening to the channel.
+This server parses the segments sent by the devices and performs the classification.
 
-The data path in the design is slightly inspired by classification phases except
-there is fuzzification used here. It enables to create a fusion logic over vague
-facts without need to evaluate them first.
 
-\paragraph{Sensing}
-Here we should think how to place sensor(s) in order to get the best results.
-Interesting solution is suggested in \cite{GestureControl}. Three PIR sensors are
-placed on solid board, as shown in the figure \ref{fig:3pir_geometry}.
+\subsection*{Artefact extraction and fuzzification}
+The signal produced by the PIR has a specific nature, as it is shown in the appendix \label{appendix:PIRSignal}.
+There are parts, that are constant, divided by abruptly changing edges, when there is a moving body. The
+characteristics of the movement change character of the signal.
 
-This brings a great advantage -- not only it enables using of more sensors at one time, but
-also it reduces the issue with positioning the sensors, since it is given by the
-board construction.
-
-The key here is to find the best value for $\Omega$ to minimize $r$, but maximize
-$\varphi$. Low $r$ means more reliable results. High $\varphi$ increases measurable range.
-Unfortunatelly these parameters are inversely propotional, a compromise needs to be done.
-
-Now let's express both observed parameters with $\Omega$. A sensor has $250~mm$ to $250~mm$,
-$o$ is a size of empty space on the sides of sensor, equation substituted $L = (12.5 + o)$.
-\begin{subequations}
-\begin{equation}
-\varphi = 230 + \Omega
-\end{equation}
-\begin{equation}
-r = \frac{sin((\frac{\Omega}{2}))L}{\tg{(\frac{\Omega}{2}-40)}} - cos((\frac{\Omega}{2}))L
-\end{equation}
-\end{subequations}
-
-\subsection*{Segmentation}
-The size of segments has a great influence on processing speed. And since the
-result should run in the real time, it is quite important.
-
-\subsection*{Features extractions}
-Choosing good features is inevitable part of desing and the following classifier
-is strictrly dependent on the form of features, since it is its input. Feature extraction
-and fuzzification is implemented in the program {\it collector}.
-
-The input is a vector of N samples and the process transforms them into the vector of
-F features on the output.
-
-\begin{figure}[!ht]
-\begin{equation}
-\Psi_s(x) = \begin{cases}
--1    & x \in \langle 0 ; \frac{s}{2} ) \\ 
-1     & x \in \langle \frac{s}{2} ; s ) \\
-0     & \text{otherwise}
-\end{cases}
-\end{equation}
-\caption{Haar Wavelet.}
-\end{figure}
+The signal first is segmented using {\it continuous wavelet transformation} with {\it Morlet wavelet}
+and scale $s_{cwt} = 1.33846$, and the extrems are detected comparing to the $N_{n} = 8$ neighbors on both sides.
+Detected extrems are used as the borders of the segments, that lies in between them. These numbers were
+discovered experimentally minimizing the sum of the within-segment variances of the recorded data.
 
 \begin{figure}[!ht]
 \begin{equation}
 \Psi(x) = e^{-\frac{x^2}{2}} cos(5x)
 \end{equation}
-\caption{Morlet Wavelet.}
+\caption{Morlet {\it mexican hat} Wavelet.}
 \end{figure}
 
 \begin{figure}[!ht]
 \begin{equation}
-\Psi(x) = \frac{2^{\frac{5}{4}}}{\sqrt{3}}(1 + e^{2\pi x^2})e^{-\pi x^2}
+s_{cwt}, N_{n} = \text{argmin} ( \sum_{\sigma_i \in \sigma_{s,N}} \sigma_i )
 \end{equation}
-\caption{Mexican Hat Wavelet.}
+\caption{Experimental optimalization of parameters.}
 \end{figure}
 
-{\it Wavelet transformation for feature extraction}
+In next step their distances are evaluated. Distance of two adjoining segments is computed as numerical
+difference of their within-segment mean values.
+
+\begin{figure}[!ht]
+\begin{equation}
+||\textbf{AB}|| = \mu_\textbf{B} - \mu_\textbf{A}
+\end{equation}
+\caption{Distance of segments.}
+\end{figure}
+
+There comes to the game fuzzification. A designed fuzzy sets corresponds with falling edge (\textbf{F}), stagnating signal (\textbf{S})
+and rising edge (\textbf{R}). The E and R are related, they use the same wave form. Both of the curves can be parametrized with
+$t$ being tolerance and $x_0$ being center/shift. The fuzzy set arrange is visualized in the figure \ref{fig:fuzzysets} with $t=10$.
+
+\begin{figure}[!ht]
+\begin{equation}
+\xi_R(x) = \frac{ arctan( 4\cdot (\frac{x - x_0}{t} + 1) )}{\pi} + 0.5
+\end{equation}
+\caption{Fuzzy set function used for \textbf{R}.}
+\end{figure}
+
+
+\begin{figure}[!ht]
+\begin{equation}
+\xi_L(x) = \xi_R(-x)
+\end{equation}
+\caption{Fuzzy set function used for \textbf{F}.}
+\end{figure}
+
+\begin{figure}[!ht]
+\begin{equation}
+\xi_R(x) = \sqrt{ exp( -\frac{(x_0 - x)^2}{2\cdot (0.6t)^2} ) }
+\end{equation}
+\caption{Fuzzy set function used for \textbf{S}.}
+\end{figure}
+
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[width=0.6\textwidth]{obrazky-figures/fuzzysets.png}
+\caption{Fuzzy sets used for fuzzification.\label{fig:fuzzysets}}
+\end{center}
+\end{figure}
+
 
 \subsection*{Fuzzification and classification}
 The classifier fuzzifies received a F-sized feature vector representing a segment of samples sensed by a sensor
@@ -556,82 +591,83 @@ into a 2D fuzzy values array. These values express fuzzy membership value of pre
 
 Classifier is built on the observation ...
 
-\begin{subequations}
-\begin{equation}
-    \alpha_A = \frac{2b_A}{r} = \frac{5}{11} = \underline{0.4545}
-\end{equation}
-\begin{equation}
-    \alpha_B = \frac{2b_A + 2b_B}{r} = \frac{5 + 10}{11} = \underline{1.3636}
-\end{equation}
-\begin{equation}
-    \alpha_C = \frac{2b_A + 2b_B + 2b_C}{r} = \frac{5 + 10 + 8}{11} = \underline{2.0909}
-\end{equation}
-\end{subequations}
+%\begin{subequations}
+%\begin{equation}
+%    \alpha_A = \frac{2b_A}{r} = \frac{5}{11} = \underline{0.4545}
+%\end{equation}
+%\begin{equation}
+%    \alpha_B = \frac{2b_A + 2b_B}{r} = \frac{5 + 10}{11} = \underline{1.3636}
+%\end{equation}
+%\begin{equation}
+%    \alpha_C = \frac{2b_A + 2b_B + 2b_C}{r} = \frac{5 + 10 + 8}{11} = \underline{2.0909}
+%\end{equation}
+%\end{subequations}
+%\begin{subequations}
+%\begin{equation}
+%    \varphi_1 = \frac{\alpha_C - \alpha_B}{2} = \frac{2.0909 - 1.3636}{2} = 0.36365
+%\end{equation}
+%\begin{equation}
+%    \varphi_2 = \frac{\alpha_B - \alpha_A}{2} = \frac{1.3636 - 0.4545}{2} = 0.45455
+%\end{equation}
+%\begin{equation}
+%    \varphi_3 = \frac{\alpha_A}{2} = \frac{0.4545}{2} = 0.22725
+%\end{equation}
+%\end{subequations}
 
-\begin{subequations}
-\begin{equation}
-    \varphi_1 = \frac{\alpha_C - \alpha_B}{2} = \frac{2.0909 - 1.3636}{2} = 0.36365
-\end{equation}
-\begin{equation}
-    \varphi_2 = \frac{\alpha_B - \alpha_A}{2} = \frac{1.3636 - 0.4545}{2} = 0.45455
-\end{equation}
-\begin{equation}
-    \varphi_3 = \frac{\alpha_A}{2} = \frac{0.4545}{2} = 0.22725
-\end{equation}
-\end{subequations}
+%During the movement around the sensor with circular trajectory of radius $r_X$,
+%the sectors are being crossed in the order $\varphi_1$, $\varphi_2$, $\varphi_3$,
+%$\varphi_3^{'}$, $\varphi_2^{'}$, $\varphi_1^{'}$. The length of a sector $l$ is
 
-During the movement around the sensor with circular trajectory of radius $r_X$,
-the sectors are being crossed in the order $\varphi_1$, $\varphi_2$, $\varphi_3$,
-$\varphi_3^{'}$, $\varphi_2^{'}$, $\varphi_1^{'}$. The length of a sector $l$ is
+%\begin{equation}
+%  l = \varphi r
+%\end{equation}
 
-\begin{equation}
-  l = \varphi r
-\end{equation}
+%The measurement was done in a room with width $w = 7.63~m$, $w_R = 4.25~m$ on the right
+%and $w_L = 3.38~m$ from the left. The radiuses of circular trajectories were $3~m$, $6~m$, $9~m$ and $12~m$.
 
-The measurement was done in a room with width $w = 7.63~m$, $w_R = 4.25~m$ on the right
-and $w_L = 3.38~m$ from the left. The radiuses of circular trajectories were $3~m$, $6~m$, $9~m$ and $12~m$.
+%To calculate maximal possible angle equation at figure \ref{fig:maxangle} can be used, $w$ is a distance of
+%the sensor and a side wall, $r$ is a distance of the object we want to calculate the maximal angle of.
 
-To calculate maximal possible angle equation at figure \ref{fig:maxangle} can be used, $w$ is a distance of
-the sensor and a side wall, $r$ is a distance of the object we want to calculate the maximal angle of.
+%\begin{figure}[ht!]
+%\begin{equation}
+%\varphi_{max}(w, r) = \text{min}(\frac{\alpha_C}{2}, 
+%  \begin{cases}
+%    \text{arcsin}(\frac{w}{r}) & \frac{w}{r} \in (0 ; 1) \\ 
+%    \infty                      & \text{otherwise}
+%  \end{cases}
+%)
+%\end{equation}
+%\caption{Instantaneous maximal angle. \label{fig:maxangle}}
+%\end{figure}
 
-\begin{figure}[ht!]
-\begin{equation}
-\varphi_{max}(w, r) = \text{min}(\frac{\alpha_C}{2}, 
-  \begin{cases}
-    \text{arcsin}(\frac{w}{r}) & \frac{w}{r} \in (0 ; 1) \\ 
-    \infty                      & \text{otherwise}
-  \end{cases}
-)
-\end{equation}
-\caption{Instantaneous maximal angle. \label{fig:maxangle}}
-\end{figure}
+%\begin{subequations}
+%\begin{equation}
+%\varphi_{max}(3.38~m, 3~m) = \text{min}(\frac{2.0909}{2}, \infty) =  1.04545
+%\end{equation}
+%\begin{equation}
+%\varphi_{max}(4.25~m, 3~m) = \text{min}(1.04545, \infty) =  1.04545
+%\end{equation}
+%\end{subequations}
 
-\begin{subequations}
-\begin{equation}
-\varphi_{max}(3.38~m, 3~m) = \text{min}(\frac{2.0909}{2}, \infty) =  1.04545
-\end{equation}
-\begin{equation}
-\varphi_{max}(4.25~m, 3~m) = \text{min}(1.04545, \infty) =  1.04545
-\end{equation}
-\end{subequations}
+%\begin{subequations}
+%\begin{equation}
+%\varphi_{max}(3.38~m, 6~m) = \text{min}(1.04545, \text{arcsin}(\frac{3.38}{6})) = 0.59841
+%\end{equation}
+%\begin{equation}
+%\varphi_{max}(4.25~m, 6~m) = \text{min}(1.04545, \text{arcsin}(\frac{4.25}{6})) = 0.78713
+%\end{equation}
+%\end{subequations}
 
-\begin{subequations}
-\begin{equation}
-\varphi_{max}(3.38~m, 6~m) = \text{min}(1.04545, \text{arcsin}(\frac{3.38}{6})) = 0.59841
-\end{equation}
-\begin{equation}
-\varphi_{max}(4.25~m, 6~m) = \text{min}(1.04545, \text{arcsin}(\frac{4.25}{6})) = 0.78713
-\end{equation}
-\end{subequations}
+%\begin{subequations}
+%\begin{equation}
+%\varphi_{max}(3.38~m, 9~m) = \text{min}(1.04545, \text{arcsin}(\frac{3.38}{9})) = 0.385
+%\end{equation}
+%\begin{equation}
+%\varphi_{max}(4.25~m, 9~m) = \text{min}(1.04545, \text{arcsin}(\frac{4.25}{9})) = 0.49181
+%\end{equation}
+%\end{subequations}
 
-\begin{subequations}
-\begin{equation}
-\varphi_{max}(3.38~m, 9~m) = \text{min}(1.04545, \text{arcsin}(\frac{3.38}{9})) = 0.385
-\end{equation}
-\begin{equation}
-\varphi_{max}(4.25~m, 9~m) = \text{min}(1.04545, \text{arcsin}(\frac{4.25}{9})) = 0.49181
-\end{equation}
-\end{subequations}
+
 
 %\begin{subequations}
 %\begin{equation}
@@ -642,8 +678,8 @@ the sensor and a side wall, $r$ is a distance of the object we want to calculate
 %\end{equation}
 %\end{subequations}
 
-This means, that walking around the circle should generate signal that will be scaled with
-the distance of the object from the sensor.
+%This means, that walking around the circle should generate signal that will be scaled with
+%the distance of the object from the sensor.
 
 
 ...
@@ -886,7 +922,7 @@ The only found sensor that offers an analog output was {\it PIR STD} by
 \begin{figure}[h!]
 \begin{center}
 \includegraphics[width=0.8\textwidth]{obrazky-figures/pirstd.png}
-\caption{Scheme of PIR STD.\label{fig:pirstd}}
+\caption{Scheme of PIR STD.\cite{PIROperationalManual}\label{fig:pirstd}}
 \end{center}
 \end{figure}
 
