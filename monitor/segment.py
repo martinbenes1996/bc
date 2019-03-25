@@ -48,11 +48,11 @@ class Segment:
         return segmentList
 
 class Edge:
-    toleranceStagnation = 40
+    toleranceStagnation = 20
     toleranceCharacter = 2
-    Khi = { "F": fuzzy.TriangularSet(toleranceStagnation, 0, "L").get,
-            "S": fuzzy.TriangularSet(toleranceStagnation).get,
-            "R": fuzzy.TriangularSet(toleranceStagnation, 0, "R").get }
+    Khi = { "F": fuzzy.ArctangenoidSet(toleranceStagnation, 0, "L").get,
+            "S": fuzzy.GaussianSet(toleranceStagnation).get,
+            "R": fuzzy.ArctangenoidSet(toleranceStagnation, 0, "R").get }
 
     def __init__(self, segments):
         self.first, self.second = segments[0], segments[1]
@@ -62,9 +62,9 @@ class Edge:
         return self.second.var() - self.first.var()
 
     def muScore(self):
-        return self.Dmu() / self.toleranceStagnation
+        return self.Dmu() #/ self.toleranceStagnation
     def varScore(self):
-        return self.Dvar() / self.toleranceCharacter
+        return self.Dvar() #/ self.toleranceCharacter
 
     def stagnates(self):
         return abs(self.muScore()) <= 1
@@ -112,9 +112,12 @@ class Artefact:
         # fill artefact fuzzy matrix
         artefactMatrix = []
         for i in range(1,len(edges)-1):
+
             triade = dict()
             for key in edgeCombinations:
                 fuzzyCoeff = edges[i-1].getKhi(key[0])*edges[i].getKhi(key[1])*edges[i+1].getKhi(key[2])
+                if key == "SSS":
+                    print(fuzzyCoeff, "=", edges[i-1].getKhi(key[0]), edges[i].getKhi(key[1]), edges[i+1].getKhi(key[2]))
                 triade[key] = cls.score(edges[i-1:i+2], key) * fuzzyCoeff
             artefactMatrix.append(triade)
 
@@ -131,17 +134,21 @@ class Artefact:
         n = nAlpha+nBeta+nGamma+nDelta
         # SS*, FF*, RR*
         if key[0:2] in {"SS", "FF", "RR"}:
-            return (nAlpha + nBeta + nGamma) / n
+            #return (nAlpha + nBeta) / n
+            return 1
         # RSR, FSF
         elif key in {"RSR", "FSF", "SRS", "SFS"}:
-            return (nBeta + nGamma) / n
+            #return (nBeta + nGamma) / n
+            return 1
             # or using variances
         # SFF, SRR, RSS, FSS
         elif key in {"SFF", "SRR", "RSS", "FSS"}:
-            return (nAlpha + nBeta) / n
+            #return (nAlpha + nBeta) / n
+            return 1
         # FSR, RSF
         elif key in {"FSR", "RSF"}:
-            return (nAlpha + nDelta) / n
+            #return (nAlpha + nDelta) / n
+            return 1
         # RF*, FR *
         elif key[0:2] in {"RF","FR"}:
             return 1

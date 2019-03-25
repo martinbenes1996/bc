@@ -40,11 +40,11 @@ def testObjects(name):
     # segment segments
     artefacts = segment.Artefact.parseArtefacts(segments)
 
+    # debugging
     for i in range( len(segments) - 4 ):
         print( segment.Edge(segments[i:i+2]).Dmu(), segment.Edge(segments[i+1:i+3]).Dmu(), segment.Edge(segments[i+2:i+4]).Dmu() )
         for k in sorted(artefacts[i].items(), key=lambda x : -x[1]):
             print(k[0], ":", k[1])
-        #print( sorted(artefacts[i], key = lambda x : float(artefacts[i][x]) ) )
         ans = input('')
 
 
@@ -82,7 +82,8 @@ def testObjects(name):
     #x = [ segstarts[o[0]] for o in objectborders ]
     #y = [ segmus[o[0]] for o in objectborders ]
     #plt.scatter(x,y,s=50,c='r')
-    plt.show()
+    
+    #plt.show()
 
 
 

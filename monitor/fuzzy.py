@@ -1,4 +1,5 @@
 
+import math
 
 class TriangularSet:
     def __init__(self, width=1, xcenter=0, infiniteSide=None):
@@ -42,3 +43,26 @@ class TriangularSet:
         else:
             return self.getTriangle(x) 
 
+class ArctangenoidSet:
+    def __init__(self, width=1, xcenter=0, side="L"):
+        assert(width > 0)
+        assert( side in {"L","R"} )
+        if side == 'L':
+            self.f = lambda x : math.atan( 4*(-x-xcenter-width)/width ) / math.pi + 0.5
+        elif side == 'R':
+            self.f = lambda x : math.atan( 4*(x-xcenter-width)/width ) / math.pi + 0.5
+            
+
+    def get(self, x):
+        #print(x, self.xcenter)
+        return self.f(x)
+
+class GaussianSet:
+    def __init__(self, width=1, xcenter=0):
+        assert(width > 0)
+        mu = xcenter
+        var = width
+        self.f = lambda x : math.sqrt(math.exp(-((mu-x)**2)/(2*(0.6*var)**2)))
+
+    def get(self, x):
+        return self.f(x)
