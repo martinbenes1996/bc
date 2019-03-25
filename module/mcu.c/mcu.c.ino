@@ -18,6 +18,7 @@ const char * WiFi_password = "17222813";
 #include <ESP8266WebServer.h>
 #include <WiFiUDP.h>
 #include <WiFiManager.h>
+#include <EEPROM.h>
 
 
 // parameters
@@ -44,7 +45,6 @@ int mem[SEGMENT];
 int memIt = 0;
 
 // comm
-WiFiManager wifiManager;
 ESP8266WebServer server(80);
 WiFiUDP udp;
 bool ucastEn = false, mcastEn = true, bcastEn = false;
@@ -55,11 +55,16 @@ uint16_t ucastPort = 1234, mcastPort = 1234, bcastPort = 1234;
 void setup() {
   Serial.begin(9600);
   delay(10);
+
+  // WiFi_reset();
+  
   pinMode(LED_BUILTIN, OUTPUT); digitalWrite(LED_BUILTIN, HIGH);
   pinMode(2, OUTPUT); digitalWrite(2, HIGH);
-
+  pinMode(D0, INPUT);
+  
   // init
-  AP_Init();
+  WiFi_load();
+  //AP_Init();
   //WiFi_Init();
   HTTP_Init();
 
@@ -70,8 +75,12 @@ void setup() {
 }
 
 void loop() {
-  if(!enabled) { return; }
-  server.handleClient();
+  // reset memory
+  if(digitalRead(D0) == LOW) {
+    Serial.println("Reset!");
+    WiFi_reset();
+  }
+  
   
   int now = millis();
   if(WiFi.status() != WL_CONNECTED) {
@@ -80,6 +89,9 @@ void loop() {
     else { lastConnectFail = millis(); }
     return;
   } else { digitalWrite(2, HIGH); }
+
+  if(!enabled) { return; }
+  server.handleClient();
 
   // read
   now = millis();
@@ -136,8 +148,22 @@ void HTTP_Init() {
 }
 
 void AP_Init() {
+  WiFiManager wifiManager;
+  //wifiManager.setDebugOutput(false);
+  wifiManager.resetSettings();
   wifiManager.setSaveConfigCallback(startSending);
-  wifiManager.autoConnect("SensorWiFi");
+  //wifiManager.setConfigPortalTimeout(600);
+  wifiManager.setBreakAfterConfig(true);
+  if (!wifiManager.autoConnect("SensorWiFi")) {
+    Serial.println("failed to connect, we should reset as see if it connects");
+    delay(3000);
+    ESP.restart();
+    delay(5000);
+  }
+  
+  Serial.print ( "Connected with IP address: " );
+  Serial.println ( WiFi.localIP() );
+  
 }
 void startSending() {
   enabled = true;
@@ -251,6 +277,82 @@ void handleSend() {
 
 void send400() { server.send(400,"text/plain", "400: Bad request"); }
 void send404() { server.send(404, "text/plain", "404: Not found"); }
+
+
+struct WiFiSettings {
+  char saved = 0;
+  char ssid[32 + 1];
+  char password[64 + 1];
+};
+
+bool connectedMemory = false;
+void EEPROM_connect() {
+  if(!connectedMemory) {
+    EEPROM.begin( sizeof(struct WiFiSettings) ); delay(10);
+    connectedMemory = true;
+  }
+}
+void WiFi_load() {
+  EEPROM_connect();
+  // read
+  WiFiSettings w;
+  uint8_t* p = (uint8_t*)&w;
+  for(size_t i = 0; i < sizeof(WiFiSettings); i++) {
+    p[i] = EEPROM.read(i);
+  }
+
+  // connect
+  if(w.saved) {
+    Serial.println("WiFi settings loaded.\n");
+    Serial.printf("[%s]\n", ((w.saved)?"Valid" : "Invalid"));
+    Serial.printf("SSID: %s\n", w.ssid);
+    Serial.printf("Password: %s\n", w.password);
+    
+    WiFi.begin(w.ssid, w.password); 
+    Serial.print(w.ssid); Serial.println(": Connecting...");
+  
+    // wait till connected
+    int tries = 0;
+    while(WiFi.status() != WL_CONNECTED) { 
+      digitalWrite(2, LOW); delay(100);
+      digitalWrite(2, HIGH); delay(900);
+      if(tries++ > 10) { ESP.reset(); }
+    }
+    enabled = true;
+    
+  } else { 
+    Serial.println("WiFi settings loaded.\n");
+    Serial.printf("[%s]\n", ((w.saved)?"Valid" : "Invalid"));
+    AP_Init(); 
+  }
+  Serial.println("Connected.");
+  WiFi_save();
+}
+
+void WiFi_save() {
+  EEPROM_connect();
+  WiFiSettings w;
+  w.saved = 0xFF;
+  strncpy(w.ssid, WiFi.SSID().c_str(), 33);
+  strncpy(w.password, WiFi.psk().c_str(), 65);
+  uint8_t* p = (uint8_t*)&w;
+  for(size_t i = 0; i < sizeof(WiFiSettings); i++) {
+    EEPROM.write(p[i], i);
+  }
+  EEPROM.commit();
+  Serial.println("WiFi settings saved.");
+  Serial.printf("[%s]\n", ((w.saved)?"Valid" : "Invalid"));
+  Serial.printf("SSID: %s\n", w.ssid);
+  Serial.printf("Password: %s\n", w.password);
+}
+
+void WiFi_reset() {
+  EEPROM_connect();
+  EEPROM.write((uint8_t)false, 0);
+  EEPROM.commit();
+  Serial.println("WiFi settings reset.");
+}
+
 
 // not used with the library
 /*
