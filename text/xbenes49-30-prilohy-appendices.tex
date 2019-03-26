@@ -20,11 +20,18 @@
 The movements that data shows were prepared in several directions
 and the type of movement can be read from the figure captions.
 
-The trajectories are concentred circles with sensor in center and
-radius values $3~m$, $6~m$, $9~m$ and $12~m$. The direction is
-either left-to-right (LR) or right-to-left (RL).
+The trajectories are concentred circles with sensor in center and radius values $3~m$, $6~m$, $9~m$ and $12~m$.
+The direction is either left-to-right (LR) or right-to-left (RL).
+The workplace is shown in the figure \ref{fig:measurement}.
 \footnote{For example {\it 6m\_RL} is movement $6~m$ from sensor right-to-left.}
 The movement was recorded multiple times.
+
+\begin{figure}[!ht]
+\begin{center}
+\includegraphics[width=0.25\textwidth]{obrazky-figures/measurement.png}
+\caption{Measurement workplace.\label{fig:measurement}}
+\end{center}
+\end{figure}
 
 Other cases are recorded as well: person walking towards ({\it C\_BF})
 or walking away ({\it C\_FB}) from the sensor and no movement ({\it E}). 
@@ -118,6 +125,95 @@ or walking away ({\it C\_FB}) from the sensor and no movement ({\it E}).
 \end{figure}
 
 
+%\begin{subequations}
+%\begin{equation}
+%    \alpha_A = \frac{2b_A}{r} = \frac{5}{11} = \underline{0.4545}
+%\end{equation}
+%\begin{equation}
+%    \alpha_B = \frac{2b_A + 2b_B}{r} = \frac{5 + 10}{11} = \underline{1.3636}
+%\end{equation}
+%\begin{equation}
+%    \alpha_C = \frac{2b_A + 2b_B + 2b_C}{r} = \frac{5 + 10 + 8}{11} = \underline{2.0909}
+%\end{equation}
+%\end{subequations}
+%\begin{subequations}
+%\begin{equation}
+%    \varphi_1 = \frac{\alpha_C - \alpha_B}{2} = \frac{2.0909 - 1.3636}{2} = 0.36365
+%\end{equation}
+%\begin{equation}
+%    \varphi_2 = \frac{\alpha_B - \alpha_A}{2} = \frac{1.3636 - 0.4545}{2} = 0.45455
+%\end{equation}
+%\begin{equation}
+%    \varphi_3 = \frac{\alpha_A}{2} = \frac{0.4545}{2} = 0.22725
+%\end{equation}
+%\end{subequations}
+
+%During the movement around the sensor with circular trajectory of radius $r_X$,
+%the sectors are being crossed in the order $\varphi_1$, $\varphi_2$, $\varphi_3$,
+%$\varphi_3^{'}$, $\varphi_2^{'}$, $\varphi_1^{'}$. The length of a sector $l$ is
+
+%\begin{equation}
+%  l = \varphi r
+%\end{equation}
+
+%The measurement was done in a room with width $w = 7.63~m$, $w_R = 4.25~m$ on the right
+%and $w_L = 3.38~m$ from the left. The radiuses of circular trajectories were $3~m$, $6~m$, $9~m$ and $12~m$.
+
+%To calculate maximal possible angle equation at figure \ref{fig:maxangle} can be used, $w$ is a distance of
+%the sensor and a side wall, $r$ is a distance of the object we want to calculate the maximal angle of.
+
+%\begin{figure}[ht!]
+%\begin{equation}
+%\varphi_{max}(w, r) = \text{min}(\frac{\alpha_C}{2}, 
+%  \begin{cases}
+%    \text{arcsin}(\frac{w}{r}) & \frac{w}{r} \in (0 ; 1) \\ 
+%    \infty                      & \text{otherwise}
+%  \end{cases}
+%)
+%\end{equation}
+%\caption{Instantaneous maximal angle. \label{fig:maxangle}}
+%\end{figure}
+
+%\begin{subequations}
+%\begin{equation}
+%\varphi_{max}(3.38~m, 3~m) = \text{min}(\frac{2.0909}{2}, \infty) =  1.04545
+%\end{equation}
+%\begin{equation}
+%\varphi_{max}(4.25~m, 3~m) = \text{min}(1.04545, \infty) =  1.04545
+%\end{equation}
+%\end{subequations}
+
+%\begin{subequations}
+%\begin{equation}
+%\varphi_{max}(3.38~m, 6~m) = \text{min}(1.04545, \text{arcsin}(\frac{3.38}{6})) = 0.59841
+%\end{equation}
+%\begin{equation}
+%\varphi_{max}(4.25~m, 6~m) = \text{min}(1.04545, \text{arcsin}(\frac{4.25}{6})) = 0.78713
+%\end{equation}
+%\end{subequations}
+
+%\begin{subequations}
+%\begin{equation}
+%\varphi_{max}(3.38~m, 9~m) = \text{min}(1.04545, \text{arcsin}(\frac{3.38}{9})) = 0.385
+%\end{equation}
+%\begin{equation}
+%\varphi_{max}(4.25~m, 9~m) = \text{min}(1.04545, \text{arcsin}(\frac{4.25}{9})) = 0.49181
+%\end{equation}
+%\end{subequations}
+
+
+
+%\begin{subequations}
+%\begin{equation}
+%\varphi_{max}(3.38~m, 12~m) = \text{min}(1.04545, \text{arcsin}(\frac{3.38}{12})) = 0.28553
+%\end{equation}
+%\begin{equation}
+%\varphi_{max}(4.25~m, 12~m) = \text{min}(1.04545, \text{arcsin}(\frac{4.25}{12})) = 0.36202
+%\end{equation}
+%\end{subequations}
+
+%This means, that walking around the circle should generate signal that will be scaled with
+%the distance of the object from the sensor.
 
 
 

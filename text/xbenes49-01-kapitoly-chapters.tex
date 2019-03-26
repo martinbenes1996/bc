@@ -234,7 +234,7 @@ and its~mechanisms is~not fully understanded yet and a~matter of current researc
 
 \begin{figure}[h!]
 \begin{center}
-\includegraphics[width=0.55\textwidth]{obrazky-figures/skin.jpg}
+\includegraphics[width=0.45\textwidth]{obrazky-figures/skin.jpg}
 \caption{Structure of a~skin. \cite{SkinStructure}\label{fig:skin}}
 \end{center}    
 \end{figure}
@@ -282,12 +282,10 @@ and resistor with original resistance $R_0$ and new resistance $R_t$ and with te
 So with using the~same voltage it measures the~electric current and with the~Ohm law $R = \frac{U}{I}$
 the~sensor computes instantaneus resistance.
 
-\begin{figure}[!ht]
 \begin{equation}
+\label{eq:bolo}
 R_t = R_0 (1 + \alpha\Delta T)
 \end{equation}
-\caption{Relationship of resistance and temperature.\label{eq:bolo}}
-\end{figure}
 
 Another type is {\it a thermoelectric sensor} reacting to the different thermoelectric resistance of
 exposed wire and comparative wire.
@@ -310,7 +308,7 @@ as you can see in the~figure \ref{fig:fresnellens}. Then the~ray is transformed 
 
 \begin{figure}[h!]
 \begin{center}
-\includegraphics[width=0.4\textwidth]{obrazky-figures/fresnellens.png}
+\includegraphics[width=0.3\textwidth]{obrazky-figures/fresnellens.png}
 \caption{Fresnel lens.\label{fig:fresnellens}}
 \end{center}
 \end{figure}
@@ -320,11 +318,10 @@ people sensing emitting radiation characterized in the figure \ref{fig:bodywavel
 Therefore the signal is amplified and filtered to well discriminate their presence and absence.
 An example is a scheme \ref{fig:pirstd} of product {\it PIR STD} made by {\it B+B Sensors}.
 
-{\it Description of fresnel len of PIR STD.}
 \begin{figure}[h!]
 \begin{center}
-\includegraphics[width=0.8\textwidth]{obrazky-figures/roomsegments.png}
-\caption{Structure of a~skin. \cite{PIROperationalManual}\label{fig:roomsegments}}
+\includegraphics[width=0.7\textwidth]{obrazky-figures/roomsegments.png}
+\caption{Sensing of PIR STD. \cite{PIROperationalManual}\label{fig:roomsegments}}
 \end{center}    
 \end{figure}
 
@@ -365,8 +362,8 @@ application-dependent features.
 
 \begin{figure}[h!]
 \begin{center}
-\includegraphics[width=1\textwidth]{obrazky-figures/featureextraction.png}
-\caption{Components processing a signal before the classification itself.\label{fig:featureextraction}}
+\includegraphics[width=0.7\textwidth]{obrazky-figures/featureextraction.png}
+\caption{Preprocessing pipeline.\label{fig:featureextraction}}
 \end{center}
 \end{figure}
 
@@ -523,57 +520,52 @@ characteristics of the movement change character of the signal.
 The signal first is segmented using {\it continuous wavelet transformation} with {\it Morlet wavelet}
 and scale $s_{cwt} = 1.33846$, and the extrems are detected comparing to the $N_{n} = 8$ neighbors on both sides.
 Detected extrems are used as the borders of the segments, that lies in between them. These numbers were
-discovered experimentally minimizing the sum of the within-segment variances of the recorded data.
+discovered experimentally minimizing the sum of the within-segment variances of the recorded data using formula \ref{eq:cwtparamssearch}
 
-\begin{figure}[!ht]
+Continuous wavelet transformation is a technique in signal processing transforming a signal into frequency domain.
+The process is quite similar to fourier tranformation. It uses so called {\it wavelet} instead of sinusoid.
+Wavelet is a finite signal with energy $E=0$, an example is Morlet wavelet, equation \ref{eq:morlet}.
+CWT reacts well to abrupt changes.
+
+% Morlet "mexican hat" wavelet.
 \begin{equation}
 \Psi(x) = e^{-\frac{x^2}{2}} cos(5x)
+\label{eq:morlet}
 \end{equation}
-\caption{Morlet {\it mexican hat} Wavelet.}
-\end{figure}
 
-\begin{figure}[!ht]
+% Experimental optimalization of parameters.
 \begin{equation}
 s_{cwt}, N_{n} = \text{argmin} ( \sum_{\sigma_i \in \sigma_{s,N}} \sigma_i )
+\label{eq:cwtparamssearch}
 \end{equation}
-\caption{Experimental optimalization of parameters.}
-\end{figure}
 
-In next step their distances are evaluated. Distance of two adjoining segments is computed as numerical
+In the next step segment distances are evaluated. Distance of two adjoining segments aka {\it edge} is computed as numerical
 difference of their within-segment mean values.
 
-\begin{figure}[!ht]
+% Distance of segments or edge height.
 \begin{equation}
 ||\textbf{AB}|| = \mu_\textbf{B} - \mu_\textbf{A}
 \end{equation}
-\caption{Distance of segments.}
-\end{figure}
 
-There comes to the game fuzzification. A designed fuzzy sets corresponds with falling edge (\textbf{F}), stagnating signal (\textbf{S})
-and rising edge (\textbf{R}). The E and R are related, they use the same wave form. Both of the curves can be parametrized with
-$t$ being tolerance and $x_0$ being center/shift. The fuzzy set arrange is visualized in the figure \ref{fig:fuzzysets} with $t=10$.
+Here comes to the game fuzzification. A designed set of fuzzy membership functions $\xi_F$, $\xi_S$ and $\xi_R$
+corresponds with artefacts falling edge (\textbf{F}), stagnating signal (\textbf{S}) and rising edge (\textbf{R}).
+The E and R are related, they use the same wave form based on transformed $arctan()$ function, parametrizable with
+tolerance $t$ and center/shift $x_0$. S is based on gaussian function. The fuzzy set arrange is visualized
+in the figure \ref{fig:fuzzysets} with $t=10$.
 
-\begin{figure}[!ht]
+% Fuzzy membership functions.
+\begin{subequations}
 \begin{equation}
 \xi_R(x) = \frac{ arctan( 4\cdot (\frac{x - x_0}{t} + 1) )}{\pi} + 0.5
 \end{equation}
-\caption{Fuzzy set function used for \textbf{R}.}
-\end{figure}
-
-
-\begin{figure}[!ht]
 \begin{equation}
-\xi_L(x) = \xi_R(-x)
+\xi_F(x) = \xi_R(-x)
 \end{equation}
-\caption{Fuzzy set function used for \textbf{F}.}
-\end{figure}
-
-\begin{figure}[!ht]
 \begin{equation}
 \xi_R(x) = \sqrt{ exp( -\frac{(x_0 - x)^2}{2\cdot (0.6t)^2} ) }
 \end{equation}
-\caption{Fuzzy set function used for \textbf{S}.}
-\end{figure}
+\end{subequations}
+
 
 \begin{figure}[h!]
 \begin{center}
@@ -582,111 +574,40 @@ $t$ being tolerance and $x_0$ being center/shift. The fuzzy set arrange is visua
 \end{center}
 \end{figure}
 
+Every edge gets assigned its fuzzy values for each of the classes. Now borders of artefacts need to be found.
+Score of border $\xi[i]$ for the edge $x_i$ is evaluated using formula \ref{fig:artefactborder}.
+\footnote{Operator $\land_P$ here means {\it product fuzzy T-norm}: $A \land_P B = f_A(x)\cdot f_B(x)$.}
+The calculation is done for all the artefact combinations $ABC$ here, where $A$ is artefact of precedent $x_{i-1}$, $B$ for the
+$x_i$ itself and $C$ for the follower $x_{i+1}$. $A,B,C \in \{F,S,B\}$.
 
-\subsection*{Fuzzification and classification}
-The classifier fuzzifies received a F-sized feature vector representing a segment of samples sensed by a sensor
-into a 2D fuzzy values array. These values express fuzzy membership value of presence of a person.
+% Artefact combination fuzzy formula.
+\begin{equation}
+\xi_{ABC}[i] = (\xi_{A}[i-1]) \land_P (\xi_{B}[i]) \land_P (\xi_{C}[i+1])
+\label{fig:artefactborder}
+\end{equation}
 
-...
+The combination indicating artefact border are put together as same as the rest. That is reached
+using formula \ref{fig:edgemerger}.\footnote{Operator $\lor_{p\Sigma}$ here means
+{\it probability sum fuzzy S-norm/T-conorm}: $A \lor_{p\Sigma} B = f_A(x) + f_B(x) - f_A(x)f_B(x)$.
+Other variants could be considered too - maximum, Lukasiewicz, etc. }
 
-Classifier is built on the observation ...
-
-%\begin{subequations}
-%\begin{equation}
-%    \alpha_A = \frac{2b_A}{r} = \frac{5}{11} = \underline{0.4545}
-%\end{equation}
-%\begin{equation}
-%    \alpha_B = \frac{2b_A + 2b_B}{r} = \frac{5 + 10}{11} = \underline{1.3636}
-%\end{equation}
-%\begin{equation}
-%    \alpha_C = \frac{2b_A + 2b_B + 2b_C}{r} = \frac{5 + 10 + 8}{11} = \underline{2.0909}
-%\end{equation}
-%\end{subequations}
-%\begin{subequations}
-%\begin{equation}
-%    \varphi_1 = \frac{\alpha_C - \alpha_B}{2} = \frac{2.0909 - 1.3636}{2} = 0.36365
-%\end{equation}
-%\begin{equation}
-%    \varphi_2 = \frac{\alpha_B - \alpha_A}{2} = \frac{1.3636 - 0.4545}{2} = 0.45455
-%\end{equation}
-%\begin{equation}
-%    \varphi_3 = \frac{\alpha_A}{2} = \frac{0.4545}{2} = 0.22725
-%\end{equation}
-%\end{subequations}
-
-%During the movement around the sensor with circular trajectory of radius $r_X$,
-%the sectors are being crossed in the order $\varphi_1$, $\varphi_2$, $\varphi_3$,
-%$\varphi_3^{'}$, $\varphi_2^{'}$, $\varphi_1^{'}$. The length of a sector $l$ is
-
-%\begin{equation}
-%  l = \varphi r
-%\end{equation}
-
-%The measurement was done in a room with width $w = 7.63~m$, $w_R = 4.25~m$ on the right
-%and $w_L = 3.38~m$ from the left. The radiuses of circular trajectories were $3~m$, $6~m$, $9~m$ and $12~m$.
-
-%To calculate maximal possible angle equation at figure \ref{fig:maxangle} can be used, $w$ is a distance of
-%the sensor and a side wall, $r$ is a distance of the object we want to calculate the maximal angle of.
-
-%\begin{figure}[ht!]
-%\begin{equation}
-%\varphi_{max}(w, r) = \text{min}(\frac{\alpha_C}{2}, 
-%  \begin{cases}
-%    \text{arcsin}(\frac{w}{r}) & \frac{w}{r} \in (0 ; 1) \\ 
-%    \infty                      & \text{otherwise}
-%  \end{cases}
-%)
-%\end{equation}
-%\caption{Instantaneous maximal angle. \label{fig:maxangle}}
-%\end{figure}
-
-%\begin{subequations}
-%\begin{equation}
-%\varphi_{max}(3.38~m, 3~m) = \text{min}(\frac{2.0909}{2}, \infty) =  1.04545
-%\end{equation}
-%\begin{equation}
-%\varphi_{max}(4.25~m, 3~m) = \text{min}(1.04545, \infty) =  1.04545
-%\end{equation}
-%\end{subequations}
-
-%\begin{subequations}
-%\begin{equation}
-%\varphi_{max}(3.38~m, 6~m) = \text{min}(1.04545, \text{arcsin}(\frac{3.38}{6})) = 0.59841
-%\end{equation}
-%\begin{equation}
-%\varphi_{max}(4.25~m, 6~m) = \text{min}(1.04545, \text{arcsin}(\frac{4.25}{6})) = 0.78713
-%\end{equation}
-%\end{subequations}
-
-%\begin{subequations}
-%\begin{equation}
-%\varphi_{max}(3.38~m, 9~m) = \text{min}(1.04545, \text{arcsin}(\frac{3.38}{9})) = 0.385
-%\end{equation}
-%\begin{equation}
-%\varphi_{max}(4.25~m, 9~m) = \text{min}(1.04545, \text{arcsin}(\frac{4.25}{9})) = 0.49181
-%\end{equation}
-%\end{subequations}
+% Artefact border fuzzy formula.
+\begin{subequations}
+\begin{equation}
+f_{1}[i] = \bigvee\limits_{\xi \in \xi_1}{}_{p\Sigma} (\xi)
+\end{equation}
+\begin{equation}
+f_{0}[i] = \bigvee\limits_{\xi \in \xi_0}{}_{p\Sigma} (\xi)
+\end{equation}
+\label{fig:edgemerger}
+\end{subequations}
 
 
-
-%\begin{subequations}
-%\begin{equation}
-%\varphi_{max}(3.38~m, 12~m) = \text{min}(1.04545, \text{arcsin}(\frac{3.38}{12})) = 0.28553
-%\end{equation}
-%\begin{equation}
-%\varphi_{max}(4.25~m, 12~m) = \text{min}(1.04545, \text{arcsin}(\frac{4.25}{12})) = 0.36202
-%\end{equation}
-%\end{subequations}
-
-%This means, that walking around the circle should generate signal that will be scaled with
-%the distance of the object from the sensor.
-
-
-...
-
-Representation of the space in front of a sensor is inspired by cellular automata - carved into
-segments. These segments are given by azimuth (phase) with a center in the sensor and by
-the distance zone - deltas in polar coordinates.
+\subsection*{Classification}
+The classifier's output is a 2D fuzzy value matrix, representing the space in from of the sensor.
+It is inspired by the space representation by cellular automata, which carves it into small
+homogenous segments. The fuzzy value at certain index expresses a presence of a person
+at the position.
 
 Even though the space because of the construction of sensor has a shape of circular sector,
 it can be easily represented by classical 2D matrix, as it is shown in the figure \ref{fig:circularsector}.
@@ -698,79 +619,78 @@ it can be easily represented by classical 2D matrix, as it is shown in the figur
 \end{center}
 \end{figure}
 
-{\it Fuzzification. Consider action characteristics (speed, direction, multiple people).}
 
-The output of fuzzification is a 2D matrix of space segments containing fuzzy value expressing
-presence of person.
+{\it Artefacts into features. Consider action characteristics (speed, direction, multiple people).}
 
+\subsection*{Fusion}
 Using more sensors brings advantages: the measuring might be more precise since the person presence
 classified by two independent sensors is not only more probable but the computed position
 can get more accurate than when using only one sensor. The disadvantage is higher price and need
 to know the mutual orientation and position of the sensors. 
 
-If more sensors are used it is necessary to merge their space segments matrixes in one,
-as shown in the figure \ref{fig:3pir_area}. To do so, a fuzzy logic mechanism
-{\it Takagi-Sugeno rules} can be used as described in \cite{InsightIntoFuzzyModelling}.
-The form of rules is [IF {\it antecendent} THEN {\it succendent}] as shown in the table
-\ref{table:takagisugeno}. During the calculation all the antecendentes are evaluated
-and the most relevant leads to application of corresponding succendent to the output.
+%If more sensors are used it is necessary to merge their space segments matrixes in one,
+%as shown in the figure \ref{fig:3pir_area}. To do so, a fuzzy logic mechanism
+%{\it Takagi-Sugeno rules} can be used as described in \cite{InsightIntoFuzzyModelling}.
+%The form of rules is [IF {\it antecendent} THEN {\it succendent}] as shown in the table
+%\ref{table:takagisugeno}. During the calculation all the antecendentes are evaluated
+%and the most relevant leads to application of corresponding succendent to the output.
 
-\begin{figure}[h!]
-\begin{center}
-\includegraphics[width=0.5\textwidth]{obrazky-figures/3pir_area.png}
-\caption{Fusion of detection areas.\label{fig:3pir_area}}
-\end{center}
-\end{figure}
+%\begin{figure}[h!]
+%\begin{center}
+%\includegraphics[width=0.5\textwidth]{obrazky-figures/3pir_area.png}
+%\caption{Fusion of detection areas.\label{fig:3pir_area}}
+%\end{center}
+%\end{figure}
 
-\begin{table}[h!]
-\begin{center}
-\begin{tabular}{|c|c|c|} \hline
-\textbf{Rule}   & \textbf{Antecendent}                                & \textbf{Succendent}                             \\ \hline
-$R_1$           & $X_1$ is $A_{11}$ and \dots and $X_n$ is $A_{1n}$   & $Y = b_{10} + b_{11}X_1 + \dots + b_{1n}X_n$    \\ \hline
-$R_2$           & $X_1$ is $A_{21}$ and \dots and $X_n$ is $A_{2n}$   & $Y = b_{20} + b_{21}X_1 + \dots + b_{2n}X_n$    \\ \hline
-\multicolumn{3}{|c|}{\dots}                                                                                             \\ \hline
-$R_m$           & $X_1$ is $A_{m1}$ and \dots and $X_n$ is $A_{mn}$   & $Y = b_{m0} + b_{m1}X_1 + \dots + b_{mn}X_n$    \\ \hline
-\end{tabular}
-\caption{Takagi-Sugeno rules. $X$ is input, $A$ is a matrix of fuzzy numbers, $b$ is a matrix of fuzzy coefficients.\label{table:takagisugeno} \cite{InsightIntoFuzzyModelling}}
-\end{center}
-\end{table}
+%\begin{table}[h!]
+%\begin{center}
+%\begin{tabular}{|c|c|c|} \hline
+%\textbf{Rule}   & \textbf{Antecendent}                                & \textbf{Succendent}                             \\ \hline
+%$R_1$           & $X_1$ is $A_{11}$ and \dots and $X_n$ is $A_{1n}$   & $Y = b_{10} + b_{11}X_1 + \dots + b_{1n}X_n$    \\ \hline
+%$R_2$           & $X_1$ is $A_{21}$ and \dots and $X_n$ is $A_{2n}$   & $Y = b_{20} + b_{21}X_1 + \dots + b_{2n}X_n$    \\ \hline
+%\multicolumn{3}{|c|}{\dots}                                                                                             \\ \hline
+%$R_m$           & $X_1$ is $A_{m1}$ and \dots and $X_n$ is $A_{mn}$   & $Y = b_{m0} + b_{m1}X_1 + \dots + b_{mn}X_n$    \\ \hline
+%\end{tabular}
+%\caption{Takagi-Sugeno rules. $X$ is input, $A$ is a matrix of fuzzy numbers, $b$ is a matrix of fuzzy coefficients.\label{table:takagisugeno} \cite{InsightIntoFuzzyModelling}}
+%\end{center}
+%\end{table}
 
-The designed fusion fuzzy system is to be seen in the table \ref{table:fuzzyfusion}. To be able to merge
-the space segments, overlap must be known and then vector $X$ is created, containing pairs of values
-from each vector ($X[i]_L$ and $X[i]_R$). Each of these pairs is input to the fusion algorithm, which
-merges it to one fuzzy number result. 
+%The designed fusion fuzzy system is to be seen in the table \ref{table:fuzzyfusion}. To be able to merge
+%the space segments, overlap must be known and then vector $X$ is created, containing pairs of values
+%from each vector ($X[i]_L$ and $X[i]_R$). Each of these pairs is input to the fusion algorithm, which
+%merges it to one fuzzy number result. 
 
-$C_{L}$ and $C_{R}$ are 2D matrixes of coefficients with indexing $[i,j]$, where $i,j \in \{0,L,M,H\}$.
-The fuzzy sets LOW, MEDIUM and HIGH of $X$ composes a basic evaluative trichotomy extended for unknown state OUT.
-The optimal values of coefficients and the fuzzy sets parameters have to be found experimentally. 
+%$C_{L}$ and $C_{R}$ are 2D matrixes of coefficients with indexing $[i,j]$, where $i,j \in \{0,L,M,H\}$.
+%The fuzzy sets LOW, MEDIUM and HIGH of $X$ composes a basic evaluative trichotomy extended for unknown state OUT.
+%The optimal values of coefficients and the fuzzy sets parameters have to be found experimentally. 
 
-\begin{table}[h!]
-\begin{center}
-\begin{tabular}{|c|c c|rcl|} \hline
-\textbf{Rule}   & \textbf{$X_L$}  & \textbf{$X_R$}  & \multicolumn{3}{|c|}{\textbf{Y}}  \\ \hline
-$R_1$           & OUT             & OUT             & $C_{L}[0,0]    $&+&$ C_{R}[0,0]   $   \\ \hline
-$R_2$           & OUT             & LOW             & $C_{L}[0,L]    $&+&$ C_{R}[L,0]X_R$   \\ \hline
-$R_3$           & OUT             & MEDIUM          & $C_{L}[0,M]    $&+&$ C_{R}[M,0]X_R$   \\ \hline
-$R_4$           & OUT             & HIGH            & $C_{L}[0,H]    $&+&$ C_{R}[H,0]X_R$   \\ \hline
-$R_5$           & LOW             & OUT             & $C_{L}[L,0]X_L $&+&$ C_{R}[0,L]   $   \\ \hline
-$R_6$           & LOW             & LOW             & $C_{L}[L,L]X_L $&+&$ C_{R}[L,L]X_R$   \\ \hline
-$R_7$           & LOW             & MEDIUM          & $C_{L}[L,M]X_L $&+&$ C_{R}[M,L]X_R$   \\ \hline
-$R_8$           & LOW             & HIGH            & $C_{L}[L,H]X_L $&+&$ C_{R}[H,L]X_R$   \\ \hline
-$R_9$           & MEDIUM          & OUT             & $C_{L}[M,0]X_L $&+&$ C_{R}[0,M]$      \\ \hline
-$R_{10}$        & MEDIUM          & LOW             & $C_{L}[M,L]X_L $&+&$ C_{R}[L,M]X_R$   \\ \hline
-$R_{11}$        & MEDIUM          & MEDIUM          & $C_{L}[M,M]X_L $&+&$ C_{R}[M,M]X_R$   \\ \hline
-$R_{12}$        & MEDIUM          & HIGH            & $C_{L}[M,H]X_L $&+&$ C_{R}[H,M]X_R$   \\ \hline
-$R_{13}$        & HIGH            & OUT             & $C_{L}[H,0]X_L $&+&$ C_{R}[0,H]   $   \\ \hline
-$R_{14}$        & HIGH            & LOW             & $C_{L}[H,L]X_L $&+&$ C_{R}[L,H]X_R$   \\ \hline
-$R_{15}$        & HIGH            & MEDIUM          & $C_{L}[H,M]X_L $&+&$ C_{R}[M,H]X_R$   \\ \hline
-$R_{16}$        & HIGH            & HIGH            & $C_{L}[H,H]X_L $&+&$ C_{R}[H,H]X_R$   \\ \hline
-\end{tabular}
-\caption{Design fuzzy system to fuseTakagi-Sugeno rules. $X$ is input, $A$ is a matrix of fuzzy numbers, $b$ is a matrix of fuzzy coefficients.\label{table:fuzzyfusion} \cite{InsightIntoFuzzyModelling}}
-\end{center}
-\end{table}
+%\begin{table}[h!]
+%\begin{center}
+%\begin{tabular}{|c|c c|rcl|} \hline
+%\textbf{Rule}   & \textbf{$X_L$}  & \textbf{$X_R$}  & \multicolumn{3}{|c|}{\textbf{Y}}  \\ \hline
+%$R_1$           & OUT             & OUT             & $C_{L}[0,0]    $&+&$ C_{R}[0,0]   $   \\ \hline
+%$R_2$           & OUT             & LOW             & $C_{L}[0,L]    $&+&$ C_{R}[L,0]X_R$   \\ \hline
+%$R_3$           & OUT             & MEDIUM          & $C_{L}[0,M]    $&+&$ C_{R}[M,0]X_R$   \\ \hline
+%$R_4$           & OUT             & HIGH            & $C_{L}[0,H]    $&+&$ C_{R}[H,0]X_R$   \\ \hline
+%$R_5$           & LOW             & OUT             & $C_{L}[L,0]X_L $&+&$ C_{R}[0,L]   $   \\ \hline
+%$R_6$           & LOW             & LOW             & $C_{L}[L,L]X_L $&+&$ C_{R}[L,L]X_R$   \\ \hline
+%$R_7$           & LOW             & MEDIUM          & $C_{L}[L,M]X_L $&+&$ C_{R}[M,L]X_R$   \\ \hline
+%$R_8$           & LOW             & HIGH            & $C_{L}[L,H]X_L $&+&$ C_{R}[H,L]X_R$   \\ \hline
+%$R_9$           & MEDIUM          & OUT             & $C_{L}[M,0]X_L $&+&$ C_{R}[0,M]$      \\ \hline
+%$R_{10}$        & MEDIUM          & LOW             & $C_{L}[M,L]X_L $&+&$ C_{R}[L,M]X_R$   \\ \hline
+%$R_{11}$        & MEDIUM          & MEDIUM          & $C_{L}[M,M]X_L $&+&$ C_{R}[M,M]X_R$   \\ \hline
+%$R_{12}$        & MEDIUM          & HIGH            & $C_{L}[M,H]X_L $&+&$ C_{R}[H,M]X_R$   \\ \hline
+%$R_{13}$        & HIGH            & OUT             & $C_{L}[H,0]X_L $&+&$ C_{R}[0,H]   $   \\ \hline
+%$R_{14}$        & HIGH            & LOW             & $C_{L}[H,L]X_L $&+&$ C_{R}[L,H]X_R$   \\ \hline
+%$R_{15}$        & HIGH            & MEDIUM          & $C_{L}[H,M]X_L $&+&$ C_{R}[M,H]X_R$   \\ \hline
+%$R_{16}$        & HIGH            & HIGH            & $C_{L}[H,H]X_L $&+&$ C_{R}[H,H]X_R$   \\ \hline
+%\end{tabular}
+%\caption{Design fuzzy system to fuseTakagi-Sugeno rules. $X$ is input, $A$ is a matrix of fuzzy numbers, $b$ is a matrix of fuzzy coefficients.\label{table:fuzzyfusion} \cite{InsightIntoFuzzyModelling}}
+%\end{center}
+%\end{table}
 
-For three sectors as in the figure \ref{fig:3pir_area} the situation is analogous. The table also depends
-on whether the areas of the side sensors overlap or not. Or they can be merged successively.
+%For three sectors as in the figure \ref{fig:3pir_area} the situation is analogous. The table also depends
+%on whether the areas of the side sensors overlap or not. Or they can be merged successively.
 
 \subsection*{Defuzzification}
 

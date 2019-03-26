@@ -70,6 +70,7 @@
 \usepackage{color}
 \usepackage{etoolbox}
 \usepackage{enumitem}
+\usepackage{caption}
 
 \ifczech
   \main@language{czech}
@@ -185,6 +186,7 @@
 \def\@tackn@CS{Poděkování}
 \def\@tackn@SK{Poďakovanie}
 \def\@tackn@EN{Acknowledgements}
+\DeclareCaptionType{equ}[][]
 
 \newif\ifnasel
 \def\ifEqString#1#2#3#4{\def\testa{#1}\def\testb{#2}%
