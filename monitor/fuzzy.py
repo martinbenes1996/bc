@@ -3,6 +3,17 @@ import numpy as np
 
 import math
 
+def AND(*args):
+    result = 1
+    for a in args:
+        result *= a
+    return result
+def OR(*args):
+    result = 0
+    for a in args:
+        result += a - result*a
+    return result
+
 class Negator:
     def __init__(self):
         return NotImplementedError

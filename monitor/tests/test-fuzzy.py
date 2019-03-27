@@ -107,6 +107,25 @@ def testTConorm():
     test(TC.probsum(1,1), 1)
     test(TC.probsum(0,0,1,0), 1)
 
+def testOperations():
+    conjunction = fuzzy.AND
+    disjunction = fuzzy.OR
+    
+    test(conjunction(0,0), 0)
+    test(conjunction(1,0), 0)
+    test(conjunction(0,1), 0)
+    test(conjunction(1,1), 1)
+    test(conjunction(0,0.5), 0)
+
+    test(disjunction(0,0), 0)
+    test(disjunction(1,0), 1)
+    test(disjunction(0,1), 1)
+    test(disjunction(1,1), 1)
+
+    test(conjunction(0,0,0), 0)
+    test(conjunction(1,1,1), 1)
+    test(conjunction(1,1,0), 0)
+    test(conjunction(0,1,1), 0)
 
 
 def main():
@@ -115,6 +134,8 @@ def main():
 
     testNegator()
     testTConorm()
+
+    testOperations()
 
     assert(status)
 

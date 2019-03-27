@@ -40,43 +40,36 @@ def testObjects(name):
     # segment segments
     artefacts = segment.Artefact.parseArtefacts(segments)
 
-    # debugging
-    for i in range( len(segments) - 4 ):
-        print( segment.Edge(segments[i:i+2]).Dmu(), segment.Edge(segments[i+1:i+3]).Dmu(), segment.Edge(segments[i+2:i+4]).Dmu() )
-        for k in sorted(artefacts[i].items(), key=lambda x : -x[1]):
-            print(k[0], ":", k[1])
-        ans = input('')
 
 
-    replacer = [s.mu() for s in segments for _ in range(s.len())]
+    #replacer = [s.mu() for s in segments for _ in range(s.len())]
     
-    plt.plot(x)
-    plt.plot(replacer, c='k')
+    #plt.plot(x)
+    #plt.plot(replacer, c='k')
 
     
     
 
-    #start = 0
-    #col = 'r'
-    #for i,objsegs in enumerate(objectsegments):
-    #    l = model.segLens(objsegs)
-    #    y = np.concatenate(objsegs)
-    #    x = [start+i for i in range(len(y))]
-    #    plt.plot(x,y,c=col)
-    #    if col == 'r':
-    #        col = 'g'
-    #    elif col == 'g':
-    #        col = 'b'
-    #    elif col == 'b':
-    #        col = 'y'
-    #    elif col == 'y':
-    #        col = 'c'
-    #    elif col == 'c':
-    #        col = 'm'
-    #    else:
-    #        col = 'r'
-    #    start += np.size(y)
-    #plt.show()
+    start = 0
+    col = 'r'
+    for i,a in enumerate(artefacts):
+        y = a.samples()
+        x = [start+i for i in range(len(y))]
+        plt.plot(x,y,c=col)
+        if col == 'r':
+            col = 'g'
+        elif col == 'g':
+            col = 'b'
+        elif col == 'b':
+            col = 'y'
+        elif col == 'y':
+            col = 'c'
+        elif col == 'c':
+            col = 'm'
+        else:
+            col = 'r'
+        start += np.size(y)
+    plt.show()
     
     
     #x = [ segstarts[o[0]] for o in objectborders ]
@@ -103,7 +96,7 @@ def main():
     #for m in range(0,10):
     #    testGenerator(m,m/1000.)
     #testEdges("../data/6m_RL/6m_RL_2.csv")
-    testObjects("../data/6m_RL/6m_RL_2.csv")
+    testObjects("../data/3m_LR/3m_LR_2.csv")
 
     #testExtraction("../data/6m_RL/6m_RL_2.csv")
 

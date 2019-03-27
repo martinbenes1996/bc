@@ -56,6 +56,7 @@ class Edge:
 
     def __init__(self, segments):
         self.first, self.second = segments[0], segments[1]
+        self.fuzzyScore = dict()
     def Dmu(self):
         return self.second.mu() - self.first.mu()
     def Dvar(self):
@@ -99,66 +100,62 @@ class Edge:
 
 
 class Artefact:
-    def __init__(self, samples, score):
-        self.samples = samples
-        self.score = score
-        pass
+    def __init__(self):
+        self.segments = []
+    def append(self, segment):
+        self.segments.append(segment)
+
+    def samples(self):
+        artefactSamples = []
+        for segment in self.segments:
+            for sample in segment.samples:
+                artefactSamples.append(sample)
+        return np.array(artefactSamples)
+    def mu(self):
+        return np.mean(self.samples())
     
+    def getFeatures(self):
+        pass
+
+
     @classmethod
     def parseArtefacts(cls, segments):
         edges = [ Edge(segments[i:i+2]) for i in range(len(segments) - 1) ]
-        edgeCombinations = [ a+b+c for a in "FSR" for b in "FSR" for c in "FSR"]
+        # triades
+        allTriades = set([ a+b+c for a in "FSR" for b in "FSR" for c in "FSR"])
+        triadesNotEdge = {"FFF", "FFR", "FFS", "RRF", "RRR", "RRS", "SSF", "SSR", "SSS"}
+        triadesIsEdge = allTriades - triadesNotEdge
 
         # fill artefact fuzzy matrix
-        artefactMatrix = []
+        artefacts = [ Artefact() ]
         for i in range(1,len(edges)-1):
 
             triade = dict()
-            for key in edgeCombinations:
-                fuzzyCoeff = edges[i-1].getKhi(key[0])*edges[i].getKhi(key[1])*edges[i+1].getKhi(key[2])
-                #if key == "SSS":
-                #    print(fuzzyCoeff, "=", edges[i-1].getKhi(key[0]), edges[i].getKhi(key[1]), edges[i+1].getKhi(key[2]))
-                triade[key] = cls.score(edges[i-1:i+2], key) * fuzzyCoeff
-            artefactMatrix.append(triade)
+            scoreEdge, scoreNotEdge = 0, 0
+            for key in allTriades:
+                value = fuzzy.AND(edges[i-1].getKhi(key[0]),
+                                        edges[i].getKhi(key[1]),
+                                        edges[i+1].getKhi(key[2]) )
+                if key in triadesIsEdge:
+                    scoreEdge = fuzzy.OR(scoreEdge, value)
+                else:
+                    scoreNotEdge = fuzzy.OR(scoreNotEdge, value)
+                triade[key] = value
+            edges[i].fuzzyScore = triade
+
+            # score for edge (normalized to 100)
+            edgeScore = scoreEdge/(scoreEdge+scoreNotEdge)
+
+            artefacts[-1].append(edges[i].first)
+            if edgeScore >= 0.5:
+                artefacts.append(Artefact())
+            
+
+        return artefacts
         
-        return artefactMatrix
-
-        #artefactBorders = [ i for i in range(1,len(edges)-1) if cls.isBorder(edges[i-1:i+2])]
 
 
-    @classmethod
-    def score(cls, edges, key):
-        prevEdge,currEdge,nextEdge = edges
-        prevKhi,currKhi,nextKhi = prevEdge.getKhi(key[0]),currEdge.getKhi(key[1]),nextEdge.getKhi(key[2])
-        nAlpha,nBeta,nGamma,nDelta = prevEdge.first.len(),prevEdge.second.len(),nextEdge.first.len(),nextEdge.second.len()
-        n = nAlpha+nBeta+nGamma+nDelta
-        # SS*, FF*, RR*
-        if key[0:2] in {"SS", "FF", "RR"}:
-            #return (nAlpha + nBeta) / n
-            return 1
-        # RSR, FSF
-        elif key in {"RSR", "FSF", "SRS", "SFS"}:
-            #return (nBeta + nGamma) / n
-            return 1
-            # or using variances
-        # SFF, SRR, RSS, FSS
-        elif key in {"SFF", "SRR", "RSS", "FSS"}:
-            #return (nAlpha + nBeta) / n
-            return 1
-        # FSR, RSF
-        elif key in {"FSR", "RSF"}:
-            #return (nAlpha + nDelta) / n
-            return 1
-        # RF*, FR *
-        elif key[0:2] in {"RF","FR"}:
-            return 1
-        # SFR, SRF
-        elif key in {"SFR", "SRF"}:
-            return 1
-        # ???
-        else:
-            #return 1
-            raise Exception("Bad key: " + key)
+
 
 
 
