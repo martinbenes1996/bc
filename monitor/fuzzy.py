@@ -11,7 +11,8 @@ def AND(*args):
 def OR(*args):
     result = 0
     for a in args:
-        result += a - result*a
+        #result += a - result*a
+        result = max(a, result)
     return result
 
 class Negator:

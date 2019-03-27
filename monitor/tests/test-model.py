@@ -40,6 +40,10 @@ def testObjects(name):
     # segment segments
     artefacts = segment.Artefact.parseArtefacts(segments)
 
+    k = []
+    for a in artefacts:
+        k.append(*a.getFeatures())
+
 
 
     #replacer = [s.mu() for s in segments for _ in range(s.len())]
@@ -55,7 +59,14 @@ def testObjects(name):
     for i,a in enumerate(artefacts):
         y = a.samples()
         x = [start+i for i in range(len(y))]
+        line = []
+        it = y[0]
+        for xi in x:
+            line.append(it)
+            it += xi * k[i] / abs(max(y) - min(y))
+        
         plt.plot(x,y,c=col)
+        plt.plot(x,line, c='k')
         if col == 'r':
             col = 'g'
         elif col == 'g':
@@ -96,7 +107,7 @@ def main():
     #for m in range(0,10):
     #    testGenerator(m,m/1000.)
     #testEdges("../data/6m_RL/6m_RL_2.csv")
-    testObjects("../data/3m_LR/3m_LR_2.csv")
+    testObjects("../data/6m_LR/6m_LR_2.csv")
 
     #testExtraction("../data/6m_RL/6m_RL_2.csv")
 

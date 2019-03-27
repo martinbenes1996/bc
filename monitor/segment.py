@@ -115,7 +115,24 @@ class Artefact:
         return np.mean(self.samples())
     
     def getFeatures(self):
-        pass
+        features = []
+        # get description
+        samples = self.samples()
+        smin, smax = min(samples), max(samples)
+        N = len(samples)
+
+        # best fitting line (k)
+        klimit = abs(smax-smin) / N
+        maxscore, k = 0,None
+        for ki in np.linspace(-klimit, klimit, 500):
+            score = np.dot(self.samples()-self.mu(), np.array([ki*x + samples[0] for x in range(N)]))
+            if score > maxscore:
+                maxscore = score
+                k = ki
+        features.append(k)
+        return features
+        
+        
 
 
     @classmethod
