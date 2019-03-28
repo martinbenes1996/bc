@@ -40,33 +40,27 @@ def testObjects(name):
     # segment segments
     artefacts = segment.Artefact.parseArtefacts(segments)
 
-    k = []
-    for a in artefacts:
-        k.append(*a.getFeatures())
-
-
-
-    #replacer = [s.mu() for s in segments for _ in range(s.len())]
-    
+    # add signal
     #plt.plot(x)
-    #plt.plot(replacer, c='k')
 
+    # add replacer
+    #replacer = [s.mu() for s in segments for _ in range(s.len())]
+    #plt.plot(replacer, c='k')
     
-    
+    # add lines
+    #k = []
+    #for a in artefacts:
+        #k.append(*a.getFeatures())
 
     start = 0
     col = 'r'
     for i,a in enumerate(artefacts):
         y = a.samples()
         x = [start+i for i in range(len(y))]
-        line = []
-        it = y[0]
-        for xi in x:
-            line.append(it)
-            it += xi * k[i] / abs(max(y) - min(y))
-        
-        plt.plot(x,y,c=col)
-        plt.plot(x,line, c='k')
+        # generate line
+        #line,k = a.getFeatures()
+        #plt.plot(x,y,c=col)
+        #plt.plot(x,line, c='k')
         if col == 'r':
             col = 'g'
         elif col == 'g':
@@ -80,14 +74,12 @@ def testObjects(name):
         else:
             col = 'r'
         start += np.size(y)
-    plt.show()
-    
-    
-    #x = [ segstarts[o[0]] for o in objectborders ]
-    #y = [ segmus[o[0]] for o in objectborders ]
-    #plt.scatter(x,y,s=50,c='r')
-    
     #plt.show()
+
+    for a in artefacts:
+        features = a.getFeatures()
+        print(features)
+    
 
 
 
@@ -107,7 +99,7 @@ def main():
     #for m in range(0,10):
     #    testGenerator(m,m/1000.)
     #testEdges("../data/6m_RL/6m_RL_2.csv")
-    testObjects("../data/6m_LR/6m_LR_2.csv")
+    testObjects("../data/6m_RL/6m_RL_2.csv")
 
     #testExtraction("../data/6m_RL/6m_RL_2.csv")
 

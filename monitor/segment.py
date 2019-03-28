@@ -1,6 +1,8 @@
 
+import math
 import numpy as np
 import scipy.signal as signal
+import sys
 
 import fuzzy
 
@@ -113,6 +115,10 @@ class Artefact:
         return np.array(artefactSamples)
     def mu(self):
         return np.mean(self.samples())
+    def var(self):
+        return np.var(self.samples())
+    def len(self):
+        return len(self.samples())
     
     def getFeatures(self):
         features = []
@@ -122,14 +128,37 @@ class Artefact:
         N = len(samples)
 
         # best fitting line (k)
-        klimit = abs(smax-smin) / N
-        maxscore, k = 0,None
-        for ki in np.linspace(-klimit, klimit, 500):
-            score = np.dot(self.samples()-self.mu(), np.array([ki*x + samples[0] for x in range(N)]))
-            if score > maxscore:
-                maxscore = score
-                k = ki
-        features.append(k)
+        mu,var = self.mu(),self.var()
+        minP,maxP = smin,smax
+        bestScore,optimalK,optimalLine = None, None, lambda x:None
+        for startP in np.linspace(minP,maxP,15):
+            for endP in np.linspace(minP,maxP,15):
+                # count line similarity score
+                k = (endP-startP)/N
+                line = [startP + k*x for x in range(N)]
+                score = 0
+                for i in range(N):
+                    score += (samples[i]-line[i])**2
+                score /= N
+                if bestScore is None:
+                    bestScore = score
+                if abs(score) < abs(bestScore):
+                    bestScore,optimalK,optimalLine = score,k,line
+
+        #return optimalLine,optimalK
+
+        # line slope
+        features.append(optimalK)
+        # difference from line
+        features.append(bestScore)
+        # variance of artefact
+        features.append(var)
+        # length of segment
+        features.append(N)
+        # mean value of segment
+        features.append(mu)
+        # ...
+        # <add more features>
         return features
         
         
