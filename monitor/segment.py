@@ -120,7 +120,7 @@ class Artefact:
     def len(self):
         return len(self.samples())
     
-    def getFeatures(self):
+    def getFeatures(self, plotting=False):
         features = []
         # get description
         samples = self.samples()
@@ -145,7 +145,8 @@ class Artefact:
                 if abs(score) < abs(bestScore):
                     bestScore,optimalK,optimalLine = score,k,line
 
-        #return optimalLine,optimalK
+        if plotting:
+            return optimalLine
 
         # line slope
         features.append(optimalK)
@@ -165,7 +166,8 @@ class Artefact:
 
 
     @classmethod
-    def parseArtefacts(cls, segments):
+    def parseArtefacts(cls, x):
+        segments = Segment.segmentize(x)
         edges = [ Edge(segments[i:i+2]) for i in range(len(segments) - 1) ]
         # triades
         allTriades = set([ a+b+c for a in "FSR" for b in "FSR" for c in "FSR"])

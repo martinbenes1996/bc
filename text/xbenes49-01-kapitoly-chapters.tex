@@ -587,9 +587,11 @@ $x_i$ itself and $C$ for the follower $x_{i+1}$. $A,B,C \in \{F,S,B\}$.
 \end{equation}
 
 The combination indicating artefact border are put together as same as the rest. That is reached
-using formula \ref{fig:edgemerger}.\footnote{Operator $\lor_{p\Sigma}$ here means
+using formula \ref{eq:edgemerger}.\footnote{Operator $\lor_{p\Sigma}$ here means
 {\it probability sum fuzzy S-norm/T-conorm}: $A \lor_{p\Sigma} B = f_A(x) + f_B(x) - f_A(x)f_B(x)$.
-Other variants could be considered too - maximum, Lukasiewicz, etc. }
+Other variants could be considered too - maximum, Lukasiewicz, etc. } Border indicating
+combinations are those, whose precedent and own combination differ, aka. {\it \{SF*, FS*, RF*, FR*, RS*, SR*\} }.
+The rest, {\it \{FF*, SS*, RR*\}}, means no edge. The results are tresholded for $T = 0.5$.
 
 % Artefact border fuzzy formula.
 \begin{subequations}
@@ -599,28 +601,66 @@ f_{1}[i] = \bigvee\limits_{\xi \in \xi_1}{}_{p\Sigma} (\xi)
 \begin{equation}
 f_{0}[i] = \bigvee\limits_{\xi \in \xi_0}{}_{p\Sigma} (\xi)
 \end{equation}
-\label{fig:edgemerger}
+\label{eq:edgemerger}
 \end{subequations}
 
 
+Newly created artefacts will be used to form feature vectors, filled with each one's characteristics.
+Suggested metrics are variance and mean value of samples within artefact, scope of line, that 
+can be counted using formula \ref{eq:artefactline}, etc.
+$l_0$, $l_1$ are $y$ coordinates of first and last point of the line respectively,
+\textbf{A} is a artefact samples vector. $k$ is scope of the line we are looking for,
+$\Delta_{\textbf{A},k}$ is the difference score of artefact \textbf{A} and line with scope
+$k$. It can also be used as a feature. This representation is to be seen in the figure \ref{fig:siglines}.
+
+\begin{subequations}
+\begin{equation}
+l[i] = k\textbf{A}[i] + l_0
+\end{equation}
+\begin{equation}
+k = \frac{l_1 - l_0}{|\textbf{A}|}
+\end{equation}
+\begin{equation}
+\Delta _{\textbf{A},k} = \sum_{i \in \{1,...,|\textbf{A}|\}} (\textbf{A}[i]-l[i])^2
+\end{equation}
+\begin{equation}
+l_0,l_1 = \text{argmin} ( \Delta_{\textbf{A},k} )
+\end{equation}
+\label{eq:artefactline}
+\end{subequations}
+
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[width=0.9\textwidth]{obrazky-figures/signallines.png}
+\caption{Representation of artefacts using line scope.\label{fig:siglines}}
+\end{center}
+\end{figure}
+
 \subsection*{Classification}
+Extracted feature vectors for every detected artefact will undergo classification procedure
+consisting of multiple dichotomic classifiers, each evaluating single decision - whether
+the movement is present or not, if the movement is towards center or aside, if the
+movement is closer to sensor of far, and if possible, if the person is on the left side
+or right.
+
+Each of these scores are then fuzzified and put together, creating a resulting matrix.
 The classifier's output is a 2D fuzzy value matrix, representing the space in from of the sensor.
 It is inspired by the space representation by cellular automata, which carves it into small
 homogenous segments. The fuzzy value at certain index expresses a presence of a person
 at the position.
+
+{\it Consider action characteristics (speed, direction, multiple people).}
 
 Even though the space because of the construction of sensor has a shape of circular sector,
 it can be easily represented by classical 2D matrix, as it is shown in the figure \ref{fig:circularsector}.
 
 \begin{figure}[h!]
 \begin{center}
-\includegraphics[width=0.7\textwidth]{obrazky-figures/circularsector_transformation.png}
+\includegraphics[width=0.5\textwidth]{obrazky-figures/circularsector_transformation.png}
 \caption{Representation of circular sector.\label{fig:circularsector}}
 \end{center}
 \end{figure}
 
-
-{\it Artefacts into features. Consider action characteristics (speed, direction, multiple people).}
 
 \subsection*{Fusion}
 Using more sensors brings advantages: the measuring might be more precise since the person presence

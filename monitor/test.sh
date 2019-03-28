@@ -13,7 +13,7 @@ for p in $programs; do
     i=$((i + 1))
     
     echo -e "\e[33mTest $i:\e[0m \c"
-    python3 tests/$p
+    python3 tests/$p > /dev/null
     # get status
     if [ $? == 0 ] ; then
         echo -e "\e[1;32mSUCCESS\e[0m"
