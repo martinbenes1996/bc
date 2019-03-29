@@ -1,5 +1,6 @@
 
 import datetime
+import json
 import numpy as np
 import scipy.signal as signal
 import sys
@@ -11,13 +12,6 @@ import segment
 
 sys.path.insert(0, '../collector-py/')
 import cwt
-
-
-
-
-
-
-
 
 class Extractor:
     """Adapter of CWT in monitor from collector.
@@ -106,4 +100,87 @@ class Extractor:
         return [a.getFeatures() for a in artefacts]
 
 
+class Classification:
+    def __init__(self, featureDimension, areaSize):
+        self.rows,self.columns = areaSize
+        self.area = [[0 for _ in range(self.columns)] for _ in range(self.rows)]
+        self.classifiers = {}
+        self.classifiers['distance'] = LinearRegression(featureDimension)
+        self.classifiers['center'] = LinearRegression(featureDimension)
+        self.classifiers['right'] = LinearRegression(featureDimension)
+        self.allKeys = {'distance','center','right'}
 
+    def train(self, x, key={'distance': True, 'center': True, 'right': True}):
+        assert(key.keys() <= self.allKeys)
+        for k in (self.allKeys - key.keys()):
+            key[k] = True
+        for k,v in key.items():
+            self.classifiers[k].addTrainData(x,v)
+    
+    def load(self, filename):
+        with open('classifiers/'+filename, 'r') as f:
+            data = json.loads(f.read())
+        assert(data.keys() == self.allKeys)
+        for k,v in data.items():
+            self.classifiers[k].load(v)
+    def save(self, filename):
+        state = {}
+        for k in self.classifiers.keys():
+            state[k] = self.classifiers[k].save()
+        with open('classifiers/'+filename, 'w') as f:
+            f.write(json.dump(state))
+
+
+class Classifier:
+    class ClassifierError(Exception):
+        pass
+    def __init__(self,dimensions):
+        self.trained = True
+        self.trainData = []
+
+    def addTrainData(self, x, result=True):
+        self.trainData.append( (x, result) )
+    def train(self):
+        if len(self.trainData) == 0:
+            raise self.ClassifierError("No training data.")
+        self.trained = True
+
+    def classify(self, x):
+        if not self.trained:
+            raise self.ClassifierError("Classifier not trained.")
+    
+    def load(self,data):
+        raise NotImplementedError
+    def save(self):
+        raise NotImplementedError
+        
+
+class LinearRegression(Classifier):
+    def __init__(self,dimensions):
+        super().__init__(dimensions)
+        self.regression,self.noise = [0 for _ in range(dimensions)],[0 for _ in range(dimensions)]
+    
+    def train(self):
+        super().train()
+        # training
+        # ...
+
+    def classify(self,x):
+        super().classify()
+        # classification
+        # ...
+
+    def load(self, data):
+        try:
+            self.regression,self.noise = data["regression"],data["noise"]
+        except:
+            raise Classifier.ClassifierError("Invalid classifier file.")
+        super().train()
+    def save(self):
+        return {"regression": self.regression, "noise": self.noise}
+    
+def GaussianClassifier(Classifier):
+    pass
+    # ...
+
+    

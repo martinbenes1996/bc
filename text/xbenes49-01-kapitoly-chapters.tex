@@ -508,6 +508,7 @@ is reachable in a network and keeps a running web server.
 
 
 \section{Classification server}
+\label{section:classification}
 On the used communication medium is running application listening to the channel.
 This server parses the segments sent by the devices and performs the classification.
 
@@ -869,30 +870,60 @@ The lab results are shown in the appendix \ref{appendix:PIRSignal}.
 
 \chapter{Implementation}
 
-\section{Module}
+\section{Sensor device}
 
-Nowadays most of the PIR sensors sold have only a binary output.
+The sensor device consists of PIR sensor and programmed MCU that samples analog signal from
+sensor and writes in chunks called segments it via WiFi to local multicast group.
+
+Nowadays most of the PIR sensors sold have only a binary {\it switching} output.
 When signal reaches a set treshold output is set to logic "1" for a unit of time.
 This mechanism is suitable for a light sensor or door sonsor, completely useless
 for the needs of this project though.
 
 The only found sensor that offers an analog output was {\it PIR STD} by
-{\it B+B Sensors}. {\it Add documentation to appendix.}
+{\it B+B Sensors}.
+
+\subsection*{PIR STD}
+{\it PIR STD} is a product of {\it B+B Sensors}. It is the only found passive infrared
+sensor, that has except of the switching binary ouput also analog output. Except of
+operating voltage $V_{cc}$ and ground $GND$ pins, it also has reference voltage input,
+which needs to be connected to $\frac{V_{cc}}{2} V$. The optical resistance pins can
+be also used for additional classification, fusion with the infrared signal classification
+results and making the final result more accurate.
+
+Pin layout table from the sensor operational manual is shown in the table \ref{fig:pirstdpin}.
+
+\begin{table}[h!]
+\begin{center}
+\begin{tabular}{|c c | c | c |} \hline
+\textbf{Pin} & \textbf{Code} & \textbf{Type} & \textbf{Description} \\ \hline
+1 & ANA & O & Analog output \\ \hline
+2 & REF & I & Reference voltage \\ \hline
+3 & GND & O & Ground \\ \hline
+4 & OUT & O & Binary (switching) output \\ \hline
+5 & GND & O & Ground \\ \hline
+6 & VCC & I & Operating voltage \\ \hline
+7 & LDR & O & Optical resistance \\ \hline
+8 & LDR & I & Optical resistance \\ \hline
+\end{tabular}
+\end{center}
+\caption{Pin layout of PIR STD.\cite{PIROperationalManual}\label{fig:pirstdpin}}
+\end{table}
+
+The {\it PIR STD} scheme shown in the figure \ref{fig:pirstdscheme} processes the signal
+in three stages going from left to right. The first two filter and amplify the signal
+resulting with analog output. The third generates binary output from analog.
 
 \begin{figure}[h!]
 \begin{center}
-\includegraphics[width=0.8\textwidth]{obrazky-figures/pirstd.png}
-\caption{Scheme of PIR STD.\cite{PIROperationalManual}\label{fig:pirstd}}
+\includegraphics[width=0.75\textwidth]{obrazky-figures/pirstd.png}
+\caption{Scheme of PIR STD.\cite{PIROperationalManual}\label{fig:pirstdscheme}}
 \end{center}
 \end{figure}
 
-The {\it PIR STD} scheme shown in the figure \ref{fig:pirstd} processes the signal
-in three stages going from left to right. The first two processes the signal to analog output.
-The third generates binary output from analog.
-
 \paragraph{I. stage}
-The first one starts at S of the PIR sensor, following with noise filter consisting of the
-amplifier $U1A$ and the feedback components $R3$, $C4$, $C8$, $R14$, $C9$, $R14$.
+The first one starts at S of the PIR sensor, following with noise/lowpass filter consisting
+of the amplifier $U1A$ and the feedback components $R3$, $C4$, $C8$, $R14$, $C9$, $R14$.
 There is also highpass filter done by $R6$ and $C3$. The output of this stage is a signal
 with frequency between $f_{L1}$ and $f_{H1}$ amplified $A_{U1A}$ times.
 
@@ -956,37 +987,6 @@ A_{U1B} = -\frac{R_5}{R_4}
 The third phase performs top-bottom tresholding generating binary output
 used in simple industrial application. It is not used in the project.\cite{PIRSchemeDescription}
 
-\subsection*{Programming of module}
-The module is programmed to read signal in sampling frequency and send the data to server.
-
-The usable sampling frequency can be estimated: the fresnel lens of {\it PIR STD} splits the
-area into $10^{\circ}$ circular sectors. Object moving around the sensor in the distance $0.5~m$
-with speed $15~km.h^{-1} = 4.1667~m.s^{-1}$ (very fast run) passes the central circular sector in
-
-\begin{equation}
-t = \frac{s}{v} = \frac{0.5*tg(10^{\circ})}{4.1667} = 0.02116~s
-\end{equation}
-
-This means the frequency of the movement through the circular sectors is
-
-\begin{equation}
-f = \frac{1}{t} = \frac{1}{0.02116} = 47.259~Hz
-\end{equation}
-
-According to Shannon theorem, the sampling frequency must be at least twice as big as the
-maximal frequency in the signal, which leads to
-
-\begin{equation}
-Fs \geq 2*47.259 = 94.518 
-\end{equation}
-
-Rounding up gives us minimal sampling frequency $100~Hz$, or sampling period $10~ms$.
-resulting with $2B$ sample in throughput $N$
-
-\begin{equation}
-N = F_s * |\text{sample}| * 8\frac{bit}{byte} = 100 * 2 * 8 = 1.6~kbps
-\end{equation}
-
 
 \subsection*{Connecting the sensor}
 PIR sensor is connected to the MCU. Except for source, ground and output which are connected directly,
@@ -1035,23 +1035,123 @@ During the testing $100~k\Omega$ resistors were used. The circuit is shown in th
 \end{figure}
 
 
+\subsection*{Sampling}
+The module is programmed to read signal in sampling frequency and send the data to server.
+
+\paragraph{AD conversion}
+The projection of voltage to a value is done by the built-in functionality, accessible by
+standard library function \texttt{analogRead()}. The sets of analog values $A$ and digital values $D$
+according to documentation of the function\cite{ArduinoAnalogRead} and the sensor\cite{PIROperationalManual}
+and the morphism $c$ are shown in the formula \ref{eq:ad_projection}.
+
+\begin{subequations}
+\begin{equation}
+A = <0;V_{cc}>
+\end{equation}
+\begin{equation}
+D = {0, 1, ..., 1023}
+\end{equation}
+\begin{equation}
+c: A \rightarrow D = x_A \rightarrow \frac{1023x_A}{V_{cc}}, x_A \in D
+\end{equation}
+\end{subequations}
+
+\paragraph{Sampling frequency}
+The usable sampling frequency can be estimated: the fresnel lens of {\it PIR STD} splits the
+area into $10^{\circ}$ circular sectors. Object moving around the sensor in the distance $0.5~m$
+with speed $15~km.h^{-1} = 4.1667~m.s^{-1}$ (very fast run) passes the central circular sector in
+
+\begin{equation}
+t = \frac{s}{v} = \frac{0.5*tg(10^{\circ})}{4.1667} = 0.02116~s
+\end{equation}
+
+This means the frequency of the movement through the circular sectors is
+
+\begin{equation}
+f = \frac{1}{t} = \frac{1}{0.02116} = 47.259~Hz
+\end{equation}
+
+According to Shannon theorem, the sampling frequency must be at least twice as big as the
+maximal frequency in the signal, which leads to
+
+\begin{equation}
+Fs \geq 2*47.259 = 94.518 
+\end{equation}
+
+Rounding up gives us minimal sampling frequency $100~Hz$, or sampling period $10~ms$.
+resulting with $2B$ sample in throughput $\mu$
+
+\begin{equation}
+\mu = F_s * |\text{sample}| * 8\frac{bit}{byte} = 100 * 2 * 8 = 1.6~kbps
+\end{equation}
 
 
-\section{Collector}
-{\it Collector} is a program, as the name says, that collects data from sensors and implements
-the whole described algorithm. Classified objects are then sent to a {\it visualizer}.
+\subsection*{MCU Program}
+The MCU is programmed to sample data with fixed sampling frequency and form the sequential
+segments out of it. A $N$-sized segment is then sent away using ESP8266 present at the module.
+A multicast technology is used, enabling multiple servers to work over the data concurrently
+and also ease of initialization of communication, where the channel is predefined, so
+no mutual IP address is needed. The sending frequency can be derived from sampling frequency $F_s$
+with formula \ref{eq:sendfrequency}.
 
-\subsection*{Communication}
-The communication of the sensor module and the client app is designed as a client-server. The results
-from the classification performed by server are sent to the client which shows it to user.
+\begin{equation}
+F_{send} = \frac{F_s}{N}
+\label{eq:sendfrequency}
+\end{equation}
 
-As the technology for the channel a LAN multicast stream is used at 224.0.0.128:12345.
-The main advantage in comparison to unicast is a support of multiple clients.
+MCU runs a HTTP server, enabling the MCU to be configured remotely. It is possible to set
+sampling frequency or period with the altering other correspondingly as same as sending period,
+frequency, or segment size with a maximal segment size \textbf{here will be MAXSEGMENTSIZE}.
+The REST API also enables to set the multicast channel, both address and port, turning
+debugging informations on/off to serial line.
 
-\section{Visualizer}
-Client app called {\it Visualizer} is written in {\it Python3} and graphical library {\it Tkinter}.
-This choice was made with portability of the program taken into consideration.
-The design of user interface is described in chapter \ref{Label:UI}.
+The complete REST API description is to be seen in the appendix \ref{appendix:mcu_restapi}.
+
+
+
+
+\section{Monitor}
+{\it Monitor} is the classification server, that collects data from the sensors and performs
+classification algorithms described in \ref{section:classification} with it. {\it Finish}
+
+\subsection*{Data sources}
+Monitor enables reading data from serial port, multicast channel and replaying saved data from file.
+This feature is done using class \texttt{Reader} from the module \texttt{comm} and inherited classes
+in modules \texttt{comm\_serial}, \texttt{comm\_mcast}, \texttt{comm\_replay}.
+
+Class Reader corresponds with the design pattern Singleton, holding one single instance for each
+serial port, multicast channel and file to avoid opening multiple handles and potential data race.
+
+Instantiation of the object is done in the first demand for it in the call of static method \texttt{getReader()}.
+Each object then possess separate reading thread, that ensures updating of the data. Getting the last
+received segment is through method \texttt{getSegment()}, a thread lock is used. The whole design is shown
+in the figure \ref{fig:class_src}.
+
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[width=0.8\textwidth]{obrazky-figures/class_src.png}
+\caption{UML diagram of Reader classes. \label{fig:class_src}}
+\end{center}
+\end{figure}
+
+
+
+
+%\section{Collector} 
+%{\it Collector} is a program, as the name says, that collects data from sensors and implements
+%the whole described algorithm. Classified objects are then sent to a {\it visualizer}.
+
+%\subsection*{Communication}
+%The communication of the sensor module and the client app is designed as a client-server. The results
+%from the classification performed by server are sent to the client which shows it to user.
+
+%As the technology for the channel a LAN multicast stream is used at 224.0.0.128:12345.
+%The main advantage in comparison to unicast is a support of multiple clients.
+
+%\section{Visualizer}
+%Client app called {\it Visualizer} is written in {\it Python3} and graphical library {\it Tkinter}.
+%This choice was made with portability of the program taken into consideration.
+%The design of user interface is described in chapter \ref{Label:UI}.
 
 
 
