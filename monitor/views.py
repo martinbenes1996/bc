@@ -1,7 +1,18 @@
 
+
+"""
+File:           views.py
+Author:         Martin Benes
+Institution:    Faculty of Information Technology
+                Brno University of Technology
+
+This module contains main block entities for GUI of the app.
+Developed as a part of bachelor thesis "Counting of people using PIR sensor".
+"""
+
+
 import os
 import re
-import sys
 
 import tkinter as tk
 
@@ -13,8 +24,6 @@ import matplotlib.pyplot as plt
 import comm_serial
 import conf
 import ui
-sys.path.insert(0, '../collector-py/')
-import log
 
 class SerialView:
     def __init__(self, root):
@@ -249,3 +258,12 @@ class RightMenu:
         finally:
             self.popup.grab_release()
 
+
+
+
+
+# called directly
+if __name__ == '__main__':
+    from globals import *
+    raise NotCallableModuleError
+    

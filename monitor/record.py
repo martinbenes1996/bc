@@ -1,4 +1,16 @@
 
+
+"""
+File:           record.py
+Author:         Martin Benes
+Institution:    Faculty of Information Technology
+                Brno University of Technology
+
+This module contains classes performing recording session.
+Developed as a part of bachelor thesis "Counting of people using PIR sensor".
+"""
+
+
 import json
 import os
 import _thread
@@ -216,3 +228,14 @@ class View:
 
     def saveSession(self):
         self.recorder.saveSession(self.getSession())
+
+
+
+
+
+
+# called directly
+if __name__ == '__main__':
+    from globals import *
+    raise NotCallableModuleError
+    

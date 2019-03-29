@@ -1,4 +1,15 @@
 
+
+"""
+File:           app.py
+Author:         Martin Benes
+Institution:    Faculty of Information Technology
+                Brno University of Technology
+
+This module contains main view class - App.
+Developed as a part of bachelor thesis "Counting of people using PIR sensor".
+"""
+
 import tkinter as tk
 from tkinter import ttk
 

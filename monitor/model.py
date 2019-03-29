@@ -1,15 +1,26 @@
 
-import datetime
+
+"""
+File:           model.py
+Author:         Martin Benes
+Institution:    Faculty of Information Technology
+                Brno University of Technology
+
+This module contains the classes, controlling the extraction and classification.
+Developed as a part of bachelor thesis "Counting of people using PIR sensor".
+"""
+
 import json
 import numpy as np
-import scipy.signal as signal
 import sys
-import time
-import _thread
 
 import fuzzy
 import segment
 
+# to delete
+import datetime
+import time
+import _thread
 sys.path.insert(0, '../collector-py/')
 import cwt
 
@@ -100,6 +111,8 @@ class Extractor:
         return [a.getFeatures() for a in artefacts]
 
 
+# to document
+
 class Classification:
     def __init__(self, featureDimension, areaSize):
         self.rows,self.columns = areaSize
@@ -183,4 +196,10 @@ def GaussianClassifier(Classifier):
     pass
     # ...
 
-    
+
+
+
+# called directly
+if __name__ == '__main__':
+    from globals import *
+    raise NotCallableModuleError

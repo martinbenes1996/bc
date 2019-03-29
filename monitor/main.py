@@ -1,9 +1,18 @@
 #!/usr/bin/env python3
 
+"""
+File:           main.py
+Author:         Martin Benes
+Institution:    Faculty of Information Technology
+                Brno University of Technology
+
+This module is the main, which is first to run.
+Developed as a part of bachelor thesis "Counting of people using PIR sensor".
+"""
+
 import time
 
 import app
-import comm
 import comm_mcast
 import comm_serial
 import model

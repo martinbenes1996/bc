@@ -1,8 +1,18 @@
 
+
+"""
+File:           comm_replay.py
+Author:         Martin Benes
+Institution:    Faculty of Information Technology
+                Brno University of Technology
+
+This module contains classes enabling program to read data saved to file.
+Developed as a part of bachelor thesis "Counting of people using PIR sensor".
+"""
+
 import csv
 import datetime
 import numpy as np
-import sys
 import threading
 import time
 
@@ -122,4 +132,10 @@ class Reader(comm.Reader):
             return np.array([int(sample) for line in rd for sample in line])
 
     
-        
+
+
+
+# called directly
+if __name__ == '__main__':
+    from globals import *
+    raise NotCallableModuleError

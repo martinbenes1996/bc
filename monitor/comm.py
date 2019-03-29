@@ -1,11 +1,36 @@
 
+
+"""
+File:           comm.py
+Author:         Martin Benes
+Institution:    Faculty of Information Technology
+                Brno University of Technology
+
+This module contains interface for data reading.
+Developed as a part of bachelor thesis "Counting of people using PIR sensor".
+"""
+
 import sys
 import _thread
-#sys.path.insert(0, '../collector-py/')
 import conf
 
+
 class Reader:
-    """Interface to read data."""
+    """Interface to read data.
+    
+    Attributes:
+        started         Whether reading of source started.
+        segment         Shared buffer for last received segment.
+        segmentLock     Lock for simultaneous access to segment buffer.
+        change          Change indicator.
+        filename        Filename of file Reader records to. Not recording if empty.
+    """
+    
+    @classmethod
+    def getReader(cls, name, port=None):
+        """Singleton Reader instance getter."""
+        raise NotImplementedError
+
 
     def __init__(self):
         """Constructor."""
@@ -16,7 +41,12 @@ class Reader:
         self.filename = ""
     
     def record(self, filename=""):
-        """Record read segments to filename."""
+        """Record read segments to filename.
+        
+        Arguments:
+            filename        File to record to. If empty and recording, stop recording.
+                            If empty and not recording, record to file with default name.
+        """
         raise NotImplementedError
 
     def getSegment(self):
@@ -40,12 +70,14 @@ class Reader:
         self.change = bool(swapper)
         return s
     
-    @classmethod
-    def getReader(cls, name, port=None):
-        """Singleton Reader instance getter."""
-        raise NotImplementedError
-    
 
 
+
+
+
+# called directly
+if __name__ == '__main__':
+    from globals import *
+    raise NotCallableModuleError
     
-        
+    

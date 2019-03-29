@@ -108,8 +108,8 @@ def testTConorm():
     test(TC.probsum(0,0,1,0), 1)
 
 def testOperations():
-    conjunction = fuzzy.AND
-    disjunction = fuzzy.OR
+    conjunction = fuzzy.SNorm.method('product')
+    disjunction = fuzzy.TConorm.method('maximum')
     
     test(conjunction(0,0), 0)
     test(conjunction(1,0), 0)

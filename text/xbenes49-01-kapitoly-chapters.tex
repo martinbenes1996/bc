@@ -518,15 +518,17 @@ The signal produced by the PIR has a specific nature, as it is shown in the appe
 There are parts, that are constant, divided by abruptly changing edges, when there is a moving body. The
 characteristics of the movement change character of the signal.
 
-The signal first is segmented using {\it continuous wavelet transformation} with {\it Morlet wavelet}
+The signal first is segmented using {\it continuous wavelet transformation}
+\footnote{
+Continuous wavelet transformation is a signal processing technique transforming a signal to frequency domain.
+The process is quite similar to fourier tranformation, instead of sinusoid it uses wavelet, a finite signal with
+energy $E=0$, and therefore reacts better to abrupt changes.}
+with Morlet wavelet (\ref{eq:morlet})
 and scale $s_{cwt} = 1.33846$, and the extrems are detected comparing to the $N_{n} = 8$ neighbors on both sides.
 Detected extrems are used as the borders of the segments, that lies in between them. These numbers were
 discovered experimentally minimizing the sum of the within-segment variances of the recorded data using formula \ref{eq:cwtparamssearch}
 
-Continuous wavelet transformation is a technique in signal processing transforming a signal into frequency domain.
-The process is quite similar to fourier tranformation. It uses so called {\it wavelet} instead of sinusoid.
-Wavelet is a finite signal with energy $E=0$, an example is Morlet wavelet, equation \ref{eq:morlet}.
-CWT reacts well to abrupt changes.
+
 
 % Morlet "mexican hat" wavelet.
 \begin{equation}
@@ -1110,7 +1112,7 @@ The complete REST API description is to be seen in the appendix \ref{appendix:mc
 
 
 
-\section{Monitor}
+\section{Classification server}
 {\it Monitor} is the classification server, that collects data from the sensors and performs
 classification algorithms described in \ref{section:classification} with it. {\it Finish}
 

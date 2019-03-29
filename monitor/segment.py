@@ -1,11 +1,22 @@
 
-import math
+
+"""
+File:           segment.py
+Author:         Martin Benes
+Institution:    Faculty of Information Technology
+                Brno University of Technology
+
+This module contains classes preprocessing the signal and performing the feature extraction.
+Developed as a part of bachelor thesis "Counting of people using PIR sensor".
+"""
+
+
 import numpy as np
 import scipy.signal as signal
-import sys
 
 import fuzzy
 
+# to document
 
 class Segment:
     cwtCoef = 1.33846 # 1.3384615384615386
@@ -180,14 +191,18 @@ class Artefact:
 
             triade = dict()
             scoreEdge, scoreNotEdge = 0, 0
+            # fuzzy operators
+            AND = fuzzy.SNorm.method('product')
+            OR = fuzzy.TConorm.method('maximum')
+            # check all combinations for triade
             for key in allTriades:
-                value = fuzzy.AND(edges[i-1].getKhi(key[0]),
-                                        edges[i].getKhi(key[1]),
-                                        edges[i+1].getKhi(key[2]) )
+                value = AND(edges[i-1].getKhi(key[0]),
+                            edges[i].getKhi(key[1]),
+                            edges[i+1].getKhi(key[2]) )
                 if key in triadesIsEdge:
-                    scoreEdge = fuzzy.OR(scoreEdge, value)
+                    scoreEdge = OR(scoreEdge, value)
                 else:
-                    scoreNotEdge = fuzzy.OR(scoreNotEdge, value)
+                    scoreNotEdge = OR(scoreNotEdge, value)
                 triade[key] = value
             edges[i].fuzzyScore = triade
 
@@ -209,3 +224,11 @@ class Artefact:
 
 
 
+
+
+
+# called directly
+if __name__ == '__main__':
+    from globals import *
+    raise NotCallableModuleError
+    

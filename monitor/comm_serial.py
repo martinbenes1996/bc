@@ -1,4 +1,15 @@
 
+
+"""
+File:           comm_serial.py
+Author:         Martin Benes
+Institution:    Faculty of Information Technology
+                Brno University of Technology
+
+This module contains classes enabling program to receive data from serial port.
+Developed as a part of bachelor thesis "Counting of people using PIR sensor".
+"""
+
 import csv
 import datetime
 import serial
@@ -13,15 +24,10 @@ class Reader(comm.Reader):
     """Reader of data from serial port. Singleton.
     
     Attributes:
-        readers     Reader instances for various serial ports.
-        devicename
-        segment
-        segmentLock
-        started
-        mem
-        filename
-        change
-        setStatus
+        readers         Reader instances for various serial ports.
+        devicename      Name of the device.
+        port            Serial file handle.
+        mem             Buffer for error reading.
     """
     # reader instances
     readers = {}
@@ -35,7 +41,6 @@ class Reader(comm.Reader):
         # instantiate
         if name not in cls.readers:
             return cls(name)
-            #return serial.Serial(name)
         # return existing
         else:
             return cls.readers[name]
@@ -52,8 +57,6 @@ class Reader(comm.Reader):
         # create variables
         self.devicename = devicename
         self.mem = ''
-        
-        self.setStatus = lambda _: None
         # check if singleton
         assert(self.devicename not in self.readers)
         # connect to serial port
@@ -103,8 +106,6 @@ class Reader(comm.Reader):
             s = self.readSegment()
             with self.segmentLock:
                 self.segment = s
-                #self.setStatus("Update received.")
-                #print("Reader: Read ", i)
 
             # record
             self.write(s)
@@ -154,11 +155,7 @@ class Reader(comm.Reader):
         try:
             return int(l.decode('utf-8'))
         except Exception as e:
-            #print(l)
-            #print(e)
             return 0
-        # convert to bytes
-        #return (i).to_bytes(2, byteorder='big')
     
     
     
@@ -169,4 +166,7 @@ class Reader(comm.Reader):
 
 
     
-        
+ # called directly
+if __name__ == '__main__':
+    from globals import *
+    raise NotCallableModuleError       
