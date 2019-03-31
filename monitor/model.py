@@ -12,6 +12,7 @@ Developed as a part of bachelor thesis "Counting of people using PIR sensor".
 
 import json
 import numpy as np
+import sklearn.linear_model as linear_model
 import sys
 
 import fuzzy
@@ -147,12 +148,17 @@ class Classification:
 class Classifier:
     class ClassifierError(Exception):
         pass
-    def __init__(self,dimensions):
+    def __init__(self, sigmoid):
         self.trained = True
         self.trainData = []
+        self.sigmoid = sigmoid
 
     def addTrainData(self, x, result=True):
-        self.trainData.append( (x, result) )
+        if result:
+            assignClass = 2
+        else:
+            assignClass = 1
+        self.trainData.append( (x, assignClass) )
     def train(self):
         if len(self.trainData) == 0:
             raise self.ClassifierError("No training data.")
@@ -166,22 +172,35 @@ class Classifier:
         raise NotImplementedError
     def save(self):
         raise NotImplementedError
+    
+    @staticmethod
+    def logistic(x):
+        return 1 / (1 + math.exp(-x))
+    @staticmethod
+    def arctan(x):
+        return math.atan(x)
+    @staticmethod
+    def mySigmoid(x):
+        return 1 / math.sqrt(1 + x**2)
         
 
 class LinearRegression(Classifier):
-    def __init__(self,dimensions):
-        super().__init__(dimensions)
-        self.regression,self.noise = [0 for _ in range(dimensions)],[0 for _ in range(dimensions)]
+    def __init__(self, sigmoid=Classifier.logistic):
+        super().__init__(sigmoid=sigmoid)
+        self.clf = linear_model.SGDClassifier(max_iter=1000, tol=1e-3)
+
     
     def train(self):
         super().train()
+        X = np.array([d[0] for d in self.trainData])
+        Y = np.array([d[1] for d in self.trainData])
         # training
-        # ...
+        self.clf.fit(X,Y)
 
     def classify(self,x):
-        super().classify()
+        super().classify(x)
         # classification
-        # ...
+        return self.clf.decision_function( np.array([x]) )[0]
 
     def load(self, data):
         try:
@@ -193,6 +212,8 @@ class LinearRegression(Classifier):
         return {"regression": self.regression, "noise": self.noise}
     
 def GaussianClassifier(Classifier):
+    def __init__(self, sigmoid=Classifier.logistic):
+        super().__init__(sigmoid=sigmoid)
     pass
     # ...
 

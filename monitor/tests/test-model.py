@@ -10,20 +10,26 @@ import comm_replay
 import model
 import segment
 
-def testEq(cmp,ref, key):
-    dmin = 0.05
-    d = abs(cmp - ref)
-    if d > dmin:
-        print(key + ":", ref, "!=", cmp, file=sys.stderr)
-    assert(d <= dmin)
+i = 0
+status = True
+def test(s1, s2, acc = 0.0001):
+    global status
+    global i
+    i += 1
+    d = abs(s1 - s2)
+    
+    if d > acc:
+        if status:
+            print("")
+        print(str(i)+": "+str(s1)+" != "+str(s2)+".", file=sys.stderr)
+        status = False
+
 
 def testGenerator(mu,var):
     x = np.random.normal(mu,var, 1000000)
     s = segment.Segment(x)
-    testEq(s.mu(), mu, "Mean")
-    testEq(s.var(), var, "Variance")
-
-
+    test(s.mu(), mu)
+    test(s.var(), var)
 
 
 def testExtraction(name):
@@ -32,7 +38,7 @@ def testExtraction(name):
     # extract features
     features = model.Extractor.extract(x)
 
-    print("Features:", features)
+    #print("Features:", features)
 
 def testArtefacts(name):
     # read signal
@@ -62,8 +68,30 @@ def testArtefacts(name):
 
 
     #print("Features:", features)
+def sign(x):
+    if x > 0:
+        return 1
+    elif x < 0:
+        return -1
+    else:
+        return 0
+def testRegression():
+    lr = model.LinearRegression()
+    lr.addTrainData([1,1], True)
+    lr.addTrainData([1,0], True)
+    lr.addTrainData([0,1], True)
     
+    lr.addTrainData([-1,-1], False)
+    lr.addTrainData([-1,0], False)
+    lr.addTrainData([0,-1], False)
 
+    lr.train()
+
+    test( sign(lr.classify([2,2])), 1 )
+    test( sign(lr.classify([3,4])), 1 )
+
+    test( sign(lr.classify([-1,-0.5])), -1 )
+    test( sign(lr.classify([-0.5,-1])), -1 )
 
 
 def main():
@@ -72,6 +100,13 @@ def main():
 
     testExtraction("../data/6m_RL/6m_RL_2.csv")
     #testArtefacts("../data/6m_RL/6m_RL_2.csv")
+
+    testRegression()
+
+    assert(status)
+
+
+
 
 
 if __name__ == '__main__':

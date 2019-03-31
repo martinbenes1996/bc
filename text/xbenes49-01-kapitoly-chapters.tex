@@ -612,7 +612,7 @@ Newly created artefacts will be used to form feature vectors, filled with each o
 Suggested metrics are variance and mean value of samples within artefact, scope of line, that 
 can be counted using formula \ref{eq:artefactline}, etc.
 $l_0$, $l_1$ are $y$ coordinates of first and last point of the line respectively,
-\textbf{A} is a artefact samples vector. $k$ is scope of the line we are looking for,
+\textbf{A} is a artefact samples vector. $k$ is the searched line scope,
 $\Delta_{\textbf{A},k}$ is the difference score of artefact \textbf{A} and line with scope
 $k$. It can also be used as a feature. This representation is to be seen in the figure \ref{fig:siglines}.
 
@@ -634,7 +634,7 @@ l_0,l_1 = \text{argmin} ( \Delta_{\textbf{A},k} )
 
 \begin{figure}[h!]
 \begin{center}
-\includegraphics[width=0.9\textwidth]{obrazky-figures/signallines.png}
+\includegraphics[width=0.85\textwidth]{obrazky-figures/signallines.png}
 \caption{Representation of artefacts using line scope.\label{fig:siglines}}
 \end{center}
 \end{figure}
@@ -645,6 +645,49 @@ consisting of multiple dichotomic classifiers, each evaluating single decision -
 the movement is present or not, if the movement is towards center or aside, if the
 movement is closer to sensor of far, and if possible, if the person is on the left side
 or right.
+
+The classification is process based on linear regression, searching for the best linear
+separation of the training data using linear classifier \ref{eq:linearclassifier}, where 
+$\overline{x}$ is an input, $\sigma(a)$ is activation function mapping
+$\mathbb{R} \rightarrow \langle 0;1\rangle$ and $\overline{w}$,$w_0$ are searched parameters
+of the classifier.
+
+
+\begin{equation}
+y(x) = \sigma (\overline{w}^T \overline{x} + w_0)
+\label{eq:linearclassifier}
+\end{equation}
+
+The estimation of classifier's parameters $\overline{w}$,$w_0$ means maximizing the
+posterior probabilities of each training data as same as solving the equation
+\ref{eq:regressionEq}, in the logarithm domain \ref{eq:regressionLog}.
+
+\begin{subequations}
+\begin{equation}
+p(t|\textbf{X}) = argmax \prod_{n \in C_1}y(\overline{x}_n) \prod_{n \in C_2} \{ 1 - y( \overline{x}_n ) \}
+\label{eq:regressionEq}
+\end{equation}
+\begin{equation}
+-\text{ln}( p(t|\textbf{X}) ) = - \sum_{n=1}^N \{ (t_n)\text{ln}(y_n) + (1-t_n)\text{ln}(1-y_n) \} = E(\overline{w})
+\label{eq:regressionLog}
+\end{equation}
+\end{subequations}
+
+The searched extrem of \ref{eq:regressionLog} means derivation \ref{eq:regressionGradient}
+equal to $0$, solved numerically using \ref{eq:regressionGradientNumerical}.
+$\eta \in (0;1\rangle$ is a converging parameter, the computation can be stopped either after
+fixed step count or using minimal solution improvement $\varepsilon < | w^{(\tau + 1)} - w^{(\tau)} |$.
+
+\begin{subequations}
+\begin{equation}
+\nabla E(\overline{w}) = \sum_{n=1}^N (y_n - t_n)x_n = 0
+\label{eq:regressionGradient}
+\end{equation}
+\begin{equation}
+w^{(\tau + 1)} = w^{(\tau)} - \eta \nabla E(\overline{w})
+\label{eq:regressionGradientNumerical}
+\end{equation}
+\end{subequations}
 
 Each of these scores are then fuzzified and put together, creating a resulting matrix.
 The classifier's output is a 2D fuzzy value matrix, representing the space in from of the sensor.
@@ -1135,6 +1178,14 @@ in the figure \ref{fig:class_src}.
 \caption{UML diagram of Reader classes. \label{fig:class_src}}
 \end{center}
 \end{figure}
+
+{\it ...}
+
+\subsection*{Classification}
+{\it Implementation of linear regression.}
+
+
+
 
 
 
