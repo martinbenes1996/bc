@@ -1,6 +1,10 @@
 
 import os
 import sys
+import _thread
+import time
+
+import cv2
 
 sys.path.insert(0, '.')
 import comm_replay
@@ -18,37 +22,42 @@ class Labeller:
     def __init__(self):
         print("Current directory is \""+os.getcwd()+"\".")
 
-    def label(self, path):
+    def label(self, name):
+        path = '../data/'+name
         # check whether exists
         if os.path.exists(path) and os.path.isdir(path):
             # get exercises
-            exercises = Exercise.get(path)
+            exercises = Exercise.get(name)
             # label each exercise
             for e in exercises:
-                e.label()
+                labels = e.label()
+                for label in labels:
+                    print(label)
 
         else:
             raise InvalidTraining('Invalid train directory \"'+path+'\"')
 
 class Exercise:
     @classmethod
-    def get(cls, path):
-        exerciseName = os.path.basename(path)
+    def get(cls, name):
         exercises = []
         i = 1
         while True:
             # parse file names
-            name = path + '/' + exerciseName + '_' + str(i)
-            datafile,videofile,labelfile = name+'.csv', name+'.mov', name+'.json'
+            path = '../data/' + name+ '/' + name + '_' + str(i)
+            datafile,videofile,labelfile = path+'.csv', path+'.mp4', path+'.json'
 
             try:
                 # check if exists
                 if not os.path.isfile(datafile):
                     raise InvalidTraining(datafile + ' does not exist.')
                 # uncomment, when video processed
-                #if not os.path.isfile(videofile):
-                #    raise InvalidTraining(videofile + ' does not exist.')
-            except:
+                if not os.path.isfile(videofile):
+                    raise InvalidTraining(videofile + ' does not exist.')
+            except InvalidTraining:
+                break
+            except Exception as e:
+                print(e)
                 break
 
             # add
@@ -73,36 +82,67 @@ class Exercise:
 
     def label(self):
         timestamps = []
+        # sampling frequency
+        fs = conf.Config.fs()
+        #print("Signal sampling frequency:", fs)
         
         # process data
         x = comm_replay.Reader.readFile(self.datafile)
         artefacts = segment.Artefact.parseArtefacts(x)
         # process video
-        fps = 25 # TODO
+        video = cv2.VideoCapture(self.videofile)
+        if not video.isOpened():
+            raise InvalidTraining(self.videofile + ' can not be read.')
+        fps = video.get(cv2.CAP_PROP_FPS)
+        maxFrames = video.get(cv2.CAP_PROP_FRAME_COUNT)
+
+        #print("Read video", self.videofile+".", str(fps), "FPS,",str(maxFrames),"frames", str(maxFrames/fps),"s")
 
         # comparing
         pos = 0
         for i,a in enumerate(artefacts):
-            print('Process artefact '+str(i+1) + ' of '+self.datafile)
             l = a.len()
 
             # counting a center time of artefact
-            fs = conf.Config.fs()
             t = (pos + l/2) / fs
 
             # getting the video frame
-            frameIndex = t * fps
-            # frame = video[frameIndex] # TODO
-            # frame.show()
-            
-            # ask user with input for true/false position # TODO
+            frameIndex = int(t * fps)
+            #print('Artefact '+str(i+1) + ':', (l/fs), 's /', (l/fs)*fps, 'frames, represented by', frameIndex)
+            video.set(1,frameIndex)
+            ret,frame = video.read()
 
-            # add result to list timestamps[]
+            windowname = 'Frame '+str(frameIndex)
+            cv2.imshow(windowname, frame)
+            
+            presentKey = self.getValue('Is the person present? ', windowname)
+            if not presentKey:
+                keys = (False, False, False, False)
+            else:
+                keys = (presentKey,
+                        self.getValue('\tIs the person moving towards the center? ', windowname), 
+                        self.getValue('\tIs the person on the left? ', windowname),
+                        self.getValue('\tIs the person close? ', windowname) )
+            cv2.destroyWindow(windowname)
+
+            timestamps.append(keys)
 
             # moving starting position to next artefact
             pos += l
         
         return timestamps
+    
+    def getValue(self, question, windowname):
+        print(question, end='')
+        sys.stdout.flush()
+        while cv2.getWindowProperty(windowname, 0) >= 0:
+            keyCode = cv2.waitKey(100)
+            if keyCode in {177, 121, 89}:
+                print("Yes.")
+                return True
+            elif keyCode in {176,110,78}:
+                print("No.")
+                return False
         
     @classmethod
     def parseBool(cls, s):

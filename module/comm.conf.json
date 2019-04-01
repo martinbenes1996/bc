@@ -1,9 +1,9 @@
 {
-    "period" : 2000,
+    "period" : 500,
     
     "segment" : {
-        "samples" : 220,
-        "overlap" : 20
+        "samples" : 60,
+        "overlap" : 10
     },
 
     "channel" : {
