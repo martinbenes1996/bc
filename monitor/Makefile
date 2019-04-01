@@ -16,5 +16,5 @@ test:
 .PHONY: label
 label:
 	@printf "";\
-	python3 classifiers/supervisor.py
+	python3 classifiers/labeller.py
 
