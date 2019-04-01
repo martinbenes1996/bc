@@ -57,6 +57,13 @@ class Config:
         return cls.get(cls).samples, cls.get(cls).overlap
     
     @classmethod
+    def fs(cls):
+        """Returns sampling frequency deduced from other attributes."""
+        N,overlap = cls.segment()
+        sendPeriod = cls.period()
+        return (N-overlap) / sendPeriod
+
+    @classmethod
     def period(cls):
         """Returns sending period."""
         return cls.get(cls).period

@@ -12,3 +12,9 @@ test:
 	@printf "";\
 	./test.sh
 
+
+.PHONY: label
+label:
+	@printf "";\
+	python3 classifiers/supervisor.py
+
