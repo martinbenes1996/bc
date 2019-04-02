@@ -213,7 +213,8 @@ class Artefact:
             if edgeScore >= 0.5:
                 artefacts.append(Artefact())
             
-
+        if artefacts[-1].len() == 0:
+            artefacts = artefacts[:-1]
         return artefacts
         
 

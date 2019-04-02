@@ -1,0 +1,234 @@
+{
+    "3m_LR_3": [
+        {
+            "key": [
+                false,
+                false,
+                false,
+                false
+            ],
+            "start": 0,
+            "length": 52
+        },
+        {
+            "key": [
+                false,
+                false,
+                false,
+                false
+            ],
+            "start": 52,
+            "length": 37
+        },
+        {
+            "key": [
+                false,
+                false,
+                false,
+                false
+            ],
+            "start": 89,
+            "length": 23
+        },
+        {
+            "key": [
+                false,
+                false,
+                false,
+                false
+            ],
+            "start": 112,
+            "length": 10
+        },
+        {
+            "key": [
+                false,
+                false,
+                false,
+                false
+            ],
+            "start": 122,
+            "length": 14
+        },
+        {
+            "key": [
+                false,
+                false,
+                false,
+                false
+            ],
+            "start": 136,
+            "length": 12
+        },
+        {
+            "key": [
+                false,
+                false,
+                false,
+                false
+            ],
+            "start": 148,
+            "length": 99
+        },
+        {
+            "key": [
+                true,
+                true,
+                true,
+                true
+            ],
+            "start": 247,
+            "length": 29
+        },
+        {
+            "key": [
+                true,
+                true,
+                true,
+                true
+            ],
+            "start": 276,
+            "length": 29
+        },
+        {
+            "key": [
+                true,
+                true,
+                true,
+                true
+            ],
+            "start": 305,
+            "length": 34
+        },
+        {
+            "key": [
+                true,
+                true,
+                true,
+                true
+            ],
+            "start": 339,
+            "length": 32
+        },
+        {
+            "key": [
+                true,
+                true,
+                true,
+                true
+            ],
+            "start": 371,
+            "length": 28
+        },
+        {
+            "key": [
+                true,
+                true,
+                true,
+                true
+            ],
+            "start": 399,
+            "length": 14
+        },
+        {
+            "key": [
+                true,
+                true,
+                true,
+                true
+            ],
+            "start": 413,
+            "length": 27
+        },
+        {
+            "key": [
+                true,
+                true,
+                true,
+                true
+            ],
+            "start": 440,
+            "length": 23
+        },
+        {
+            "key": [
+                true,
+                false,
+                false,
+                true
+            ],
+            "start": 463,
+            "length": 30
+        },
+        {
+            "key": [
+                true,
+                false,
+                false,
+                true
+            ],
+            "start": 493,
+            "length": 21
+        },
+        {
+            "key": [
+                true,
+                false,
+                false,
+                true
+            ],
+            "start": 514,
+            "length": 28
+        },
+        {
+            "key": [
+                true,
+                false,
+                false,
+                true
+            ],
+            "start": 542,
+            "length": 25
+        },
+        {
+            "key": [
+                true,
+                false,
+                false,
+                true
+            ],
+            "start": 567,
+            "length": 30
+        },
+        {
+            "key": [
+                true,
+                false,
+                false,
+                true
+            ],
+            "start": 597,
+            "length": 53
+        },
+        {
+            "key": [
+                false,
+                false,
+                false,
+                false
+            ],
+            "start": 650,
+            "length": 62
+        },
+        {
+            "key": [
+                false,
+                false,
+                false,
+                false
+            ],
+            "start": 712,
+            "length": 30
+        }
+    ]
+}

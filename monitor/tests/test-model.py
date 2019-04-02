@@ -93,6 +93,9 @@ def testRegression():
     test( sign(lr.classify([-1,-0.5])), -1 )
     test( sign(lr.classify([-0.5,-1])), -1 )
 
+def testClassification():
+    c = model.Classification()
+    c.addTrainData('3m_LR')
 
 def main():
     #for m in range(0,10):
@@ -102,6 +105,8 @@ def main():
     #testArtefacts("../data/6m_RL/6m_RL_2.csv")
 
     testRegression()
+
+    testClassification()
 
     assert(status)
 

@@ -522,7 +522,7 @@ The signal first is segmented using {\it continuous wavelet transformation}
 \footnote{
 Continuous wavelet transformation is a signal processing technique transforming a signal to frequency domain.
 The process is quite similar to fourier tranformation, instead of sinusoid it uses wavelet, a finite signal with
-energy $E=0$, and therefore reacts better to abrupt changes.}
+energy $E=0$, and therefore reacts better to abrupt changes.\cite{WaveletTour}}
 with Morlet wavelet (\ref{eq:morlet})
 and scale $s_{cwt} = 1.33846$, and the extrems are detected comparing to the $N_{n} = 8$ neighbors on both sides.
 Detected extrems are used as the borders of the segments, that lies in between them. These numbers were
@@ -1116,7 +1116,7 @@ This means the frequency of the movement through the circular sectors is
 f = \frac{1}{t} = \frac{1}{0.02116} = 47.259~Hz
 \end{equation}
 
-According to Shannon theorem, the sampling frequency must be at least twice as big as the
+According to Shannon theorem\cite{DigitalSignalProcessing}, the sampling frequency must be at least twice as big as the
 maximal frequency in the signal, which leads to
 
 \begin{equation}

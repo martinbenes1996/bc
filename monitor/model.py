@@ -15,6 +15,7 @@ import numpy as np
 import sklearn.linear_model as linear_model
 import sys
 
+import comm_replay
 import fuzzy
 import segment
 
@@ -115,28 +116,38 @@ class Extractor:
 # to document
 
 class Classification:
-    def __init__(self, featureDimension, areaSize):
-        self.rows,self.columns = areaSize
+    def __init__(self, featureDimension = 5):
+        self.rows,self.columns = 2,3
         self.area = [[0 for _ in range(self.columns)] for _ in range(self.rows)]
-        self.classifiers = {}
-        self.classifiers['distance'] = LinearRegression(featureDimension)
-        self.classifiers['center'] = LinearRegression(featureDimension)
-        self.classifiers['right'] = LinearRegression(featureDimension)
-        self.allKeys = {'distance','center','right'}
-
-    def train(self, x, key={'distance': True, 'center': True, 'right': True}):
-        assert(key.keys() <= self.allKeys)
-        for k in (self.allKeys - key.keys()):
-            key[k] = True
-        for k,v in key.items():
-            self.classifiers[k].addTrainData(x,v)
+        self.classifiers = {'presence' : LinearRegression(featureDimension),
+                            'distance' : LinearRegression(featureDimension),
+                            'center' : LinearRegression(featureDimension),
+                            'left' : LinearRegression(featureDimension)}
     
-    def load(self, filename):
-        with open('classifiers/'+filename, 'r') as f:
-            data = json.loads(f.read())
-        assert(data.keys() == self.allKeys)
-        for k,v in data.items():
-            self.classifiers[k].load(v)
+    def load(self, dirname):
+        pass
+
+    def addTrainData(self, dirname):
+        with open('../data/'+dirname+'/train.json', 'r') as f:
+            labels = json.loads(f.read())
+        
+        for labelfilename,labeldata in labels.items():
+            x = comm_replay.Reader.readFile('../data/'+dirname+'/'+labelfilename+'.csv')
+            artefacts = segment.Artefact.parseArtefacts(x)
+            assert(len(artefacts) == len(labeldata))
+            for i,a in enumerate(artefacts):
+                presenceKey,centerKey,leftKey,distanceKey = labeldata[i]['key']
+                features = a.getFeatures()
+                print('Train: presence', presenceKey, 'center', centerKey, 'left', leftKey, 'distance', distanceKey)
+                self.classifiers['presence'].addTrainData(features, presenceKey)
+                self.classifiers['center'].addTrainData(features, centerKey)
+                self.classifiers['left'].addTrainData(features, leftKey)
+                self.classifiers['distance'].addTrainData(features, distanceKey)
+    
+    def train(self):
+        for k,c in self.classifiers:
+            c.train()
+
     def save(self, filename):
         state = {}
         for k in self.classifiers.keys():

@@ -1,4 +1,5 @@
 
+import json
 import os
 import sys
 import _thread
@@ -17,6 +18,8 @@ class InvalidInput(Exception):
 class InvalidTraining(Exception):
     def __init__(self, msg):
         super().__init__(msg)
+class ExitException(Exception):
+    pass
 
 class Labeller:
     def __init__(self):
@@ -29,10 +32,16 @@ class Labeller:
             # get exercises
             exercises = Exercise.get(name)
             # label each exercise
+            labels = {}
             for e in exercises:
-                labels = e.label()
-                for label in labels:
-                    print(label)
+                try:
+                    labels[e.name] = e.label()
+                except ExitException:
+                    continue
+            labelfilename = path+'/'+'label.json'
+            with open(labelfilename, 'w') as labelfile:
+                json.dump(labels, labelfile)
+            print("Label written to", labelfilename+'.')
 
         else:
             raise InvalidTraining('Invalid train directory \"'+path+'\"')
@@ -61,12 +70,13 @@ class Exercise:
                 break
 
             # add
-            exercises.append( cls(datafile, videofile, labelfile) )
+            exercises.append( cls(name+'_'+str(i), datafile, videofile, labelfile) )
             i += 1
         return exercises
 
 
-    def __init__(self, datafile,videofile,labelfile):
+    def __init__(self, name, datafile,videofile,labelfile):
+        self.name = name
         # check if exists
         if not os.path.isfile(datafile):
             raise InvalidTraining(datafile + ' does not exist.')
@@ -97,7 +107,7 @@ class Exercise:
         maxFrames = video.get(cv2.CAP_PROP_FRAME_COUNT)
 
         #print("Read video", self.videofile+".", str(fps), "FPS,",str(maxFrames),"frames", str(maxFrames/fps),"s")
-
+        print("Labeling", self.videofile)
         # comparing
         pos = 0
         for i,a in enumerate(artefacts):
@@ -125,7 +135,9 @@ class Exercise:
                         self.getValue('\tIs the person close? ', windowname) )
             cv2.destroyWindow(windowname)
 
-            timestamps.append(keys)
+            result = {'key':keys, 'start': pos, 'length': l}
+
+            timestamps.append(result)
 
             # moving starting position to next artefact
             pos += l
@@ -135,15 +147,23 @@ class Exercise:
     def getValue(self, question, windowname):
         print(question, end='')
         sys.stdout.flush()
-        while cv2.getWindowProperty(windowname, 0) >= 0:
-            keyCode = cv2.waitKey(100)
-            if keyCode in {177, 121, 89}:
-                print("Yes.")
-                return True
-            elif keyCode in {176,110,78}:
-                print("No.")
-                return False
-        
+        try:
+            while cv2.getWindowProperty(windowname, 0) >= 0:
+                keyCode = cv2.waitKey(100)
+                if keyCode in {177, 121, 89}:
+                    print("Yes.")
+                    return True
+                elif keyCode in {176,110,78}:
+                    print("No.")
+                    return False
+                elif keyCode in {27}:
+                    print("Exit.")
+                    cv2.destroyAllWindows()
+                    raise ExitException
+        except cv2.error:
+            print("Exit.")
+            raise ExitException
+
     @classmethod
     def parseBool(cls, s):
         if s.lower() in {'true', 't', 'yes', 'yeah', 'yea', 'ano', 'jo', 'ja', '1', 'right', 'richtig', 'recht'}:
@@ -166,6 +186,9 @@ def main():
         except EOFError:
             print('')
             break
+        except KeyboardInterrupt:
+            print('Exit')
+            return
         try:
             l.label(path)
         except (InvalidInput,InvalidTraining) as e:
