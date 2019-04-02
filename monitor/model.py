@@ -130,7 +130,7 @@ class Classification:
     def addTrainData(self, dirname):
         with open('../data/'+dirname+'/train.json', 'r') as f:
             labels = json.loads(f.read())
-        
+        print("Training with", dirname+'...')
         for labelfilename,labeldata in labels.items():
             x = comm_replay.Reader.readFile('../data/'+dirname+'/'+labelfilename+'.csv')
             artefacts = segment.Artefact.parseArtefacts(x)
@@ -138,15 +138,40 @@ class Classification:
             for i,a in enumerate(artefacts):
                 presenceKey,centerKey,leftKey,distanceKey = labeldata[i]['key']
                 features = a.getFeatures()
-                print('Train: presence', presenceKey, 'center', centerKey, 'left', leftKey, 'distance', distanceKey)
+                #print('Train: presence', presenceKey, 'center', centerKey, 'left', leftKey, 'distance', distanceKey)
                 self.classifiers['presence'].addTrainData(features, presenceKey)
                 self.classifiers['center'].addTrainData(features, centerKey)
                 self.classifiers['left'].addTrainData(features, leftKey)
                 self.classifiers['distance'].addTrainData(features, distanceKey)
     
+    def test(self, dirname):
+        with open('../data/'+dirname+'/test.json', 'r') as f:
+            labels = json.loads(f.read())
+        print("Testing with", dirname+'...')
+        for labelfilename,labeldata in labels.items():
+            x = comm_replay.Reader.readFile('../data/'+dirname+'/'+labelfilename+'.csv')
+            artefacts = segment.Artefact.parseArtefacts(x)
+            assert(len(artefacts) == len(labeldata))
+            for i,a in enumerate(artefacts):
+                presenceKey,centerKey,leftKey,distanceKey = labeldata[i]['key']
+                features = a.getFeatures()
+                presenceScore = self.classifiers['presence'].classify(features)
+                centerScore = self.classifiers['center'].classify(features)
+                leftScore = self.classifiers['left'].classify(features)
+                distanceScore = self.classifiers['distance'].classify(features)
+
+                print(presenceScore, presenceKey)
+                print(centerScore, centerKey)
+                print(leftScore, leftKey)
+                print(distanceScore, distanceKey)
+                input('')
+
+
+    
     def train(self):
-        for k,c in self.classifiers:
+        for k,c in self.classifiers.items():
             c.train()
+        print("Classifiers trained.")
 
     def save(self, filename):
         state = {}

@@ -96,6 +96,14 @@ def testRegression():
 def testClassification():
     c = model.Classification()
     c.addTrainData('3m_LR')
+    c.addTrainData('3m_RL')
+    c.addTrainData('3m_RL2')
+
+    c.train()
+
+    c.test('3m_LR')
+
+
 
 def main():
     #for m in range(0,10):
