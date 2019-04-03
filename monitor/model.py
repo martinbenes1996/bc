@@ -126,7 +126,10 @@ class Classification:
                             'left' : LinearRegression(featureDimension)}
     
     def load(self):
-        pass
+        for k,c in self.classifiers.items():
+            c.load('classifier-'+k)
+        print("Trained trained.")
+        return self
 
     def addTrainData(self, dirname):
         with open('../data/'+dirname+'/train.json', 'r') as f:
@@ -149,6 +152,7 @@ class Classification:
         with open('../data/'+dirname+'/test.json', 'r') as f:
             labels = json.loads(f.read())
         print("Testing with", dirname+'...')
+        results = []
         for labelfilename,labeldata in labels.items():
             x = comm_replay.Reader.readFile('../data/'+dirname+'/'+labelfilename+'.csv')
             artefacts = segment.Artefact.parseArtefacts(x)
@@ -161,23 +165,23 @@ class Classification:
                 leftScore = self.classifiers['left'].classify(features)
                 distanceScore = self.classifiers['distance'].classify(features)
 
-                print(presenceScore, presenceKey)
-                print(centerScore, centerKey)
-                print(leftScore, leftKey)
-                print(distanceScore, distanceKey)
-                input('')
+                results.append({'presence':(presenceScore,presenceKey),
+                                'center':(centerScore,centerKey),
+                                'left':(leftScore,leftKey),
+                                'distance':(distanceScore,distanceKey)})
+                #print(presenceScore, presenceKey)
+                #print(centerScore, centerKey)
+                #print(leftScore, leftKey)
+                #print(distanceScore, distanceKey)
+                #input('')
+        return results
 
-
-    
     def train(self, save=False):
         for k,c in self.classifiers.items():
             c.train()
         print("Classifiers trained.")
         if save:
             self.save()
-        
-
-
 
     def save(self):
         status = True
@@ -189,6 +193,22 @@ class Classification:
                 status = False
         if status:
             print("Classifiers saved.")
+    
+    @classmethod
+    def retrain(cls, trainList=['3m_LR','3m_RL2','6m_LR','6m_RL','6m90_LR','9m_LR','E2']):
+        c = cls()
+        for t in trainList:
+            c.addTrainData(t)
+        c.train(save=True)
+        return c
+
+    @classmethod
+    def getTrained(cls):
+        c = cls()
+        try:
+            return c.load()
+        except:
+            return cls.retrain()
 
 
 class Classifier:
@@ -205,8 +225,8 @@ class Classifier:
         else:
             assignClass = 1
         self.trainData.append( (x, assignClass) )
-    def train(self):
-        if len(self.trainData) == 0:
+    def train(self, loaded=False):
+        if not loaded and len(self.trainData) == 0:
             raise self.ClassifierError("No training data.")
         self.trained = True
 
@@ -253,7 +273,7 @@ class LinearRegression(Classifier):
             self.clf = externals.joblib.load('classifiers/'+filename+'.sav')
         except:
             raise Classifier.ClassifierError("Invalid classifier file.")
-        super().train()
+        super().train(loaded=True)
         
     def save(self, filename):
         externals.joblib.dump(self.clf, 'classifiers/'+filename+'.sav')

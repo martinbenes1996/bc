@@ -1,16 +1,24 @@
 
 
+.PHONY: all
+all:
+	@echo "Open README.md to get usage.";
 
 .PHONY: run
 run:
 	@printf "";\
-	./run.sh
+	python3 main.py
 
 
 .PHONY: test
 test:
 	@printf "";\
-	./test.sh
+	python3 classifiers/test.py
+
+.PHONY: unittests
+unittest:
+	@printf "";\
+	./unittests.sh	
 
 
 .PHONY: label
@@ -18,3 +26,7 @@ label:
 	@printf "";\
 	python3 classifiers/labeller.py
 
+.PHONY: train
+train:
+	@printf "";\
+	python3 classifiers/train.py

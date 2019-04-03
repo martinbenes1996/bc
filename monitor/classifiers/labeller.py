@@ -6,6 +6,8 @@ import _thread
 import time
 
 import cv2
+import matplotlib.pyplot as plt
+import numpy as np
 
 sys.path.insert(0, '.')
 import comm_replay
@@ -119,21 +121,35 @@ class Exercise:
             # getting the video frame
             frameIndex = int(t * fps)
             #print('Artefact '+str(i+1) + ':', (l/fs), 's /', (l/fs)*fps, 'frames, represented by', frameIndex)
-            video.set(1,frameIndex)
-            ret,frame = video.read()
 
-            windowname = 'Frame '+str(frameIndex)
-            cv2.imshow(windowname, frame)
+            try:
+                # plot graph
+                y = a.samples()
+                x = np.linspace(0,len(y),len(y))
+                plt.clf()
+                plt.plot(x,y,c='r')
+                axes = plt.gca()
+                axes.set_ylim([0,1023])
+                plt.pause(0.01)
+                # show video
+                video.set(1,frameIndex)
+                ret,frame = video.read()
+
+                windowname = 'Frame '+str(frameIndex)
+                cv2.imshow(windowname, frame)
             
-            presentKey = self.getValue('Is the person present? ', windowname)
-            if not presentKey:
-                keys = (False, False, False, False)
-            else:
-                keys = (presentKey,
-                        self.getValue('\tIs the person moving towards the center? ', windowname), 
-                        self.getValue('\tIs the person on the left? ', windowname),
-                        self.getValue('\tIs the person close? ', windowname) )
-            cv2.destroyWindow(windowname)
+                presentKey = self.getValue('Is the person present? ', windowname)
+                if not presentKey:
+                    keys = (False, False, False, False)
+                else:
+                    keys = (presentKey,
+                            self.getValue('\tIs the person moving towards the center? ', windowname), 
+                            self.getValue('\tIs the person on the left? ', windowname),
+                            self.getValue('\tIs the person close? ', windowname) )
+                #cv2.destroyWindow(windowname)
+            except cv2.error:
+                keys = (False,False,False,False)
+
 
             result = {'key':keys, 'start': pos, 'length': l}
 

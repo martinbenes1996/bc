@@ -94,14 +94,7 @@ def testRegression():
     test( sign(lr.classify([-0.5,-1])), -1 )
 
 def testClassification():
-    c = model.Classification()
-    #c.load()
-    c.addTrainData('3m_LR')
-    c.addTrainData('3m_RL')
-    c.addTrainData('3m_RL2')
-
-    c.train(save=True)
-
+    c = model.Classification.getTrained()
     c.test('3m_LR')
 
 
