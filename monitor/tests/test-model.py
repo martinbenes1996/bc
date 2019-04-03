@@ -95,11 +95,12 @@ def testRegression():
 
 def testClassification():
     c = model.Classification()
+    #c.load()
     c.addTrainData('3m_LR')
     c.addTrainData('3m_RL')
     c.addTrainData('3m_RL2')
 
-    c.train()
+    c.train(save=True)
 
     c.test('3m_LR')
 

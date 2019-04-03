@@ -13,6 +13,7 @@ Developed as a part of bachelor thesis "Counting of people using PIR sensor".
 import json
 import numpy as np
 import sklearn.linear_model as linear_model
+import sklearn.externals as externals
 import sys
 
 import comm_replay
@@ -124,7 +125,7 @@ class Classification:
                             'center' : LinearRegression(featureDimension),
                             'left' : LinearRegression(featureDimension)}
     
-    def load(self, dirname):
+    def load(self):
         pass
 
     def addTrainData(self, dirname):
@@ -168,17 +169,26 @@ class Classification:
 
 
     
-    def train(self):
+    def train(self, save=False):
         for k,c in self.classifiers.items():
             c.train()
         print("Classifiers trained.")
+        if save:
+            self.save()
+        
 
-    def save(self, filename):
-        state = {}
-        for k in self.classifiers.keys():
-            state[k] = self.classifiers[k].save()
-        with open('classifiers/'+filename, 'w') as f:
-            f.write(json.dump(state))
+
+
+    def save(self):
+        status = True
+        for k,c in self.classifiers.items():
+            try:
+                c.save('classifier-'+k)
+            except Exception as e:
+                print(e, file=sys.stderr)
+                status = False
+        if status:
+            print("Classifiers saved.")
 
 
 class Classifier:
@@ -238,14 +248,15 @@ class LinearRegression(Classifier):
         # classification
         return self.clf.decision_function( np.array([x]) )[0]
 
-    def load(self, data):
+    def load(self, filename):
         try:
-            self.regression,self.noise = data["regression"],data["noise"]
+            self.clf = externals.joblib.load('classifiers/'+filename+'.sav')
         except:
             raise Classifier.ClassifierError("Invalid classifier file.")
         super().train()
-    def save(self):
-        return {"regression": self.regression, "noise": self.noise}
+        
+    def save(self, filename):
+        externals.joblib.dump(self.clf, 'classifiers/'+filename+'.sav')
     
 def GaussianClassifier(Classifier):
     def __init__(self, sigmoid=Classifier.logistic):
