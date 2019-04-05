@@ -94,9 +94,11 @@ def testRegression():
     test( sign(lr.classify([-0.5,-1])), -1 )
 
 def testClassification():
+    model.Classification.setTrainSet(['3m_LR','3m_RL2','6m_LR','6m90_LR','6m_RL','9m_LR'], persistent=True)
+    model.Classification.setTestSet(['6m_RL', '6m_LR'], persistent=True)
     c = model.Classification.getTrained()
-    c.test('3m_LR')
-
+    result = c.test(['3m_LR'])
+    #print(result)
 
 
 def main():

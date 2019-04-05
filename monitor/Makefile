@@ -30,3 +30,5 @@ label:
 train:
 	@printf "";\
 	python3 classifiers/train.py
+
+

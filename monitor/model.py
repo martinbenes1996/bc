@@ -117,6 +117,8 @@ class Extractor:
 # to document
 
 class Classification:
+    trainSet = None
+    testSet = None
     def __init__(self, featureDimension = 5):
         self.rows,self.columns = 2,3
         self.area = [[0 for _ in range(self.columns)] for _ in range(self.rows)]
@@ -147,34 +149,6 @@ class Classification:
                 self.classifiers['center'].addTrainData(features, centerKey)
                 self.classifiers['left'].addTrainData(features, leftKey)
                 self.classifiers['distance'].addTrainData(features, distanceKey)
-    
-    def test(self, dirname):
-        with open('../data/'+dirname+'/test.json', 'r') as f:
-            labels = json.loads(f.read())
-        print("Testing with", dirname+'...')
-        results = []
-        for labelfilename,labeldata in labels.items():
-            x = comm_replay.Reader.readFile('../data/'+dirname+'/'+labelfilename+'.csv')
-            artefacts = segment.Artefact.parseArtefacts(x)
-            assert(len(artefacts) == len(labeldata))
-            for i,a in enumerate(artefacts):
-                presenceKey,centerKey,leftKey,distanceKey = labeldata[i]['key']
-                features = a.getFeatures()
-                presenceScore = self.classifiers['presence'].classify(features)
-                centerScore = self.classifiers['center'].classify(features)
-                leftScore = self.classifiers['left'].classify(features)
-                distanceScore = self.classifiers['distance'].classify(features)
-
-                results.append({'presence':(presenceScore,presenceKey),
-                                'center':(centerScore,centerKey),
-                                'left':(leftScore,leftKey),
-                                'distance':(distanceScore,distanceKey)})
-                #print(presenceScore, presenceKey)
-                #print(centerScore, centerKey)
-                #print(leftScore, leftKey)
-                #print(distanceScore, distanceKey)
-                #input('')
-        return results
 
     def train(self, save=False):
         for k,c in self.classifiers.items():
@@ -194,10 +168,18 @@ class Classification:
         if status:
             print("Classifiers saved.")
     
+    def test(self, testSet = None):
+        if testSet == None:
+            testSet = self.getTestSet()
+        # perform tests
+        return dict( (testItem, self.performTest(testItem)) for testItem in testSet )
+
     @classmethod
-    def retrain(cls, trainList=['3m_LR','3m_RL2','6m_LR','6m_RL','6m90_LR','9m_LR','E2']):
+    def retrain(cls, trainSet=None):
+        if trainSet == None:
+            trainSet = cls.getTrainSet()
         c = cls()
-        for t in trainList:
+        for t in trainSet:
             c.addTrainData(t)
         c.train(save=True)
         return c
@@ -209,6 +191,61 @@ class Classification:
             return c.load()
         except:
             return cls.retrain()
+    
+    @classmethod
+    def getTrainSet(cls):
+        if cls.trainSet == None:
+            cls.trainSet = cls.readTrainSet()
+        return cls.trainSet
+    @classmethod
+    def getTestSet(cls):
+        if cls.testSet == None:
+            cls.testSet = cls.readTestSet()
+        return cls.testSet
+    @staticmethod
+    def readTrainSet():
+        with open('classifiers/trainset.json','r') as ts:
+            return json.load(ts)
+    @staticmethod
+    def readTestSet():
+        with open('classifiers/testset.json','r') as ts:
+            return json.load(ts)
+
+    @classmethod
+    def setTrainSet(cls, trainSet, persistent=False):
+        cls.trainSet = trainSet
+        if persistent:
+            with open('classifiers/trainset.json','w') as ts:
+                json.dump(trainSet,ts)
+    @classmethod
+    def setTestSet(cls, testSet, persistent=False):
+        cls.testSet = testSet
+        if persistent:
+            with open('classifiers/testset.json','w') as ts:
+                json.dump(testSet,ts)
+    
+    def performTest(self, dirname):
+        with open('../data/'+dirname+'/test.json', 'r') as f:
+            labels = json.load(f)
+        print("Testing with", dirname+'...')
+        results = []
+        for labelfilename,labeldata in labels.items():
+            x = comm_replay.Reader.readFile('../data/'+dirname+'/'+labelfilename+'.csv')
+            artefacts = segment.Artefact.parseArtefacts(x)
+            assert(len(artefacts) == len(labeldata))
+            for i,a in enumerate(artefacts):
+                presenceKey,centerKey,leftKey,distanceKey = labeldata[i]['key']
+                features = a.getFeatures()
+                presenceScore = self.classifiers['presence'].classify(features)
+                centerScore = self.classifiers['center'].classify(features)
+                leftScore = self.classifiers['left'].classify(features)
+                distanceScore = self.classifiers['distance'].classify(features)
+
+                results.append({'presence':(presenceScore,presenceKey),
+                                'center':(centerScore,centerKey),
+                                'left':(leftScore,leftKey),
+                                'distance':(distanceScore,distanceKey)})
+        return results
 
 
 class Classifier:
@@ -220,10 +257,13 @@ class Classifier:
         self.sigmoid = sigmoid
 
     def addTrainData(self, x, result=True):
-        if result:
+        if result is True:
             assignClass = 2
-        else:
+        elif result is False:
             assignClass = 1
+        elif result is None:
+            return
+
         self.trainData.append( (x, assignClass) )
     def train(self, loaded=False):
         if not loaded and len(self.trainData) == 0:

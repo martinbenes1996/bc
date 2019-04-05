@@ -9,7 +9,7 @@ import model
 
 
 class Tester:
-    trainSet = ['E2']
+    trainSet = ['3m_RL2']
 
     @staticmethod
     def normalize(l):
@@ -19,9 +19,8 @@ class Tester:
         # train
         c = model.Classification.getTrained()
         # test
-        for t in self.trainSet:
-            # get test results
-            result = c.test(t)
+        results = c.test()
+        for testname,result in results.items():
             # x,y
             x = np.linspace(0,len(result),len(result))
             y = [i[key][0] for i in result]
@@ -31,6 +30,7 @@ class Tester:
             plt.plot(x,y,c='r')
             plt.plot(x,y_ref,c='k')
             plt.show()
+
 
 def main():
     tester = Tester()
