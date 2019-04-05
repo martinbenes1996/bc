@@ -13,7 +13,8 @@ class Tester:
 
     @staticmethod
     def normalize(l):
-        return (np.array(l) - min(l)) / max(l)
+        minimum = min(l)
+        return 1 - (np.array(l) - minimum)/(max(l) - minimum)
     
     def plotTest(self, key):
         # train
@@ -34,7 +35,7 @@ class Tester:
 
 def main():
     tester = Tester()
-    tester.plotTest('presence')
+    tester.plotTest('left')
    
     
 

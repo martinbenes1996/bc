@@ -130,7 +130,7 @@ class Classification:
     def load(self):
         for k,c in self.classifiers.items():
             c.load('classifier-'+k)
-        print("Trained trained.")
+        print("Classifier loaded.")
         return self
 
     def addTrainData(self, dirname):
@@ -140,11 +140,9 @@ class Classification:
         for labelfilename,labeldata in labels.items():
             x = comm_replay.Reader.readFile('../data/'+dirname+'/'+labelfilename+'.csv')
             artefacts = segment.Artefact.parseArtefacts(x)
-            assert(len(artefacts) == len(labeldata))
             for i,a in enumerate(artefacts):
                 presenceKey,centerKey,leftKey,distanceKey = labeldata[i]['key']
                 features = a.getFeatures()
-                #print('Train: presence', presenceKey, 'center', centerKey, 'left', leftKey, 'distance', distanceKey)
                 self.classifiers['presence'].addTrainData(features, presenceKey)
                 self.classifiers['center'].addTrainData(features, centerKey)
                 self.classifiers['left'].addTrainData(features, leftKey)

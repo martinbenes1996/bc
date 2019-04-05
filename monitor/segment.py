@@ -115,8 +115,11 @@ class Edge:
 class Artefact:
     def __init__(self):
         self.segments = []
+        self.previous = None
     def append(self, segment):
         self.segments.append(segment)
+    def setPreviousArtefact(self, prev):
+        self.previous = prev
 
     def samples(self):
         artefactSamples = []
@@ -130,7 +133,30 @@ class Artefact:
         return np.var(self.samples())
     def len(self):
         return len(self.samples())
-    
+
+    def getK(self):
+        samples = self.samples()
+        smin, smax = min(samples), max(samples)
+        N = len(samples)
+        # best fitting line (k)
+        mu,var = self.mu(),self.var()
+        minP,maxP = smin,smax
+        bestScore,optimalK,optimalLine = None, None, lambda x:None
+        for startP in np.linspace(minP,maxP,15):
+            for endP in np.linspace(minP,maxP,15):
+                # count line similarity score
+                k = (endP-startP)/N
+                line = [startP + k*x for x in range(N)]
+                score = 0
+                for i in range(N):
+                    score += (samples[i]-line[i])**2
+                score /= N
+                if bestScore is None:
+                    bestScore = score
+                if abs(score) < abs(bestScore):
+                    bestScore,optimalK,optimalLine = score,k,line
+        return optimalK
+
     def getFeatures(self, plotting=False):
         features = []
         # get description
@@ -155,6 +181,10 @@ class Artefact:
                     bestScore = score
                 if abs(score) < abs(bestScore):
                     bestScore,optimalK,optimalLine = score,k,line
+        if self.previous is not None:
+            previousK = self.previous.getK()
+        else:
+            previousK = optimalK
 
         if plotting:
             return optimalLine
@@ -163,6 +193,8 @@ class Artefact:
         features.append(optimalK)
         # difference from line
         features.append(bestScore)
+        # previous line slope
+        features.append(previousK)
         # variance of artefact
         features.append(var)
         # length of segment
@@ -212,6 +244,8 @@ class Artefact:
             artefacts[-1].append(edges[i].first)
             if edgeScore >= 0.5:
                 artefacts.append(Artefact())
+                artefacts[-1].setPreviousArtefact(artefacts[-2])
+                
             
         if artefacts[-1].len() == 0:
             artefacts = artefacts[:-1]

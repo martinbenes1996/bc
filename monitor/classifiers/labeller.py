@@ -140,7 +140,7 @@ class Exercise:
             
                 presentKey = self.getValue('Is the person present? ', windowname)
                 if not presentKey:
-                    keys = (False, False, False, False)
+                    keys = (False, None, None, None)
                 else:
                     keys = (presentKey,
                             self.getValue('\tIs the person moving towards the center? ', windowname), 
@@ -148,7 +148,7 @@ class Exercise:
                             self.getValue('\tIs the person close? ', windowname) )
                 #cv2.destroyWindow(windowname)
             except cv2.error:
-                keys = (False,False,False,False)
+                keys = (False,None,None,None)
 
 
             result = {'key':keys, 'start': pos, 'length': l}
