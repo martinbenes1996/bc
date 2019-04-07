@@ -60,7 +60,6 @@ void setup() {
   
   pinMode(LED_BUILTIN, OUTPUT); digitalWrite(LED_BUILTIN, HIGH);
   pinMode(2, OUTPUT); digitalWrite(2, HIGH);
-  pinMode(D0, INPUT);
   
   // init
   WiFi_load();
@@ -75,12 +74,6 @@ void setup() {
 }
 
 void loop() {
-  // reset memory
-  if(digitalRead(D0) == LOW) {
-    Serial.println("Reset!");
-    WiFi_reset();
-  }
-  
   
   int now = millis();
   if(WiFi.status() != WL_CONNECTED) {
@@ -150,7 +143,7 @@ void HTTP_Init() {
 void AP_Init() {
   WiFiManager wifiManager;
   //wifiManager.setDebugOutput(false);
-  wifiManager.resetSettings();
+  //wifiManager.resetSettings();
   wifiManager.setSaveConfigCallback(startSending);
   //wifiManager.setConfigPortalTimeout(600);
   wifiManager.setBreakAfterConfig(true);
@@ -350,6 +343,7 @@ void WiFi_reset() {
   EEPROM_connect();
   EEPROM.write((uint8_t)false, 0);
   EEPROM.commit();
+  wifiManager.resetSettings();
   Serial.println("WiFi settings reset.");
 }
 
