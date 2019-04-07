@@ -72,7 +72,7 @@ class CheckButton:
         """Updates checkbutton availability status."""
         # try to connect
         try:
-            self.alive(self.name)
+            self.alive(self.name[2:])
         # failed
         except Exception as e:
             self.button.config(state=tk.DISABLED)
