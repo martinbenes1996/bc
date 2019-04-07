@@ -57,15 +57,17 @@ class Exercise:
             # parse file names
             path = '../data/' + name+ '/' + name + '_' + str(i)
             datafile,videofile,labelfile = path+'.csv', path+'.mp4', path+'.json'
+            
 
             try:
                 # check if exists
                 if not os.path.isfile(datafile):
                     raise InvalidTraining(datafile + ' does not exist.')
                 # uncomment, when video processed
-                if not os.path.isfile(videofile):
-                    raise InvalidTraining(videofile + ' does not exist.')
-            except InvalidTraining:
+                #if not os.path.isfile(videofile):
+                #    raise InvalidTraining(videofile + ' does not exist.')
+            except InvalidTraining as e:
+                print(e)
                 break
             except Exception as e:
                 print(e)
@@ -81,10 +83,10 @@ class Exercise:
         self.name = name
         # check if exists
         if not os.path.isfile(datafile):
-            raise InvalidTraining(datafile + ' does not exist.')
+            raise InvalidTraining("Data file " + datafile + ' does not exist.')
         # uncomment, when video processed
         #if not os.path.isfile(videofile):
-        #   raise InvalidTraining(videofile + ' does not exist.')
+        #   raise InvalidTraining("Video file " + videofile + ' does not exist.')
 
         # files
         self.datafile = datafile
@@ -102,9 +104,11 @@ class Exercise:
         x = comm_replay.Reader.readFile(self.datafile)
         artefacts = segment.Artefact.parseArtefacts(x)
         # process video
+        showVideo = True
         video = cv2.VideoCapture(self.videofile)
         if not video.isOpened():
-            raise InvalidTraining(self.videofile + ' can not be read.')
+            showVideo = False
+            #raise InvalidTraining(self.videofile + ' can not be read.')
         fps = video.get(cv2.CAP_PROP_FPS)
         maxFrames = video.get(cv2.CAP_PROP_FRAME_COUNT)
 

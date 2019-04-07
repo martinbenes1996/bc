@@ -163,7 +163,7 @@ class SignalView:
         # show new data
         self.show( self.getData() )
         # plan next update after 300 ms
-        self.afterId = self.master.after(300, self.update)
+        self.afterId = self.master.after(conf.Config.period(), self.update)
 
     def manualUpdate(self, event):
         """Updates view. Handler for mouse events.

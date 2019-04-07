@@ -13,20 +13,26 @@ class Tester:
 
     @staticmethod
     def normalize(l):
-        minimum = min(l)
-        return 1 - (np.array(l) - minimum)/(max(l) - minimum)
-    
+        minimum,maximum = min(l),max(l)
+        if maximum > minimum:
+            return (np.array(l) - minimum)/(maximum - minimum)
+        else:
+            return np.array(l)-minimum
+
     def plotTest(self, key):
         # train
         c = model.Classification.getTrained()
         # test
         results = c.test()
         for testname,result in results.items():
+            if len(result) == 1:
+                result = result * 2
             # x,y
             x = np.linspace(0,len(result),len(result))
             y = [i[key][0] for i in result]
             y_ref = [1 if i[key][1] else 0 for i in result]
             y = self.normalize(y)
+            print(testname)
             # plot
             plt.plot(x,y,c='r')
             plt.plot(x,y_ref,c='k')
@@ -35,7 +41,7 @@ class Tester:
 
 def main():
     tester = Tester()
-    tester.plotTest('left')
+    tester.plotTest('distance')
    
     
 
