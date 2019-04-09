@@ -69,16 +69,15 @@ class Recorder:
         _thread.start_new_thread(self.count_run, (), {"secs" : secs})
     def count_run(self, secs=1):
         for i in range(0, secs):
-            self.sine_tone(1000, 200, 0.8)
+            self.sine_tone(1000, 0.2, 0.8)
             time.sleep(0.8)
     def beep(self):
-        self.sine_tone(440, 500)
+        self.sine_tone(440, 0.5)
 
     @classmethod
-    def sine_tone(frequency, duration, volume=1, sample_rate=22050):
-        os.system("pwd")
-        os.system("echo $USER")
-        os.system("./beep.sh "+str(frequency)+" "+str(duration))
+    def sine_tone(cls, frequency, duration, volume=1, sample_rate=22050):
+        print(frequency, duration, volume)
+        os.system("bash beep.sh "+str(frequency)+" "+str(duration))
 
 
 class View:
