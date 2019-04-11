@@ -689,16 +689,11 @@ w^{(\tau + 1)} = w^{(\tau)} - \eta \nabla E(\overline{w})
 \end{equation}
 \end{subequations}
 
-Each of these scores are then fuzzified and put together, creating a resulting matrix.
 The classifier's output is a 2D fuzzy value matrix, representing the space in from of the sensor.
 It is inspired by the space representation by cellular automata, which carves it into small
 homogenous segments. The fuzzy value at certain index expresses a presence of a person
-at the position.
-
-{\it Consider action characteristics (speed, direction, multiple people).}
-
-Even though the space because of the construction of sensor has a shape of circular sector,
-it can be easily represented by classical 2D matrix, as it is shown in the figure \ref{fig:circularsector}.
+at the position. Even though the space because of the construction of sensor has a shape of
+circular sector, it can be easily represented by classical 2D matrix, as it is shown in the figure \ref{fig:circularsector}.
 
 \begin{figure}[h!]
 \begin{center}
@@ -707,6 +702,22 @@ it can be easily represented by classical 2D matrix, as it is shown in the figur
 \end{center}
 \end{figure}
 
+Each of the scores is fuzzified using sigmoid function and merged together using formula \ref{eq:regressionmerger},
+creating the resulting matrix, as shown in the figure \ref{fig:areamatrixweighting}. {\it Consider action characteristics (speed, direction, multiple people) and state engine.}
+
+\begin{equation}
+TODO
+\label{eq:regressionmerger}
+\end{equation}
+
+
+
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[width=0.3\textwidth]{obrazky-figures/pir_area.png}
+\caption{Weighting of regression score to area matrix.\label{fig:areamatrixweighting}}
+\end{center}
+\end{figure}
 
 \subsection*{Fusion}
 Using more sensors brings advantages: the measuring might be more precise since the person presence
