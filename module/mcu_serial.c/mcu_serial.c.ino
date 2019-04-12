@@ -1,10 +1,10 @@
 
 
 /* -------- PARAMETERS --------- */
-#define SEGMENT 220                 /* segment size */
-#define OVERLAP 20                  /* overlap size */
+#define SEGMENT 60                 /* segment size */
+#define OVERLAP 10                  /* overlap size */
 #define SAMPLE_FREQUENCY 100        /* sampling frequency */
-#define SEND_FREQUENCY 0.5          /* sending frequency  */
+#define SEND_FREQUENCY 2          /* sending frequency  */
 /* ---------------------------- */
 
 
