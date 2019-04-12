@@ -172,6 +172,19 @@ class Classification:
         # perform tests
         return dict( (testItem, self.performTest(testItem)) for testItem in testSet )
 
+    def classify(self, x):
+        score = dict( (clfname, clf.classify(x)) for clfname,clf in self.classifiers.items())
+        areaM = [[0 for _ in range(2)] for _ in range(2)] # 2x2 matrix
+        # check score \in <0;1>
+        N = fuzzy.Negator.method('standard')
+        AND = fuzzy.SNorm.method('product')
+        areaM[0][0] = AND(score['presence'],   score['distance'],    score['left'])
+        areaM[0][1] = AND(score['presence'],   score['distance'],  N(score['left']))
+        areaM[1][0] = AND(score['presence'], N(score['distance']),   score['left'])
+        areaM[1][1] = AND(score['presence'], N(score['distance']), N(score['left']))
+        return areaM
+
+
     @classmethod
     def retrain(cls, trainSet=None):
         if trainSet == None:

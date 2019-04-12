@@ -8,24 +8,22 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 
-if len(sys.argv) == 3 and sys.argv[1] == '-f':
-    filename = sys.argv[2]
-else:
-    filename = 'file.dat'
+assert(len(sys.argv) == 2)
+filename = sys.argv[1]
 
 y = []
 with open(filename, 'r') as csv_file:
     csv_reader = csv.reader(csv_file, delimiter=',')
     line_count = 0
     for row in csv_reader:
-        if line_count == 1:
+        if line_count == 0:
             y = [int(i) for i in row]
         else:
             for i in row[10:]:
                 y.append(int(i))
         line_count += 1
 
-x = [i/100. for i in range(0, len(y))]
+x = [i/100. for i in range(len(y))]
 #print(x)
 #l = [int.from_bytes(data[i:i+2],byteorder='big') for i in range(0,len(data)-1,2)]
 

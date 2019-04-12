@@ -689,16 +689,11 @@ w^{(\tau + 1)} = w^{(\tau)} - \eta \nabla E(\overline{w})
 \end{equation}
 \end{subequations}
 
-Each of these scores are then fuzzified and put together, creating a resulting matrix.
 The classifier's output is a 2D fuzzy value matrix, representing the space in from of the sensor.
 It is inspired by the space representation by cellular automata, which carves it into small
 homogenous segments. The fuzzy value at certain index expresses a presence of a person
-at the position.
-
-{\it Consider action characteristics (speed, direction, multiple people).}
-
-Even though the space because of the construction of sensor has a shape of circular sector,
-it can be easily represented by classical 2D matrix, as it is shown in the figure \ref{fig:circularsector}.
+at the position. Even though the space because of the construction of sensor has a shape of
+circular sector, it can be easily represented by classical 2D matrix, as it is shown in the figure \ref{fig:circularsector}.
 
 \begin{figure}[h!]
 \begin{center}
@@ -707,6 +702,22 @@ it can be easily represented by classical 2D matrix, as it is shown in the figur
 \end{center}
 \end{figure}
 
+Each of the scores is fuzzified using sigmoid function and merged together using formula \ref{eq:regressionmerger},
+creating the resulting matrix, as shown in the figure \ref{fig:areamatrixweighting}. {\it Consider action characteristics (speed, direction, multiple people) and state engine.}
+
+\begin{equation}
+TODO
+\label{eq:regressionmerger}
+\end{equation}
+
+
+
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[width=0.3\textwidth]{obrazky-figures/pir_area.png}
+\caption{Weighting of regression score to area matrix.\label{fig:areamatrixweighting}}
+\end{center}
+\end{figure}
 
 \subsection*{Fusion}
 Using more sensors brings advantages: the measuring might be more precise since the person presence
@@ -848,20 +859,6 @@ azimuth.
 
 \chapter{Data}
 
-\begin{figure}[h!]
-\begin{center}
-\includegraphics[width=0.85\textwidth]{obrazky-figures/signal_calm.png}
-\caption{Signal of zero movement.\label{fig:signalcalm}}
-\end{center}
-\end{figure}
-
-\begin{figure}[h!]
-\begin{center}
-\includegraphics[width=0.85\textwidth]{obrazky-figures/signal_walk.png}
-\caption{Signal of person walking around.\label{fig:signalwalk}}
-\end{center}
-\end{figure}
-
 A output of a sensor as you can see in the figures \ref{fig:signalcalm} and \ref{fig:signalwalk}
 is very discriminative -- with a bare eye a movement from no movement is distinguishable.
 A detection of presence used in light sensors can be implemented with tresholding, this attitude is
@@ -872,6 +869,20 @@ of electricity, slightly polluted with a background noise etc.}. Movement in the
 abrupt changes of output. When the object either leaves the area, or stays completely calm, the signal
 changes are getting slower and after a little while the output voltage gets in the calm state again.
 
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[width=0.65\textwidth]{obrazky-figures/signal_calm.png}
+\caption{Signal of zero movement.\label{fig:signalcalm}}
+\end{center}
+\end{figure}
+
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[width=0.65\textwidth]{obrazky-figures/signal_walk.png}
+\caption{Signal of person walking around.\label{fig:signalwalk}}
+\end{center}
+\end{figure}
+
 Therefore, the nature of the signal does not seem to need a complicated method to perform a classification on it.
 {\it Fourier transformation} and {\it wavelet transformation} were considered for feature
 extraction. The abrupt changes in the signal could be problem for FT, because it can not represent
@@ -879,11 +890,11 @@ it efficiently\cite{SinglePIR}, % youtube video
 but unlike sinusoids, the wavelets exist for a finite duration and they are suitable for representing
 abrupt changes.
 
-The wavelet transformation is defined as a function F(s,k). Parameters s,k are scale and shift, changing
+The wavelet transformation is defined as a function $F_{(s,k)}(x)$. Parameters s,k are scale and shift, changing
 them in predefined unit and interval creates a matrix, as you can see in the figure \ref{fig:walk03}.
 
 \begin{equation}
-F(s,k) = \sum_{n=1}^{N} x[n] \Psi_{(s,k)}^{*}[n]
+F_{(s,k)}(x) = \sum_{n=1}^{N} x[n] \Psi_{(s,k)}^{*}[n]
 \end{equation}
 
 Firstly The data were offline analysed using {\it Matlab}, which has implemented wavelet transformation.
@@ -900,15 +911,14 @@ wscalogram('image', cwt(data));
 
 \begin{figure}[h!]
 \begin{center}
-\includegraphics[width=0.6\textwidth]{obrazky-figures/walk03.png}
+\includegraphics[width=0.5\textwidth]{obrazky-figures/walk03.png}
 \caption{Matlab {\it cwt()} output of {\it walk03.csv}.\label{fig:walk03}}
 \end{center}
 \end{figure}
 
 
-{\it Origin of data, description, training.}
-
-The lab results are shown in the appendix \ref{appendix:PIRSignal}.
+The training and testing data were recorded as a part of the work, results are
+shown and described by the appendix \ref{appendix:PIRSignal}.
 
 
 
@@ -1053,11 +1063,15 @@ During the testing $100~k\Omega$ resistors were used. The circuit is shown in th
   % ref
   (0,2) to[short, l={\tiny $REF$}, o-]
   (1,2) to[short]
-  (2,2) to[R={\tiny $R_{X}$}]
   (4,2) to[R={\tiny $R_{X}$}]
-  (6,2) to[short,-*] (6,0.5)
+  (6,2) to[short,-*] (6,1.5)
+
+  (2,0.5) to[short,*-]
+  (2,2.5) to[R={\tiny $R_{X}$}]
+  (4,2.5) to[short,-*] (4,2) 
   
-  (4,2) to[short,*-*] (4,1.5)
+  
+  
   % vcc
   (0,1.5) to[short, l={\tiny $VCC$}, o-]
   (1,1.5) to[short]
@@ -1091,14 +1105,15 @@ and the morphism $c$ are shown in the formula \ref{eq:ad_projection}.
 
 \begin{subequations}
 \begin{equation}
-A = <0;V_{cc}>
+A = \langle 0;V_{cc}\rangle
 \end{equation}
 \begin{equation}
-D = {0, 1, ..., 1023}
+D = \{0; 1; ..., 1023\}
 \end{equation}
 \begin{equation}
 c: A \rightarrow D = x_A \rightarrow \frac{1023x_A}{V_{cc}}, x_A \in D
 \end{equation}
+\label{eq:ad_projection}
 \end{subequations}
 
 \paragraph{Sampling frequency}
