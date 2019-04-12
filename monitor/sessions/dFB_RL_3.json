@@ -1,0 +1,1 @@
+{"measurements": [{"delay": 20, "name": "dFB_RL_3_1", "time": 15, "signal": true}, {"delay": 10, "name": "dFB_RL_3_2", "time": 15, "signal": true}, {"delay": 10, "name": "dFB_RL_3_3", "time": 15, "signal": true}], "name": "dFB_RL_3"}
