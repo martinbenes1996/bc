@@ -274,7 +274,8 @@ class Classifier:
             assignClass = 1
         elif result is None:
             return
-
+        if x is None:
+            raise ValueError
         self.trainData.append( (x, assignClass) )
     def train(self, loaded=False):
         if not loaded and len(self.trainData) == 0:
@@ -312,7 +313,12 @@ class LinearRegression(Classifier):
         X = np.array([d[0] for d in self.trainData])
         Y = np.array([d[1] for d in self.trainData])
         # training
-        self.clf.fit(X,Y)
+        try:
+            self.clf.fit(X,Y)
+        except ValueError:
+            for i in X:
+                print(i)
+            raise
 
     def classify(self,x):
         super().classify(x)

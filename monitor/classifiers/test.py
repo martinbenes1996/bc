@@ -26,6 +26,7 @@ class Tester:
         results = c.test()
         for testname,result in results.items():
             if len(result) == 1:
+                print(result)
                 result = result * 2
             # x,y
             x = np.linspace(0,len(result),len(result))
@@ -41,7 +42,7 @@ class Tester:
 
 def main():
     tester = Tester()
-    tester.plotTest('distance')
+    tester.plotTest('presence')
    
     
 

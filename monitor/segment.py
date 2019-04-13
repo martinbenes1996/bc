@@ -185,6 +185,10 @@ class Artefact:
             previousK = self.previous.getK()
         else:
             previousK = optimalK
+        if optimalK is None:
+            optimalK = 0
+        if previousK is None:
+            previousK = 0
 
         if plotting:
             return optimalLine
