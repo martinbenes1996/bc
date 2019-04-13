@@ -147,7 +147,7 @@ class Exercise:
                     keys = (False, None, None, None)
                 else:
                     keys = (presentKey,
-                            self.getValue('\tIs the person moving towards the center? ', windowname), 
+                            self.getValue('\tIs the person close the center? ', windowname), 
                             self.getValue('\tIs the person on the left? ', windowname),
                             self.getValue('\tIs the person close? ', windowname) )
                 #cv2.destroyWindow(windowname)
