@@ -1,1 +1,488 @@
-{"c4m_RL_2_1": [{"key": [false, null, null, null], "start": 0, "length": 221}, {"key": [true, false, false, true], "start": 221, "length": 73}, {"key": [true, false, false, true], "start": 294, "length": 76}, {"key": [true, true, false, true], "start": 370, "length": 32}, {"key": [true, true, false, true], "start": 402, "length": 27}, {"key": [true, true, true, true], "start": 429, "length": 22}, {"key": [true, true, true, true], "start": 451, "length": 17}, {"key": [true, true, true, true], "start": 468, "length": 43}, {"key": [true, true, true, true], "start": 511, "length": 49}, {"key": [true, false, true, true], "start": 560, "length": 53}, {"key": [true, false, true, true], "start": 613, "length": 53}, {"key": [false, null, null, null], "start": 666, "length": 26}, {"key": [false, null, null, null], "start": 692, "length": 12}, {"key": [false, null, null, null], "start": 704, "length": 19}, {"key": [false, null, null, null], "start": 723, "length": 31}, {"key": [false, null, null, null], "start": 754, "length": 55}, {"key": [false, null, null, null], "start": 809, "length": 496}], "c4m_RL_2_2": [{"key": [false, null, null, null], "start": 0, "length": 188}, {"key": [true, false, false, true], "start": 188, "length": 86}, {"key": [true, false, false, true], "start": 274, "length": 10}, {"key": [true, false, false, true], "start": 284, "length": 28}, {"key": [true, true, false, true], "start": 312, "length": 50}, {"key": [true, true, false, true], "start": 362, "length": 29}, {"key": [true, true, false, true], "start": 391, "length": 13}, {"key": [true, true, false, true], "start": 404, "length": 31}, {"key": [true, true, true, true], "start": 435, "length": 57}, {"key": [true, true, true, true], "start": 492, "length": 18}, {"key": [true, false, true, true], "start": 510, "length": 28}, {"key": [true, false, true, true], "start": 538, "length": 46}, {"key": [true, false, true, true], "start": 584, "length": 27}, {"key": [true, false, true, true], "start": 611, "length": 30}, {"key": [false, null, null, null], "start": 641, "length": 21}, {"key": [false, null, null, null], "start": 662, "length": 39}, {"key": [false, null, null, null], "start": 701, "length": 20}, {"key": [false, null, null, null], "start": 721, "length": 524}], "c4m_RL_2_3": [{"key": [false, null, null, null], "start": 0, "length": 221}, {"key": [true, false, false, true], "start": 221, "length": 60}, {"key": [true, true, false, true], "start": 281, "length": 38}, {"key": [true, true, false, true], "start": 319, "length": 21}, {"key": [true, true, false, true], "start": 340, "length": 61}, {"key": [true, true, true, true], "start": 401, "length": 18}, {"key": [true, true, true, true], "start": 419, "length": 22}, {"key": [false, null, null, null], "start": 441, "length": 20}, {"key": [true, true, true, true], "start": 461, "length": 35}, {"key": [true, true, true, true], "start": 496, "length": 49}, {"key": [true, false, true, true], "start": 545, "length": 57}, {"key": [false, null, null, null], "start": 602, "length": 39}, {"key": [false, null, null, null], "start": 641, "length": 653}]}
+{
+    "c4m_RL_2_1": [
+        {
+            "key": [
+                false,
+                null,
+                null,
+                null
+            ],
+            "start": 0,
+            "length": 221
+        },
+        {
+            "key": [
+                true,
+                false,
+                false,
+                true
+            ],
+            "start": 221,
+            "length": 73
+        },
+        {
+            "key": [
+                true,
+                false,
+                false,
+                true
+            ],
+            "start": 294,
+            "length": 76
+        },
+        {
+            "key": [
+                true,
+                true,
+                false,
+                true
+            ],
+            "start": 370,
+            "length": 32
+        },
+        {
+            "key": [
+                true,
+                true,
+                false,
+                true
+            ],
+            "start": 402,
+            "length": 27
+        },
+        {
+            "key": [
+                true,
+                true,
+                true,
+                true
+            ],
+            "start": 429,
+            "length": 22
+        },
+        {
+            "key": [
+                true,
+                true,
+                true,
+                true
+            ],
+            "start": 451,
+            "length": 17
+        },
+        {
+            "key": [
+                true,
+                true,
+                true,
+                true
+            ],
+            "start": 468,
+            "length": 43
+        },
+        {
+            "key": [
+                true,
+                true,
+                true,
+                true
+            ],
+            "start": 511,
+            "length": 49
+        },
+        {
+            "key": [
+                true,
+                false,
+                true,
+                true
+            ],
+            "start": 560,
+            "length": 53
+        },
+        {
+            "key": [
+                true,
+                false,
+                true,
+                true
+            ],
+            "start": 613,
+            "length": 53
+        },
+        {
+            "key": [
+                false,
+                null,
+                null,
+                null
+            ],
+            "start": 666,
+            "length": 26
+        },
+        {
+            "key": [
+                false,
+                null,
+                null,
+                null
+            ],
+            "start": 692,
+            "length": 12
+        },
+        {
+            "key": [
+                false,
+                null,
+                null,
+                null
+            ],
+            "start": 704,
+            "length": 19
+        },
+        {
+            "key": [
+                false,
+                null,
+                null,
+                null
+            ],
+            "start": 723,
+            "length": 31
+        },
+        {
+            "key": [
+                false,
+                null,
+                null,
+                null
+            ],
+            "start": 754,
+            "length": 55
+        },
+        {
+            "key": [
+                false,
+                null,
+                null,
+                null
+            ],
+            "start": 809,
+            "length": 496
+        }
+    ],
+    "c4m_RL_2_2": [
+        {
+            "key": [
+                false,
+                null,
+                null,
+                null
+            ],
+            "start": 0,
+            "length": 188
+        },
+        {
+            "key": [
+                true,
+                false,
+                false,
+                true
+            ],
+            "start": 188,
+            "length": 86
+        },
+        {
+            "key": [
+                true,
+                false,
+                false,
+                true
+            ],
+            "start": 274,
+            "length": 10
+        },
+        {
+            "key": [
+                true,
+                false,
+                false,
+                true
+            ],
+            "start": 284,
+            "length": 28
+        },
+        {
+            "key": [
+                true,
+                true,
+                false,
+                true
+            ],
+            "start": 312,
+            "length": 50
+        },
+        {
+            "key": [
+                true,
+                true,
+                false,
+                true
+            ],
+            "start": 362,
+            "length": 29
+        },
+        {
+            "key": [
+                true,
+                true,
+                false,
+                true
+            ],
+            "start": 391,
+            "length": 13
+        },
+        {
+            "key": [
+                true,
+                true,
+                false,
+                true
+            ],
+            "start": 404,
+            "length": 31
+        },
+        {
+            "key": [
+                true,
+                true,
+                true,
+                true
+            ],
+            "start": 435,
+            "length": 57
+        },
+        {
+            "key": [
+                true,
+                true,
+                true,
+                true
+            ],
+            "start": 492,
+            "length": 18
+        },
+        {
+            "key": [
+                true,
+                false,
+                true,
+                true
+            ],
+            "start": 510,
+            "length": 28
+        },
+        {
+            "key": [
+                true,
+                false,
+                true,
+                true
+            ],
+            "start": 538,
+            "length": 46
+        },
+        {
+            "key": [
+                true,
+                false,
+                true,
+                true
+            ],
+            "start": 584,
+            "length": 27
+        },
+        {
+            "key": [
+                true,
+                false,
+                true,
+                true
+            ],
+            "start": 611,
+            "length": 30
+        },
+        {
+            "key": [
+                false,
+                null,
+                null,
+                null
+            ],
+            "start": 641,
+            "length": 21
+        },
+        {
+            "key": [
+                false,
+                null,
+                null,
+                null
+            ],
+            "start": 662,
+            "length": 39
+        },
+        {
+            "key": [
+                false,
+                null,
+                null,
+                null
+            ],
+            "start": 701,
+            "length": 20
+        },
+        {
+            "key": [
+                false,
+                null,
+                null,
+                null
+            ],
+            "start": 721,
+            "length": 524
+        }
+    ],
+    "c4m_RL_2_3": [
+        {
+            "key": [
+                false,
+                null,
+                null,
+                null
+            ],
+            "start": 0,
+            "length": 221
+        },
+        {
+            "key": [
+                true,
+                false,
+                false,
+                true
+            ],
+            "start": 221,
+            "length": 60
+        },
+        {
+            "key": [
+                true,
+                true,
+                false,
+                true
+            ],
+            "start": 281,
+            "length": 38
+        },
+        {
+            "key": [
+                true,
+                true,
+                false,
+                true
+            ],
+            "start": 319,
+            "length": 21
+        },
+        {
+            "key": [
+                true,
+                true,
+                false,
+                true
+            ],
+            "start": 340,
+            "length": 61
+        },
+        {
+            "key": [
+                true,
+                true,
+                true,
+                true
+            ],
+            "start": 401,
+            "length": 18
+        },
+        {
+            "key": [
+                true,
+                true,
+                true,
+                true
+            ],
+            "start": 419,
+            "length": 22
+        },
+        {
+            "key": [
+                true,
+                true,
+                true,
+                true
+            ],
+            "start": 441,
+            "length": 20
+        },
+        {
+            "key": [
+                true,
+                true,
+                true,
+                true
+            ],
+            "start": 461,
+            "length": 35
+        },
+        {
+            "key": [
+                true,
+                true,
+                true,
+                true
+            ],
+            "start": 496,
+            "length": 49
+        },
+        {
+            "key": [
+                true,
+                false,
+                true,
+                true
+            ],
+            "start": 545,
+            "length": 57
+        },
+        {
+            "key": [
+                false,
+                null,
+                null,
+                null
+            ],
+            "start": 602,
+            "length": 39
+        },
+        {
+            "key": [
+                false,
+                null,
+                null,
+                null
+            ],
+            "start": 641,
+            "length": 653
+        }
+    ]
+}

@@ -9,7 +9,6 @@ import model
 
 
 class Tester:
-    trainSet = ['3m_RL2']
 
     @staticmethod
     def normalize(l):

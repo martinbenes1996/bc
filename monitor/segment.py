@@ -116,6 +116,7 @@ class Artefact:
     def __init__(self):
         self.segments = []
         self.previous = None
+        self.optimalK = None
     def append(self, segment):
         self.segments.append(segment)
     def setPreviousArtefact(self, prev):
@@ -135,6 +136,8 @@ class Artefact:
         return len(self.samples())
 
     def getK(self):
+        if self.optimalK is not None:
+            return self.optimalK
         samples = self.samples()
         smin, smax = min(samples), max(samples)
         N = len(samples)
@@ -155,6 +158,7 @@ class Artefact:
                     bestScore = score
                 if abs(score) < abs(bestScore):
                     bestScore,optimalK,optimalLine = score,k,line
+        self.optimalK = optimalK
         return optimalK
 
     def getFeatures(self, plotting=False):
@@ -189,6 +193,7 @@ class Artefact:
             optimalK = 0
         if previousK is None:
             previousK = 0
+        self.optimalK = optimalK
 
         if plotting:
             return optimalLine
