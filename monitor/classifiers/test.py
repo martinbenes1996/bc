@@ -10,14 +10,6 @@ import model
 
 class Tester:
 
-    @staticmethod
-    def normalize(l):
-        minimum,maximum = min(l),max(l)
-        if maximum > minimum:
-            return (np.array(l) - minimum)/(maximum - minimum)
-        else:
-            return np.array(l)-minimum
-
     def plotTest(self, key):
         # train
         c = model.Classification.getTrained()
@@ -31,7 +23,6 @@ class Tester:
             x = np.linspace(0,len(result),len(result))
             y = [i[key][0] for i in result]
             y_ref = [1 if i[key][1] else 0 for i in result]
-            y = self.normalize(y)
             print(testname)
             # plot
             plt.plot(x,y,c='r')

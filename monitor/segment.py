@@ -259,6 +259,10 @@ class Artefact:
         if artefacts[-1].len() == 0:
             artefacts = artefacts[:-1]
         return artefacts
+    
+    @staticmethod
+    def parseDescriptor(x):
+        return (min(x),max(x))
         
 
 

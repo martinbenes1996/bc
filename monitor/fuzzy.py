@@ -13,6 +13,10 @@ Developed as a part of bachelor thesis "Counting of people using PIR sensor".
 import math
 import numpy as np
 
+def fuzzify(x, descriptor):
+    minimum,maximum = descriptor
+    variance = maximum - minimum
+    return (x - minimum) / variance
 
 class FuzzyOperator:
     """General fuzzy operator.

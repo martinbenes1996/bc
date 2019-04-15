@@ -18,6 +18,7 @@ import sys
 
 import comm_replay
 import fuzzy
+import globals
 import segment
 
 # to delete
@@ -172,11 +173,35 @@ class Classification:
         # perform tests
         return dict( (testItem, self.performTest(testItem)) for testItem in testSet )
 
-    def classify(self, x):
-        score = dict( (clfname, clf.classify(x)) for clfname,clf in self.classifiers.items())
+    def classify(self, featuresVector):
         areaM = [[0 for _ in range(2)] for _ in range(2)] # 2x2 matrix
-        # check score \in <0;1>
+        rawPresence,rawDistance,rawLeft,rawCenter = [],[],[],[]
+        for x in featuresVector:
+            rawPresence.append(self.classifiers['presence'].classify(x))
+            rawDistance.append(self.classifiers['distance'].classify(x))
+            rawLeft.append(self.classifiers['left'].classify(x))
+            rawCenter.append(self.classifiers['center'].classify(x))
+        
+        
+        # fuzzification
+        presence = globals.normalize(rawPresence)
+        distance = globals.normalize(rawDistance)
+        left = globals.normalize(rawLeft)
+        center = globals.normalize(rawCenter)
+
+        # postprocessing
         N = fuzzy.Negator.method('standard')
+        presence = self.classifiers['presence'].postprocessPresence(presence)
+        center = N(center)
+        left = N(left)
+        distance = N(distance)
+
+        # delete
+        score = []
+        for i,_ in enumerate(presence):
+            score.append( {'presence':presence[i],'distance':distance[i],'left':left[i],'center':center[i]} )
+        return score
+        
         AND = fuzzy.SNorm.method('product')
         areaM[0][0] = AND(score['presence'],   score['distance'],    score['left'])
         areaM[0][1] = AND(score['presence'],   score['distance'],  N(score['left']))
@@ -243,15 +268,24 @@ class Classification:
         for labelfilename,labeldata in labels.items():
             x = comm_replay.Reader.readFile('../data/'+dirname+'/'+labelfilename+'.csv')
             artefacts = segment.Artefact.parseArtefacts(x)
+
             assert(len(artefacts) == len(labeldata))
+            featureSet = [ a.getFeatures() for a in artefacts]
+                # delete
+                #presenceScore = self.classifiers['presence'].classify(features)
+                #centerScore = self.classifiers['center'].classify(features)
+                #leftScore = self.classifiers['left'].classify(features)
+                #distanceScore = self.classifiers['distance'].classify(features)
+
+            # delete
+            scoreSet = self.classify(featureSet)
+            
             for i,a in enumerate(artefacts):
                 presenceKey,centerKey,leftKey,distanceKey = labeldata[i]['key']
-                features = a.getFeatures()
-                presenceScore = self.classifiers['presence'].classify(features)
-                centerScore = self.classifiers['center'].classify(features)
-                leftScore = self.classifiers['left'].classify(features)
-                distanceScore = self.classifiers['distance'].classify(features)
-
+                presenceScore = scoreSet[i]['presence']
+                centerScore = scoreSet[i]['center']
+                leftScore = scoreSet[i]['left']
+                distanceScore = scoreSet[i]['distance']
                 results.append({'presence':(presenceScore,presenceKey),
                                 'center':(centerScore,centerKey),
                                 'left':(leftScore,leftKey),
@@ -282,6 +316,7 @@ class Classifier:
             raise self.ClassifierError("No training data.")
         self.trained = True
 
+
     def classify(self, x):
         if not self.trained:
             raise self.ClassifierError("Classifier not trained.")
@@ -306,6 +341,7 @@ class LinearRegression(Classifier):
     def __init__(self, sigmoid=Classifier.logistic):
         super().__init__(sigmoid=sigmoid)
         self.clf = linear_model.SGDClassifier(max_iter=1000, tol=1e-3)
+        #self.clf = linear_model.LogisticRegression(max_iter=1000, tol=1e-3)
 
     
     def train(self):
@@ -335,6 +371,25 @@ class LinearRegression(Classifier):
     def save(self, filename):
         externals.joblib.dump(self.clf, 'classifiers/'+filename+'.sav')
     
+    @classmethod
+    def postprocessPresence(cls, presence):
+        def smoothen(x):
+            assert(len(x) > 0)
+            m = x[0]
+            for i,p in enumerate(x):
+                r = p + m
+                if r > 1:
+                    r = 1
+                x[i] = r
+                m = 0.5*r
+            return x
+
+        # process
+        forward = smoothen(presence)
+        #return forward
+        backward = np.flip( smoothen( np.flip(presence,0) ),0 )
+        return [fuzzy.TConorm.maximum(forward[i],backward[i]) for i in range(len(forward))]
+
 def GaussianClassifier(Classifier):
     def __init__(self, sigmoid=Classifier.logistic):
         super().__init__(sigmoid=sigmoid)
