@@ -70,8 +70,8 @@ def optimize():
         print(i+1,"/",len(files))
         optimums[f] = getOptimum(f)
     
-    optimalEdge = model.mu([item[0] for item in optimums.values()])
-    optimalCwt = model.mu([item[1] for item in optimums.values()])
+    optimalEdge = np.mean([item[0] for item in optimums.values()])
+    optimalCwt = np.mean([item[1] for item in optimums.values()])
     print("Optimal edge order:", optimalEdge)
     print("Optimal CWT coefficient:", optimalCwt)
 
