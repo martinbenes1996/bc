@@ -117,17 +117,21 @@ class Artefact:
         self.segments = []
         self.previous = None
         self.optimalK = None
+        self._samples = None
     def append(self, segment):
         self.segments.append(segment)
     def setPreviousArtefact(self, prev):
         self.previous = prev
 
     def samples(self):
+        if self._samples is not None:
+            return self._samples
         artefactSamples = []
         for segment in self.segments:
             for sample in segment.samples:
                 artefactSamples.append(sample)
-        return np.array(artefactSamples)
+        self._samples = np.array(artefactSamples)
+        return self._samples
     def mu(self):
         return np.mean(self.samples())
     def var(self):

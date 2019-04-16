@@ -31,4 +31,9 @@ train:
 	@printf "";\
 	python3 classifiers/train.py
 
+.PHONY: evaluate
+evaluate:
+	@printf "";\
+	python3 optimizers/evaluator.py
+
 

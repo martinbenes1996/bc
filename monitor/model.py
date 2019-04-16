@@ -117,6 +117,93 @@ class Extractor:
 
 # to document
 
+class Reference:
+    TRAINTEST_RATIO = (2/3)
+    def __init__(self, data, filename="<noname>"):
+        self._data = data
+        self._filename = filename
+    
+    def getArtefactReference(self, artefact_index):
+        r = self._data[artefact_index]["key"]
+        return { "presence": self.boolToFuzzy(r[0]), "center": self.boolToFuzzy(r[1]), "left": self.boolToFuzzy(r[2]), "distance": self.boolToFuzzy(r[3]) }
+
+    def getSampleReference(self, sample_index):
+        artefact_index = self.artefactOfSample(sample_index)
+        return self.getArtefactReference(artefact_index)
+    def getRangeReference(self, range_start, range_end):
+        range_end -= 1
+        assert(range_start <= range_end)
+        range_len = range_end - range_start + 1
+        start_artefact = self.artefactOfSample(range_start)
+        end_artefact = self.artefactOfSample(range_end, start_artefact)
+        if start_artefact == end_artefact:
+            #print("Same artefact:", range_start, start_artefact, range_end, end_artefact)
+            return self.getArtefactReference(start_artefact)
+        r = {}
+        for artefactindex in range(start_artefact, end_artefact+1):
+            artefact = self._data[artefactindex]
+            a_start,a_len = artefact["start"],artefact["length"]
+            a_end = a_start + a_len
+            if a_start < range_start:
+                r[artefactindex] = a_end - range_start
+            elif a_end > range_end:
+                r[artefactindex] = range_end - a_start + 1
+            else:
+                r[artefactindex] = a_len
+        assert(sum(list(r.values())) == range_len)
+        result = {"presence":0,"center":0,"left":0,"distance":0}
+        N = {"presence":range_len, "center":range_len, "left":range_len, "distance":range_len}
+        for k,v in r.items():
+            for i,key in enumerate(("presence","center","left","distance")):
+                if self._data[k]["key"][i] == True:
+                    result[key] += v
+                elif self._data[k]["key"][i] == None:
+                    N[key] -= v
+        for key in ("presence","center","left","distance"):
+            if N[key] == 0:
+                result[key] = None
+            else:
+                result[key] /= N[key]
+        return result
+    def getDataPath(self):
+        return "../data/"+self._filename[:-2]+"/"+self._filename+".csv"
+                    
+
+    def artefactOfSample(self, sample_index, start_hint=0):
+        i = start_hint
+        while True:
+            if sample_index >= self._data[i]["start"] and sample_index < (self._data[i]["start"]+self._data[i]["length"]):
+                return i
+            else:
+                i += 1
+                assert(i < len(self._data))
+
+            
+    @classmethod
+    def generateReferences(cls, name, traintest=False):
+        with open('../data/'+name+'/label.json') as f:
+            data = json.load(f)
+            files = sorted(list(data.keys()))
+            result = dict( (filename,cls(data[filename], filename)) for filename in files )
+            if not traintest:
+                return result
+            else:
+                assert(cls.TRAINTEST_RATIO >= 0 and cls.TRAINTEST_RATIO <= 1)
+                traincnt = int(len(files) * cls.TRAINTEST_RATIO)
+                trains = dict( (filename,result[filename]) for filename in files[:traincnt])
+                tests = dict( (filename,result[filename]) for filename in files[traincnt:])
+                return trains,tests
+    @staticmethod
+    def boolToFuzzy(val):
+        if val is True:
+            return 1.0
+        elif val is False:
+            return 0.0
+        elif val is None:
+            return None
+        elif val >= 0 and val <= 1:
+            return val
+
 class Classification:
     trainSet = None
     testSet = None
@@ -172,6 +259,14 @@ class Classification:
             testSet = self.getTestSet()
         # perform tests
         return dict( (testItem, self.performTest(testItem)) for testItem in testSet )
+    def evaluate(self,testSet=None):
+        if testSet == None:
+            testSet = self.getTestSet()
+        # perform tests
+        result,Ns = {},{}
+        for testItem in testSet:
+            result[testItem],Ns[testItem] = self.performTest(testItem,True)
+        return result,Ns
 
     def classify(self, featuresVector):
         areaM = [[0 for _ in range(2)] for _ in range(2)] # 2x2 matrix
@@ -260,28 +355,27 @@ class Classification:
             with open('classifiers/testset.json','w') as ts:
                 json.dump(testSet,ts)
     
-    def performTest(self, dirname):
-        with open('../data/'+dirname+'/test.json', 'r') as f:
-            labels = json.load(f)
+    def performTest(self, dirname, segmentsizes=False):
+        _,tests = Reference.generateReferences(dirname, True)
         print("Testing with", dirname+'...')
         results = []
-        for labelfilename,labeldata in labels.items():
-            x = comm_replay.Reader.readFile('../data/'+dirname+'/'+labelfilename+'.csv')
+        testNs = []
+        for testName,testReference in tests.items():
+            x = comm_replay.Reader.readFile(testReference.getDataPath())
             artefacts = segment.Artefact.parseArtefacts(x)
 
-            assert(len(artefacts) == len(labeldata))
             featureSet = [ a.getFeatures() for a in artefacts]
-                # delete
-                #presenceScore = self.classifiers['presence'].classify(features)
-                #centerScore = self.classifiers['center'].classify(features)
-                #leftScore = self.classifiers['left'].classify(features)
-                #distanceScore = self.classifiers['distance'].classify(features)
 
-            # delete
             scoreSet = self.classify(featureSet)
             
+            startIt = 0
+            artefactNs = []
             for i,a in enumerate(artefacts):
-                presenceKey,centerKey,leftKey,distanceKey = labeldata[i]['key']
+                N = a.len()
+                artefactNs.append(N)
+                referenceKey = testReference.getRangeReference(startIt,startIt+N)
+                presenceKey,centerKey,leftKey,distanceKey = referenceKey["presence"],referenceKey["center"],referenceKey["left"],referenceKey["distance"]
+
                 presenceScore = scoreSet[i]['presence']
                 centerScore = scoreSet[i]['center']
                 leftScore = scoreSet[i]['left']
@@ -290,7 +384,12 @@ class Classification:
                                 'center':(centerScore,centerKey),
                                 'left':(leftScore,leftKey),
                                 'distance':(distanceScore,distanceKey)})
-        return results
+                startIt += N
+            testNs.append(artefactNs)
+        if not segmentsizes:
+            return results
+        else:
+            return results,testNs
 
 
 class Classifier:

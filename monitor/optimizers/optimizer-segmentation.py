@@ -10,11 +10,12 @@ import matplotlib.pyplot as plt
 sys.path.insert(0, '.')
 import comm_replay
 import model
+import segment
 
 def getVarianceSum(segments):
     varSum = 0
     for seg in segments:
-        varSum += model.var(seg)
+        varSum += seg.var()
     return varSum
 
 def getOptimum(name):
@@ -28,7 +29,8 @@ def getOptimum(name):
         for edgeOrder in edgeSpace:
             model.cwtCoef,model.edgeOrder = cwtCoef,edgeOrder
             
-            segments = model.segmentize(x)    
+
+            segments = segment.Segment.segmentize(x)    
             varSum = getVarianceSum(segments)
 
             row.append(varSum)
@@ -61,7 +63,7 @@ def getOptimum(name):
 
 def optimize():
     optimums = {}
-    dirs = ['../data/'+d for d in os.listdir('../data/') if re.match("(.*_[(LR)(RL)])|(E.*)|(.*[(BF)|(FB)])",d)]
+    dirs = [ "../data/"+d for d in model.Classification.getTrainSet()]
     files = [d+'/'+f for d in dirs for f in os.listdir(d) if re.match(r".*\.csv",f)]
 
     for i,f in enumerate(files):
