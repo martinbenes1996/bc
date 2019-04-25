@@ -1197,6 +1197,7 @@ in the figure \ref{fig:class_src}.
 {\it ...}
 
 \subsection*{Classification}
+The segmentation 
 {\it Implementation of linear regression.}
 
 
@@ -1225,6 +1226,79 @@ in the figure \ref{fig:class_src}.
 
 
 \chapter{Experiments}
+
+\section{Evaluation}
+A several metrics can be used to evaluate the success rate of decision.
+In following equations, $A$ stands for tuple of $|A|$ artefacts being
+evaluated, $A[i]$ for an artefact from this set. For each artefact from testing
+set, a label $\kappa_{A[i]^{X}}$ for all traits is known.
+
+For labeling purposes, a variation of Lukasiewicz logic was used to cover
+the states, which Bool logic is not able to handle, as the position of person
+in case area is empty. The operation in the table \ref{table:3stateLogicOp} is
+represents comparing the computed score and the real label returning a score
+of success of the decision.
+
+Input conditions for fuzzy number $a \in \in \langle 0;1 \rangle$
+and $\kappa \in \{ 1, 0, N\}$, which is in {\it json} file format represented
+by {\it True}, {\it False} and {\it None} literals respectively. The output
+is a success rate, multiplied by $100$ can be converted to percentage.
+
+\begin{table}
+\begin{center}
+\begin{tabular}{|c|c|c|} \hline
+\textbf{a}  & \textbf{$\kappa$} & \textbf{$a \cdot \kappa$} \\ \hline
+$a$         & 1               & $a$                       \\ \hline
+$a$         & 0               & $N(a)$                    \\ \hline
+$a$         & N               & \it{excluded}             \\ \hline
+\end{tabular}
+\caption{Classifier output comparing to reference.\label{table:3stateLogicOp} }
+\end{center}
+\end{table}
+
+To emulate the decision by tresholding a fuzzy sigmoid can be applied to $a$,
+mapping fuzzy values to fuzzy values, which are more decisive. An example is
+shown at the equation \ref{eq:fuzzySigmoid}. The usage and choice of such
+function distorts results significantly.
+
+\begin{equation}
+\sigma(a) = \begin{cases} 1 & a \geq 0.5 \\
+            0 & \text{otherwise} \end{cases}
+\label{eq:fuzzySigmoid}
+\end{equation}
+
+The metrics used and described below use also notation described by the equations
+\ref{eq:tupleArtefactNotation}. These tuples contains only artefacts, that are
+positive for the trait $X$ ($A_{X}^{1}$), or negative ($A_{X}^{0}$).
+
+\begin{subequations}
+\begin{equation}
+A_{X}^{1} = (\forall a \in A: \kappa_{X}(a) = 1)
+\end{equation}
+\begin{equation}
+A_{X}^{0} = (\forall a \in A \kappa_{X}(a) = 0)
+\end{equation}
+\label{eq:tupleArtefactNotation}
+\end{subequations}
+
+First possible metric is a simple average of artefacts with its scores by the
+formula \ref{eq:artefactAverage} for trait $X$. Similarly can be counted
+separately success rate for $A_{X}^{1}$ and $A_{X}^{0}$.
+
+\begin{equation}
+\overline{A_{X}} = \frac{1}{|A|} \sum_{a\in A} a_{X} \cdot \kappa_{X}(a)
+\label{eq:artefactAverage}
+\end{equation}
+
+The metric \ref{eq:artefactAverage} does not take account of artefact length
+as a weight. To do so, the formula is altered with a weight added at the
+formula \ref{eq:artefactWeightedAverage}.
+
+\begin{equation}
+\overline{A_{X}} = \sum_{a\in A} (a_{X} \cdot \kappa_{X}(a))\frac{|a|}{\sum_{A}|a|}
+\label{eq:artefactWeightedAverage}
+\end{equation}
+
 Unit tests were created to verify the program components. It uses {\it Boost.Test},
 framework for creating unit tests which is part of {\it C++ Boost} library set.
 The testing program placed in folder {\it collector/tests/} is linked with

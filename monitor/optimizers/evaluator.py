@@ -8,39 +8,92 @@ import model
 
 class Evaluator:
 
+    def sigmoid(self,kappa):
+        #if kappa >= 0.5:
+        #    return 1
+        #else:
+        #    return 0
+        return kappa
+
     def evaluate(self, key):
         # train
         c = model.Classification.getTrained()
         # test
-        results,segsizes = c.evaluate()
-        assert(len(results) == len(segsizes))
+        results,sizes = c.evaluate()
+        assert(len(results) == len(sizes))
+        # used in loops
+        resultscore,positivescore,negativescore = 0,0,0 # scores
+        totalN,ptotalN,ntotalN = 0,0,0                  # lengths
 
-        positives,negatives = [],[]
-        N = 0
+        # iterate over tests
         for testname,result in results.items():
-            scores = [i[key][0] for i in result]
-            N += len(scores)
-            segsizevec = segsizes[testname]
+            # artefact sizes vector
+            artefactsSizes = sizes[testname][0]
+            assert(len(result) == len(artefactsSizes))
+            # summing sizes up
+            sampleN = sum(artefactsSizes)
+            psampleN = sum([s for i,s in enumerate(artefactsSizes) if result[i][key][1] == True])
+            nsampleN = sum([s for i,s in enumerate(artefactsSizes) if result[i][key][1] == False])
+            # adding to totals
+            totalN += sampleN
+            ptotalN += psampleN
+            ntotalN += nsampleN
 
-            print(len(result),len(segsizevec))
-            assert(len(result) == len(segsizevec))
-
+            # used in loop
+            positives,negatives,testResult = [],[],[]
+            # loop over artefacts
             for i,res in enumerate(result):
-                segsize = segsizevec[i]
-                score = res[key][0]
-                if res[key][1]:
-                    positives.append(score)
-                else:
-                    negatives.append(score)
-            
-        pscore = np.mean(positives)*100
-        nscore = (1 - np.mean(negatives))*100
+                # weight
+                aW = artefactsSizes[i]
+                # score and key (kappa)
+                score,kappa = res[key][0],res[key][1]
+                # N
+                if kappa == None:
+                    print("None!")
+                    continue
+                # 1
+                elif kappa == True:
+                    weightedScore = self.sigmoid(score) * aW
+                    resultscore += weightedScore
+                    positivescore += weightedScore
+                # 0
+                elif kappa == False:
+                    weightedScore = self.sigmoid(1-score) * aW
+                    resultscore += weightedScore
+                    negativescore += weightedScore
 
-        print("Positive score:", pscore)
-        print("Negative score:", nscore)
+        # normalizing, converting to percents
+        positivescore *= 100 / ptotalN
+        negativescore *= 100 / ntotalN
+        resultscore *= 100 / totalN
+        # logging
+        print("Positive score: ", positivescore)
+        print("Negative score: ", negativescore)
+        print("=======================")
+        print("Result score:", resultscore)
 
-        totalscore = (pscore*len(positives) + nscore*len(negatives) ) / N
-        print("Total score:", totalscore)
+        return (positivescore,negativescore)
+
+    def optimize(self, key):
+
+        # train
+        c = model.Classification.getTrained()
+        # test
+        results,sizes = c.evaluate()
+        assert(len(results) == len(sizes))
+        # used in loops
+        resultscore,positivescore,negativescore = 0,0,0 # scores
+        totalN,ptotalN,ntotalN = 0,0,0                  # lengths
+        
+        # optimize
+        for ki in (-0.1,-0.05,-0.01,-0.005,-0.001):
+            for kj in (-0.1,-0.05,-0.01,-0.005,-0.001):
+                model.LinearRegression.smoothenSlopeForwards = ki
+                model.LinearRegression.smoothenSlopeBackwards = kj
+                pscore,nscore = self.evaluate(key)
+                print(ki,kj,">",pscore,nscore)
+
+
 
 
 def main():

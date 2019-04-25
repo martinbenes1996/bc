@@ -217,6 +217,10 @@ class Artefact:
         # ...
         # <add more features>
         return features
+    
+    @classmethod
+    def artefactLength(cls, features):
+        return features[4]
         
         
 

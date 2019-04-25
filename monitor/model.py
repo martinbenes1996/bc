@@ -271,6 +271,7 @@ class Classification:
     def classify(self, featuresVector):
         areaM = [[0 for _ in range(2)] for _ in range(2)] # 2x2 matrix
         rawPresence,rawDistance,rawLeft,rawCenter = [],[],[],[]
+        artefactsLengths = [segment.Artefact.artefactLength(x) for x in featuresVector]
         for x in featuresVector:
             rawPresence.append(self.classifiers['presence'].classify(x))
             rawDistance.append(self.classifiers['distance'].classify(x))
@@ -286,7 +287,7 @@ class Classification:
 
         # postprocessing
         N = fuzzy.Negator.method('standard')
-        presence = self.classifiers['presence'].postprocessPresence(presence)
+        presence = self.classifiers['presence'].postprocessPresence(presence, artefactsLengths)
         center = N(center)
         left = N(left)
         distance = N(distance)
@@ -437,6 +438,8 @@ class Classifier:
         
 
 class LinearRegression(Classifier):
+    smoothenSlopeForwards = -0.085
+    smoothenSlopeBackwards = -0.0025
     def __init__(self, sigmoid=Classifier.logistic):
         super().__init__(sigmoid=sigmoid)
         self.clf = linear_model.SGDClassifier(max_iter=1000, tol=1e-3)
@@ -471,22 +474,27 @@ class LinearRegression(Classifier):
         externals.joblib.dump(self.clf, 'classifiers/'+filename+'.sav')
     
     @classmethod
-    def postprocessPresence(cls, presence):
-        def smoothen(x):
+    def postprocessPresence(cls, presence, Ns):
+        def smoothen(x, Ns, k=-1):
             assert(len(x) > 0)
+            assert(len(x) == len(Ns))
             m = x[0]
             for i,p in enumerate(x):
                 r = p + m
                 if r > 1:
                     r = 1
                 x[i] = r
-                m = 0.5*r
+                m = r + Ns[i]*k
+                if m < 0:
+                    m = 0
+                if m > 1:
+                    m = 1
             return x
 
         # process
-        forward = smoothen(presence)
+        forward = smoothen(presence, Ns,cls.smoothenSlopeForwards )
         #return forward
-        backward = np.flip( smoothen( np.flip(presence,0) ),0 )
+        backward = np.flip( smoothen( np.flip(presence,0), Ns,cls.smoothenSlopeBackwards ),0 )
         return [fuzzy.TConorm.maximum(forward[i],backward[i]) for i in range(len(forward))]
 
 def GaussianClassifier(Classifier):
