@@ -1231,7 +1231,7 @@ The segmentation
 A several metrics can be used to evaluate the success rate of decision.
 In following equations, $A$ stands for tuple of $|A|$ artefacts being
 evaluated, $A[i]$ for an artefact from this set. For each artefact from testing
-set, a label $\kappa_{A[i]^{X}}$ for all traits is known.
+set, a label $\kappa_{X}(A[i])$ for all traits is known.
 
 For labeling purposes, a variation of Lukasiewicz logic was used to cover
 the states, which Bool logic is not able to handle, as the position of person
@@ -1299,11 +1299,13 @@ formula \ref{eq:artefactWeightedAverage}.
 \label{eq:artefactWeightedAverage}
 \end{equation}
 
-Unit tests were created to verify the program components. It uses {\it Boost.Test},
-framework for creating unit tests which is part of {\it C++ Boost} library set.
-The testing program placed in folder {\it collector/tests/} is linked with
-{\it collector} transformed in static library.
+\section{Smoothing parameters optimalization}
 
+Optimalization of parameters in postprocessing smoothing function showed
+
+Parameters $-0.085$ and $-0.0025$, results $84.506$ and $88.3344$, altogether $87.0651$.
+
+\section{TO DELETE}
 {\it
 Metodika a vysledky. Muze zahrnovat i matematicke dukazu, postupy...
 
@@ -1318,8 +1320,8 @@ HW narocnost -- CPU, pamet, chovani pri paralelizaci apod.
 \chapter{User Interface}
 \label{Label:UI}
 
+\section{TO DELETE}
 {\it Description of visualizer}
-
 \begin{figure}[h!]
 \begin{center}
 \includegraphics[width=0.6\textwidth]{img/visualizer.png}
@@ -1333,6 +1335,8 @@ HW narocnost -- CPU, pamet, chovani pri paralelizaci apod.
 
 
 \chapter{Conclusion}
+
+\section{TO DELETE}
 Shrnuti zameru prace. Zhodnoceni splneni (i formalnich bodu).
 
 Zhodnoceni z pohledu dalsiho vyvoje. Co se nestihlo (a dalo by se jeste).
