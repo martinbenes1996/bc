@@ -37,3 +37,14 @@ evaluate:
 	python3 optimizers/evaluator.py
 
 
+.PHONY: enter
+enter:
+	@printf "";\
+	source env/bin/activate
+
+.PHONY: exit
+exit:
+	@printf "";\
+	deactivate
+
+
