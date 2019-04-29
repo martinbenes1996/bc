@@ -290,7 +290,8 @@ class Classification:
         presence = self.classifiers['presence'].postprocessPresence(presence, artefactsLengths)
         center = N(center)
         left = N(left)
-        distance = N(distance)
+        distance = self.classifiers['distance'].postprocessDistance(distance, presence, artefactsLengths)
+        #distance = N(distance)
 
         # delete
         score = []
@@ -438,8 +439,7 @@ class Classifier:
         
 
 class LinearRegression(Classifier):
-    smoothenSlopeForwards = -0.085
-    smoothenSlopeBackwards = -0.0025
+    
     def __init__(self, sigmoid=Classifier.logistic):
         super().__init__(sigmoid=sigmoid)
         self.clf = linear_model.SGDClassifier(max_iter=1000, tol=1e-3)
@@ -473,29 +473,46 @@ class LinearRegression(Classifier):
     def save(self, filename):
         externals.joblib.dump(self.clf, 'classifiers/'+filename+'.sav')
     
+    smoothenSlopePresenceForwards = -0.085
+    smoothenSlopePresenceBackwards = -0.0025
     @classmethod
     def postprocessPresence(cls, presence, Ns):
-        def smoothen(x, Ns, k=-1):
-            assert(len(x) > 0)
-            assert(len(x) == len(Ns))
-            m = x[0]
-            for i,p in enumerate(x):
-                r = p + m
-                if r > 1:
-                    r = 1
-                x[i] = r
-                m = r + Ns[i]*k
-                if m < 0:
-                    m = 0
-                if m > 1:
-                    m = 1
-            return x
-
+        # smooth from forwards and backwards
+        #forward = cls.smoothen(presence, Ns,cls.smoothenSlopePresenceForwards )
+        #backward = np.flip( cls.smoothen( np.flip(presence,0), Ns,cls.smoothenSlopePresenceBackwards ),0 )
+        #return [fuzzy.TConorm.maximum(forward[i],backward[i]) for i in range(len(forward))]
+        return cls.smoothenBothSides(presence, Ns, cls.smoothenSlopePresenceForwards, cls.smoothenSlopePresenceBackwards)
+    
+    smoothenSlopeDistanceForwards = -0.3
+    smoothenSlopeDistanceBackwards = -0.003
+    @classmethod
+    def postprocessDistance(cls, distance, presence, Ns):
         # process
-        forward = smoothen(presence, Ns,cls.smoothenSlopeForwards )
-        #return forward
-        backward = np.flip( smoothen( np.flip(presence,0), Ns,cls.smoothenSlopeBackwards ),0 )
+        grounded = np.absolute( np.array(distance) - np.mean(distance) )
+        smoothened = cls.smoothenBothSides(grounded, Ns, cls.smoothenSlopeDistanceForwards, cls.smoothenSlopeDistanceBackwards)
+        return np.minimum(np.array(smoothened), np.array(presence))
+    
+    @classmethod
+    def smoothenBothSides(cls, x, Ns, kF, kB):
+        forward = cls.smoothen(x, Ns, kF)
+        backward = np.flip(cls.smoothen(np.flip(x,0), Ns, kB), 0)
         return [fuzzy.TConorm.maximum(forward[i],backward[i]) for i in range(len(forward))]
+    @staticmethod
+    def smoothen(x, Ns, k=-1):
+        assert(len(x) > 0)
+        assert(len(x) == len(Ns))
+        m = x[0]
+        for i,p in enumerate(x):
+            r = p + m
+            if r > 1:
+                r = 1
+            x[i] = r
+            m = r + Ns[i]*k
+            if m < 0:
+                m = 0
+            if m > 1:
+                m = 1
+        return x
 
 def GaussianClassifier(Classifier):
     def __init__(self, sigmoid=Classifier.logistic):

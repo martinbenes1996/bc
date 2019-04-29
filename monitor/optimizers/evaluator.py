@@ -49,7 +49,9 @@ class Evaluator:
                 score,kappa = res[key][0],res[key][1]
                 # N
                 if kappa == None:
-                    print("None!")
+                    ptotalN -= 1
+                    ntotalN -= 1
+                    totalN -= 1
                     continue
                 # 1
                 elif kappa == True:
@@ -98,7 +100,7 @@ class Evaluator:
 
 def main():
     e = Evaluator()
-    e.evaluate('presence')
+    e.evaluate('distance')
    
     
 
