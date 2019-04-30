@@ -483,8 +483,8 @@ class LinearRegression(Classifier):
         #return [fuzzy.TConorm.maximum(forward[i],backward[i]) for i in range(len(forward))]
         return cls.smoothenBothSides(presence, Ns, cls.smoothenSlopePresenceForwards, cls.smoothenSlopePresenceBackwards)
     
-    smoothenSlopeDistanceForwards = -0.3
-    smoothenSlopeDistanceBackwards = -0.003
+    smoothenSlopeDistanceForwards = -0.001
+    smoothenSlopeDistanceBackwards = -0.1
     @classmethod
     def postprocessDistance(cls, distance, presence, Ns):
         # process

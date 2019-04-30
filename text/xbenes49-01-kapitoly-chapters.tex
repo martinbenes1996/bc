@@ -1093,6 +1093,23 @@ During the testing $100~k\Omega$ resistors were used. The circuit is shown in th
 \end{center}
 \end{figure}
 
+\subsection*{Product design}
+A printed circuit board was designed (figure \ref{fig:circuitboard}) and a prototype
+was printed with a PCB drill in electronic laboratory at {\it FH Vorarlberg} to
+illustrate the possible size and design of the final product.
+
+The dimensions of final product were minimized to $50 \times 50 \times 25$~mm.
+It was possible to prototype a board connecting the NodeMCU microcontroller,
+sensor PIR STD, 2AA battery case and control elements (reset button, status LED)
+within these dimensions. The sensor case design was briefly sketched too.
+
+\begin{figure}[!ht]
+\begin{center}
+\includegraphics[width=0.3\textwidth]{render/circuitboard.png}
+\caption{Circuit board. \label{fig:circuitboard}}
+\end{center}
+\end{figure}
+
 
 \subsection*{Sampling}
 The module is programmed to read signal in sampling frequency and send the data to server.
@@ -1187,7 +1204,7 @@ Each object then possess separate reading thread, that ensures updating of the d
 received segment is through method \texttt{getSegment()}, a thread lock is used. The whole design is shown
 in the figure \ref{fig:class_src}.
 
-\begin{figure}[h!]
+\begin{figure}[!ht]
 \begin{center}
 \includegraphics[width=0.8\textwidth]{img/class_src.png}
 \caption{UML diagram of Reader classes. \label{fig:class_src}}
@@ -1199,6 +1216,14 @@ in the figure \ref{fig:class_src}.
 \subsection*{Classification}
 The segmentation 
 {\it Implementation of linear regression.}
+
+
+\subsection*{Postprocessing}
+The output of each classifier was postprocessed in order to maximize the possible score. The evaluation
+metrics is described in the section \ref{section:evaluationMetrics}. The postprocessing is doing over each
+received chunk separately.
+
+Operation, that is often used is using single smoothening filter with a memory, which 
 
 
 
@@ -1228,6 +1253,7 @@ The segmentation
 \chapter{Experiments}
 
 \section{Evaluation}
+\label{section:evaluationMetrics}
 A several metrics can be used to evaluate the success rate of decision.
 In following equations, $A$ stands for tuple of $|A|$ artefacts being
 evaluated, $A[i]$ for an artefact from this set. For each artefact from testing
@@ -1304,6 +1330,20 @@ formula \ref{eq:artefactWeightedAverage}.
 Optimalization of parameters in postprocessing smoothing function showed
 
 Parameters $-0.085$ and $-0.0025$, results $84.506$ and $88.3344$, altogether $87.0651$.
+
+Distance $-0.001$ and $-0.1$, results $78.281$ and $72.977$, altogether ?, not used 4m\_ and 5m\_* for training and testing.
+
+\begin{table}[!ht]
+\begin{center}
+\begin{tabular}{|c|c c c c|} \hline
+\textbf{Aspect} & \textbf{Presence} & \textbf{Distance} & \textbf{Center} & \textbf{Left} \\ \hline
+Positive rate   & $84.506$          & $78.281$         & $$              & $$             \\
+Negative rate   & $88.3344$         & $72.977$         & $$              & $$             \\ \hline
+Total rate      & $87.0651$         & $$               & $$              & $$             \\ \hline
+\end{tabular}
+\caption{Resulting accurracy on testing data.\label{table:3stateLogicOp} }
+\end{center}
+\end{table}
 
 \section{TO DELETE}
 {\it

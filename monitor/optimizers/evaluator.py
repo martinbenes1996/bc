@@ -90,8 +90,8 @@ class Evaluator:
         # optimize
         for ki in (-0.1,-0.05,-0.01,-0.005,-0.001):
             for kj in (-0.1,-0.05,-0.01,-0.005,-0.001):
-                model.LinearRegression.smoothenSlopeForwards = ki
-                model.LinearRegression.smoothenSlopeBackwards = kj
+                model.LinearRegression.smoothenSlopeDistanceForwards = ki
+                model.LinearRegression.smoothenSlopeDistanceBackwards = kj
                 pscore,nscore = self.evaluate(key)
                 print(ki,kj,">",pscore,nscore)
 
