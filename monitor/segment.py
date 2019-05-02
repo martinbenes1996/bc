@@ -21,7 +21,6 @@ import fuzzy
 class Segment:
     cwtCoef = 1.33846 # 1.3384615384615386
     edgeOrder = 8 # 7.564102564102564
-    signalMu = 750 # calibrate!
     
     def __init__(self, samples, position):
         self.samples = samples
@@ -268,9 +267,6 @@ class Artefact:
             artefacts = artefacts[:-1]
         return artefacts
     
-    @staticmethod
-    def parseDescriptor(x):
-        return (min(x),max(x))
         
 
 

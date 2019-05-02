@@ -1223,12 +1223,39 @@ The output of each classifier was postprocessed in order to maximize the possibl
 metrics is described in the section \ref{section:evaluationMetrics}. The postprocessing is doing over each
 received chunk separately.
 
-Operation, that is often used is using single smoothening filter with a memory, which 
+Operation, that is often used is using single smoothening filter with a memory,
+defined formally by formula \ref{eq:smoothening}, filtering input artefact vector $a$ to
+output $f(a)$, using inner memory vector $m$ and saturation function $S(x)$
 
+$p$ is smoothening parameter with optimal value approximately $p \in (0,-1\rangle$,
+where 0 means no influence and $-1$ means absolute influence of previous artefact.
 
+\begin{subequations}
+\begin{equation}
+S(x) =\begin{cases} 1 & x > 1           \\
+                    0 & x < 0           \\
+                    x & text{otherwise}
+      \end{cases}
+\end{equation}
+\begin{equation}
+m[0] = 0
+\end{equation}
+\begin{equation}
+f_{p}(A) = \forall i \in \langle 0;|A|):  f(a[i]) = S(A[i] + m[i]), m[i+1] = S(S(A[i] + m[i]) + |A[i]|*p)
+\end{equation}
+\label{eq:smoothening}
+\end{subequations}
 
+To find the best fitting parameter $p$ value, equation \ref{eq:smoothening} can be
+altered in order to run the optimalization by maximizing conjunction with vector of
+reference keys $\kappa_{X}$ for each trait over the whole train set $\forall A$,
+as shown in the formula \ref{eq:smootheningOptimalization}
+This operation is introduced later in the table \ref{table:3stateLogicOp}.
 
-
+\begin{equation}
+argmax_{p} (\sum_{\forall A} f_{p}(A)\cdot \kappa_{X}(A) )* 100\%
+\label{eq:smootheningOptimalization}
+\end{equation}
 
 
 %\section{Collector} 
@@ -1327,11 +1354,26 @@ formula \ref{eq:artefactWeightedAverage}.
 
 \section{Smoothing parameters optimalization}
 
-Optimalization of parameters in postprocessing smoothing function showed
+Optimalization of parameters in postprocessing smoothing function was performed
+according to the \ref{eq:smootheningOptimalization}. The parameters for each trait
+were computed, as shown by the table \ref{table:smootheningParameters}.
 
-Parameters $-0.085$ and $-0.0025$, results $84.506$ and $88.3344$, altogether $87.0651$.
+For computing the distance parameter was computed, 4m\_* and 5m\_* testing
+and training data were not used. Due to the lack of other more distinct data
+in this trait (for example 8m\_*) they significantly distort the results.
 
-Distance $-0.001$ and $-0.1$, results $78.281$ and $72.977$, altogether ?, not used 4m\_ and 5m\_* for training and testing.
+\begin{table}[!ht]
+\begin{center}
+\begin{tabular}{|c|c c c c|} \hline
+\textbf{Direction}  & \textbf{Presence} & \textbf{Distance}*& \textbf{Center} & \textbf{Left} \\ \hline
+Forwards            & $-0.085$          & $-0.001$          & $$              & N             \\
+Backwards           & $-0.0025$         & $-0.1$            & $$              & N             \\ \hline
+\end{tabular}
+\caption{Experimentally computed smoothening parameters values.\label{table:smootheningParameters} }
+\end{center}
+\end{table}
+
+\section{Results}
 
 \begin{table}[!ht]
 \begin{center}
@@ -1341,7 +1383,7 @@ Positive rate   & $84.506$          & $78.281$         & $$              & $52.5
 Negative rate   & $88.3344$         & $72.977$         & $$              & $53.451$       \\ \hline
 Total rate      & $87.0651$         & $$               & $$              & $$             \\ \hline
 \end{tabular}
-\caption{Resulting accurracy on testing data.\label{table:3stateLogicOp} }
+\caption{Resulting accurracy on testing data.\label{table:results} }
 \end{center}
 \end{table}
 
