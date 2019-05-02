@@ -1206,17 +1206,23 @@ in the figure \ref{fig:class_src}.
 
 \begin{figure}[!ht]
 \begin{center}
-\includegraphics[width=0.8\textwidth]{img/class_src.png}
+\includegraphics[width=0.7\textwidth]{img/class_src.png}
 \caption{UML diagram of Reader classes. \label{fig:class_src}}
 \end{center}
 \end{figure}
 
 {\it ...}
 
-\subsection*{Classification}
+\subsection*{Classification model}
 The segmentation 
 {\it Implementation of linear regression.}
 
+\begin{figure}[!ht]
+\begin{center}
+\includegraphics[width=0.5\textwidth]{img/class_segment.png}
+\caption{UML diagram of Segment classes. \label{fig:class_segment}}
+\end{center}
+\end{figure}
 
 \subsection*{Postprocessing}
 The output of each classifier was postprocessed in order to maximize the possible score. The evaluation
@@ -1249,7 +1255,7 @@ f_{p}(A) = \forall i \in \langle 0;|A|):  f(a[i]) = S(A[i] + m[i]), m[i+1] = S(S
 To find the best fitting parameter $p$ value, equation \ref{eq:smoothening} can be
 altered in order to run the optimalization by maximizing conjunction with vector of
 reference keys $\kappa_{X}$ for each trait over the whole train set $\forall A$,
-as shown in the formula \ref{eq:smootheningOptimalization}
+as shown in the formula \ref{eq:smootheningOptimalization}.
 This operation is introduced later in the table \ref{table:3stateLogicOp}.
 
 \begin{equation}
