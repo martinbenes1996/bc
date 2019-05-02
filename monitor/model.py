@@ -288,7 +288,7 @@ class Classification:
         # postprocessing
         N = fuzzy.Negator.method('standard')
         presence = self.classifiers['presence'].postprocessPresence(presence, artefactsLengths)
-        center = N(center)
+        center = self.classifiers['center'].postprocessCenter(center, presence, artefactsLengths)
         left = N(left)
         distance = self.classifiers['distance'].postprocessDistance(distance, presence, artefactsLengths)
         #distance = N(distance)
@@ -491,6 +491,11 @@ class LinearRegression(Classifier):
         grounded = np.absolute( np.array(distance) - np.mean(distance) )
         smoothened = cls.smoothenBothSides(grounded, Ns, cls.smoothenSlopeDistanceForwards, cls.smoothenSlopeDistanceBackwards)
         return np.minimum(np.array(smoothened), np.array(presence))
+    
+    @classmethod
+    def postprocessCenter(cls, center, presence, Ns):
+        # process
+        return np.array(center)*np.array(presence)
     
     @classmethod
     def smoothenBothSides(cls, x, Ns, kF, kB):

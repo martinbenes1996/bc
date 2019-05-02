@@ -40,13 +40,26 @@ class Labeller:
                     labels[e.name] = e.label()
                 except ExitException:
                     continue
-            labelfilename = path+'/'+'label.json'
+            labelfilename = path+'/label.json'
             with open(labelfilename, 'w') as labelfile:
                 json.dump(labels, labelfile)
             print("Label written to", labelfilename+'.')
 
         else:
             raise InvalidTraining('Invalid train directory \"'+path+'\"')
+    
+    def check(self, name):
+        path = '../data/'+name
+        # check whether exists
+        if os.path.exists(path) and os.path.isdir(path):
+            # get exercises
+            exercises = Exercise.get(name)
+            # check each exercise
+            for e in exercises:
+                e.check()
+        else:
+            raise InvalidTraining('Invalid train directory \"'+path+'\"')
+
 
 class Exercise:
     @classmethod
@@ -55,8 +68,9 @@ class Exercise:
         i = 1
         while True:
             # parse file names
+            labelfile = '../data/'+name+'_'+str(i)+'/label.json'
             path = '../data/' + name+ '/' + name + '_' + str(i)
-            datafile,videofile,labelfile = path+'.csv', path+'.mp4', path+'.json'
+            datafile,videofile = path+'.csv', path+'.mp4'
             
 
             try:
@@ -91,7 +105,7 @@ class Exercise:
         # files
         self.datafile = datafile
         self.videofile = videofile
-
+        self.labelfile = labelfile
         
 
     def label(self):
@@ -183,6 +197,11 @@ class Exercise:
         except cv2.error:
             print("Exit.")
             raise ExitException
+        
+    def check(self):
+        print('check',self.labelfile)
+        return
+        labels = json.load(open(self.labelfile,'r'))
 
     @classmethod
     def parseBool(cls, s):
@@ -210,7 +229,10 @@ def main():
             print('Exit')
             return
         try:
-            l.label(path)
+            if path.split(' ')[0] == 'check':
+                l.check(path.split(' ')[1])
+            else:
+                l.label(path)
         except (InvalidInput,InvalidTraining) as e:
             print(e)
 

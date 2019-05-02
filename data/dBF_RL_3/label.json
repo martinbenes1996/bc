@@ -132,10 +132,10 @@
         },
         {
             "key": [
-                true,
                 false,
-                true,
-                true
+                null,
+                null,
+                null
             ],
             "start": 668,
             "length": 36
