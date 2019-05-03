@@ -100,7 +100,7 @@ class Evaluator:
 
 def main():
     e = Evaluator()
-    e.optimize('presence')
+    e.evaluate('distance')
    
     
 
