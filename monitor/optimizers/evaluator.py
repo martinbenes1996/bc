@@ -77,7 +77,6 @@ class Evaluator:
         return (positivescore,negativescore)
 
     def optimize(self, key):
-
         # train
         c = model.Classification.getTrained()
         # test
@@ -90,8 +89,8 @@ class Evaluator:
         # optimize
         for ki in (-0.1,-0.05,-0.01,-0.005,-0.001):
             for kj in (-0.1,-0.05,-0.01,-0.005,-0.001):
-                model.LinearRegression.smoothenSlopeDistanceForwards = ki
-                model.LinearRegression.smoothenSlopeDistanceBackwards = kj
+                model.LinearRegression.smoothenSlopePresenceForwards = ki
+                model.LinearRegression.smoothenSlopePresenceBackwards = kj
                 pscore,nscore = self.evaluate(key)
                 print(ki,kj,">",pscore,nscore)
 
@@ -100,7 +99,7 @@ class Evaluator:
 
 def main():
     e = Evaluator()
-    e.evaluate('distance')
+    e.optimize('distance')
    
     
 
