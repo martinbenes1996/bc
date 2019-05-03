@@ -48,7 +48,7 @@ class Labeller:
         else:
             raise InvalidTraining('Invalid train directory \"'+path+'\"')
     
-    def check(self, name):
+    def check(self, name, key):
         path = '../data/'+name
         # check whether exists
         if os.path.exists(path) and os.path.isdir(path):
@@ -56,9 +56,48 @@ class Labeller:
             exercises = Exercise.get(name)
             # check each exercise
             for e in exercises:
-                e.check()
+                e.check(key)
         else:
             raise InvalidTraining('Invalid train directory \"'+path+'\"')
+
+class VideoFile:
+    def __init__(self, path):
+        self.show = True
+        self.video = cv2.VideoCapture(path)
+        if not self.video.isOpened():
+            self.show = False
+        self.fps = self.video.get(cv2.CAP_PROP_FPS)
+        self.maxFrames = self.video.get(cv2.CAP_PROP_FRAME_COUNT)
+    def showFrame(self, time):
+        frameIndex = int(time*self.fps)
+        self.video.set(1,frameIndex)
+        ret,frame = self.video.read()
+        self.windowname = 'Frame '+str(frameIndex)
+        cv2.imshow(self.windowname, frame)
+    def waitKey(self):
+        while True:
+            keyCode = cv2.waitKey(100)
+            if keyCode != -1:
+                return keyCode
+    def getValue(self, question):
+        print(question, end='')
+        sys.stdout.flush()
+        try:
+            while cv2.getWindowProperty(self.windowname, 0) >= 0:
+                keyCode = cv2.waitKey(100)
+                if keyCode in {177, 121, 89}:
+                    print("Yes.")
+                    return True
+                elif keyCode in {176,110,78}:
+                    print("No.")
+                    return False
+                elif keyCode in {27}:
+                    print("Exit.")
+                    cv2.destroyAllWindows()
+                    raise ExitException
+        except cv2.error:
+            print("Exit.")
+            raise ExitException
 
 
 class Exercise:
@@ -68,7 +107,7 @@ class Exercise:
         i = 1
         while True:
             # parse file names
-            labelfile = '../data/'+name+'_'+str(i)+'/label.json'
+            labelfile = '../data/'+name+'/label.json'
             path = '../data/' + name+ '/' + name + '_' + str(i)
             datafile,videofile = path+'.csv', path+'.mp4'
             
@@ -81,7 +120,7 @@ class Exercise:
                 #if not os.path.isfile(videofile):
                 #    raise InvalidTraining(videofile + ' does not exist.')
             except InvalidTraining as e:
-                print(e)
+                #print(e)
                 break
             except Exception as e:
                 print(e)
@@ -110,35 +149,19 @@ class Exercise:
 
     def label(self):
         timestamps = []
-        # sampling frequency
         fs = conf.Config.fs()
-        #print("Signal sampling frequency:", fs)
-        
         # process data
         x = comm_replay.Reader.readFile(self.datafile)
         artefacts = segment.Artefact.parseArtefacts(x)
         # process video
-        showVideo = True
-        video = cv2.VideoCapture(self.videofile)
-        if not video.isOpened():
-            showVideo = False
-            #raise InvalidTraining(self.videofile + ' can not be read.')
-        fps = video.get(cv2.CAP_PROP_FPS)
-        maxFrames = video.get(cv2.CAP_PROP_FRAME_COUNT)
+        video = VideoFile(self.videofile)
 
-        #print("Read video", self.videofile+".", str(fps), "FPS,",str(maxFrames),"frames", str(maxFrames/fps),"s")
-        print("Labeling", self.videofile)
         # comparing
         pos = 0
         for i,a in enumerate(artefacts):
-            l = a.len()
-
             # counting a center time of artefact
+            l = a.len()
             t = (pos + l/2) / fs
-
-            # getting the video frame
-            frameIndex = int(t * fps)
-            #print('Artefact '+str(i+1) + ':', (l/fs), 's /', (l/fs)*fps, 'frames, represented by', frameIndex)
 
             try:
                 # plot graph
@@ -150,58 +173,58 @@ class Exercise:
                 axes.set_ylim([0,1023])
                 plt.pause(0.01)
                 # show video
-                video.set(1,frameIndex)
-                ret,frame = video.read()
-
-                windowname = 'Frame '+str(frameIndex)
-                cv2.imshow(windowname, frame)
-            
-                presentKey = self.getValue('Is the person present? ', windowname)
+                video.showFrame(t)
+                # ask
+                presentKey = video.getValue('Is the person present? ')
                 if not presentKey:
                     keys = (False, None, None, None)
                 else:
                     keys = (presentKey,
-                            self.getValue('\tIs the person close the center? ', windowname), 
-                            self.getValue('\tIs the person on the left? ', windowname),
-                            self.getValue('\tIs the person close? ', windowname) )
-                #cv2.destroyWindow(windowname)
+                            video.getValue('\tIs the person close the center? '), 
+                            video.getValue('\tIs the person on the left? '),
+                            video.getValue('\tIs the person close? ') )
             except cv2.error:
                 keys = (False,None,None,None)
 
-
             result = {'key':keys, 'start': pos, 'length': l}
-
             timestamps.append(result)
 
             # moving starting position to next artefact
             pos += l
-        
         return timestamps
-    
-    def getValue(self, question, windowname):
-        print(question, end='')
-        sys.stdout.flush()
-        try:
-            while cv2.getWindowProperty(windowname, 0) >= 0:
-                keyCode = cv2.waitKey(100)
-                if keyCode in {177, 121, 89}:
-                    print("Yes.")
-                    return True
-                elif keyCode in {176,110,78}:
-                    print("No.")
-                    return False
-                elif keyCode in {27}:
-                    print("Exit.")
-                    cv2.destroyAllWindows()
-                    raise ExitException
-        except cv2.error:
-            print("Exit.")
-            raise ExitException
         
-    def check(self):
-        print('check',self.labelfile)
-        return
+    def check(self, key):
+        def printQuestion(question,answer):
+            print(question,end=' ')
+            if answer is True:
+                print('Yes.')
+            elif answer is False:
+                print('No.')
+            elif answer is None:
+                print('Unknown.')
+            else:
+                raise InvalidTraining("Unknown answer: "+str(answer))
+        print('========================')
+        print('Checking ',self.labelfile)
+        fs = conf.Config.fs()
         labels = json.load(open(self.labelfile,'r'))
+        video = VideoFile(self.videofile)
+        artefacts = labels[self.name]
+
+        for a in artefacts:
+            t = (a['start'] + a['length']/2) / fs
+            video.showFrame(t)
+            # print label
+            if a['key'][0] is False:
+                printQuestion('Is the person present?', a['key'][0])
+            else:
+                for i,q in enumerate(('Is the person present?','\tIs the person close the center?','\tIs the person on the left?','\tIs the person close?')):
+                    printQuestion(q,a['key'][i])
+            video.waitKey()
+            
+            
+
+
 
     @classmethod
     def parseBool(cls, s):
@@ -230,7 +253,7 @@ def main():
             return
         try:
             if path.split(' ')[0] == 'check':
-                l.check(path.split(' ')[1])
+                l.check(path.split(' ')[1], 'center')
             else:
                 l.label(path)
         except (InvalidInput,InvalidTraining) as e:

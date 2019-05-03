@@ -222,19 +222,24 @@ class Classification:
         return self
 
     def addTrainData(self, dirname):
-        with open('../data/'+dirname+'/train.json', 'r') as f:
-            labels = json.loads(f.read())
+        references,_ = Reference.generateReferences(dirname,traintest=True)
         print("Training with", dirname+'...')
-        for labelfilename,labeldata in labels.items():
-            x = comm_replay.Reader.readFile('../data/'+dirname+'/'+labelfilename+'.csv')
+        for filename,trainReference in references.items():
+            x = comm_replay.Reader.readFile('../data/'+dirname+'/'+filename+'.csv')
             artefacts = segment.Artefact.parseArtefacts(x)
+
+            startIt = 0
             for i,a in enumerate(artefacts):
-                presenceKey,centerKey,leftKey,distanceKey = labeldata[i]['key']
+                N = a.len()
+                referenceKey = trainReference.getArtefactReference(i)#startIt,startIt+N)
+                presenceKey,centerKey,leftKey,distanceKey = referenceKey["presence"],referenceKey["center"],referenceKey["left"],referenceKey["distance"]
                 features = a.getFeatures()
                 self.classifiers['presence'].addTrainData(features, presenceKey)
                 self.classifiers['center'].addTrainData(features, centerKey)
                 self.classifiers['left'].addTrainData(features, leftKey)
                 self.classifiers['distance'].addTrainData(features, distanceKey)
+                startIt += N
+
 
     def train(self, save=False):
         for k,c in self.classifiers.items():
@@ -291,7 +296,6 @@ class Classification:
         center = self.classifiers['center'].postprocessCenter(center, presence, artefactsLengths)
         left = N(left)
         distance = self.classifiers['distance'].postprocessDistance(distance, presence, artefactsLengths)
-        #distance = N(distance)
 
         # delete
         score = []
@@ -409,6 +413,10 @@ class Classifier:
             assignClass = 1
         elif result is None:
             return
+        elif result >= 0.5:
+            assignClass = 2
+        elif result < 0.5:
+            assignClass = 1
         if x is None:
             raise ValueError
         self.trainData.append( (x, assignClass) )

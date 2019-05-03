@@ -50,7 +50,7 @@ for k in segments:
         if k['key'][0] == False:
             y_ref.append(0)
             x_ref.append(v/100.)
-        elif k['key'][0] == True:
+        elif k['key'][1] == True:
             y_ref.append(600)
             x_ref.append(v/100.)
 ax.plot(x_ref,y_ref, color='k')

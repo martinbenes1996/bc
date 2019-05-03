@@ -32,7 +32,7 @@ class Tester:
 
 def main():
     tester = Tester()
-    tester.plotTest('center')
+    tester.plotTest('presence')
    
     
 
