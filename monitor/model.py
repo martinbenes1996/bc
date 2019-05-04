@@ -481,7 +481,7 @@ class LinearRegression(Classifier):
     def save(self, filename):
         externals.joblib.dump(self.clf, 'classifiers/'+filename+'.sav')
     
-    smoothenSlopePresenceForwards = -0.085#-0.085
+    smoothenSlopePresenceForwards = -0.085
     smoothenSlopePresenceBackwards = -0.001#-0.0025
     @classmethod
     def postprocessPresence(cls, presence, Ns):
@@ -497,8 +497,8 @@ class LinearRegression(Classifier):
     @classmethod
     def postprocessDistance(cls, distance, presence, Ns):
         # process
-        #grounded = np.absolute( np.array(distance) - np.mean(distance) )
-        grounded = distance
+        grounded = np.absolute( np.array(distance) - np.mean(distance) )
+        #grounded = distance
         smoothened = cls.smoothenBothSides(grounded, Ns, cls.smoothenSlopeDistanceForwards, cls.smoothenSlopeDistanceBackwards)
         return np.minimum(np.array(smoothened), np.array(presence))
     

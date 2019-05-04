@@ -1223,6 +1223,13 @@ The segmentation
 \end{center}
 \end{figure}
 
+\begin{figure}[!ht]
+\begin{center}
+\includegraphics[width=0.8\textwidth]{img/class_model.png}
+\caption{UML diagram of Model classes. \label{fig:class_model}}
+\end{center}
+\end{figure}
+
 \subsection*{Postprocessing}
 The output of each classifier was postprocessed in order to maximize the possible score. The evaluation
 metrics is described in the section \ref{section:evaluationMetrics}. The postprocessing is doing over each
@@ -1365,7 +1372,7 @@ were computed, as shown by the table \ref{table:smootheningParameters}.
 
 For computing the distance parameter was computed, 4m\_* and 5m\_* testing
 and training data were not used. Due to the lack of other more distinct data
-in this trait (for example 8m\_*) they significantly distort the results.
+in this trait (for example 8m\_*) they significantly distort the negative results.
 
 \begin{table}[!ht]
 \begin{center}
@@ -1383,10 +1390,10 @@ Backwards           & $-0.0025$         & $-0.1$            & $$              & 
 \begin{table}[!ht]
 \begin{center}
 \begin{tabular}{|c|c c c c|} \hline
-\textbf{Aspect} & \textbf{Presence} & \textbf{Distance} & \textbf{Center} & \textbf{Left} \\ \hline
-Positive rate   & $84.506$          & $78.281$         & $$              & $52.540$       \\
-Negative rate   & $88.3344$         & $72.977$         & $$              & $53.451$       \\ \hline
-Total rate      & $87.0651$         & $$               & $$              & $$             \\ \hline
+\textbf{Aspect} & \textbf{Presence} & \textbf{Distance}*& \textbf{Center} & \textbf{Left} \\ \hline
+Positive rate   & $84.506$          & $78.281$          & $$              & $52.540$       \\
+Negative rate   & $88.3344$         & $75.441$          & $$              & $53.451$       \\ \hline
+Total rate      & $87.0651$         & $$                & $$              & $$             \\ \hline
 \end{tabular}
 \caption{Resulting accurracy on testing data.\label{table:results} }
 \end{center}
