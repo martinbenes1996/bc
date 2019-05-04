@@ -19,7 +19,7 @@ class Evaluator:
         # train
         c = model.Classification.getTrained()
         # test
-        results,sizes = c.evaluate()
+        results,sizes = c.evaluate() # <-- optimize
         assert(len(results) == len(sizes))
         # used in loops
         resultscore,positivescore,negativescore = 0,0,0 # scores
@@ -100,7 +100,7 @@ class Evaluator:
 
 def main():
     e = Evaluator()
-    e.evaluate('center')
+    e.evaluate('presence')
    
     
 

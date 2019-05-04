@@ -369,7 +369,6 @@ class Classification:
         for testName,testReference in tests.items():
             x = comm_replay.Reader.readFile(testReference.getDataPath())
             artefacts = segment.Artefact.parseArtefacts(x)
-
             featureSet = [ a.getFeatures() for a in artefacts]
 
             scoreSet = self.classify(featureSet)
@@ -505,7 +504,7 @@ class LinearRegression(Classifier):
     @classmethod
     def postprocessCenter(cls, center, presence, Ns):
         # process
-        return np.array(center)*np.array(presence)
+        return np.minimum(np.array(center), np.array(presence))
     
     @classmethod
     def smoothenBothSides(cls, x, Ns, kF, kB):

@@ -175,8 +175,8 @@ class Artefact:
         mu,var = self.mu(),self.var()
         minP,maxP = smin,smax
         bestScore,optimalK,optimalLine = None, None, lambda x:None
-        for startP in np.linspace(minP,maxP,15):
-            for endP in np.linspace(minP,maxP,15):
+        for startP in np.linspace(minP,maxP,10):
+            for endP in np.linspace(minP,maxP,10):
                 # count line similarity score
                 k = (endP-startP)/N
                 line = [startP + k*x for x in range(N)]

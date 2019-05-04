@@ -14,7 +14,7 @@ class Tester:
         # train
         c = model.Classification.getTrained()
         # test
-        results = c.test()
+        results = c.test() # <-- optimize
         for testname,result in results.items():
             if len(result) == 1:
                 print(result)
@@ -32,7 +32,7 @@ class Tester:
 
 def main():
     tester = Tester()
-    tester.plotTest('presence')
+    tester.plotTest('center')
    
     
 
