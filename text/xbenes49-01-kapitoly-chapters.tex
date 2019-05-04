@@ -37,16 +37,6 @@ sensor's outputs.
 
 
 
-%\chapter{Abstract}
-%\label{abstract}
-%10 lines 
-%Description of problem
-%Solution and focus
-%Maybe brief conclusion and application
-
-
-
-
 
 
 
@@ -312,10 +302,10 @@ as you can see in the~figure \ref{fig:fresnellens}. Then the~ray is transformed 
 \end{center}
 \end{figure}
 
-Before the output the signal is being processed. For vast majority of application we are interested in
-people sensing emitting radiation characterized in the figure \ref{fig:bodywavelength}.
-Therefore the signal is amplified and filtered to well discriminate their presence and absence.
-An example is a scheme \ref{fig:pirstd} of product {\it PIR STD} made by {\it B+B Sensors}.
+This sensor is made for application in sensing of people. People emit radiation with characterics
+in the figure \ref{fig:bodywavelength}. The signal is amplified and filtered by built-in mechanism,
+described later in \ref{chapter:sensorHW}, to well discriminate their presence and absence.
+An example is a scheme \ref{fig:roomsegments} of product {\it PIR STD} made by {\it B+B Sensors}.
 
 \begin{figure}[h!]
 \begin{center}
@@ -328,7 +318,7 @@ An example is a scheme \ref{fig:pirstd} of product {\it PIR STD} made by {\it B+
 
 \newpage
 \section{Pattern recognition}
-The pattern recognition means processing of a signal and localizing of predefined objects.
+The pattern recognition means processing of a signal and localization of predefined objects.
 The form is dependent on the type of signal and the objects that we search. Generally we can say
 there are five parts of recognition pipeline.
 
@@ -432,10 +422,10 @@ perform fixed-sized segmentation in order to increase the effective data speed w
 sending more samples within one chunk, but with regard to preserving {\it real-time}
 nature.
 
-One of the great issues, that needs to be solved is determining the position of the sensor,
+One of the great issues, that need to be solved, is determining the position of the sensor,
 or even worse -- mutual position of multiple sensors when used. Unless it is
 known, no fusion can be done. If the intention is to sense the door area and count
-number of incoming/outgoing people, then a position of the door needs to be known
+number of incoming/outgoing people, then a position of the door is required to be known
 in advance.
 
 Very elegant solution is suggested in \cite{GestureControl}. Three PIR sensors are
@@ -465,51 +455,10 @@ sending period could be changed in the MCU configuration using REST API if the M
 is reachable in a network and keeps a running web server.
 
 
-
-%classification process described in subsection \ref{label:dataprocessing}.
-
-%The sensors signal is at the end fused together and the results are classified objects
-%with coordinates in polar coordinate system relative to the module position. These
-%coordinates are sent to the client.
-
-%The interior angle of module $\Omega$ is a parameter of the module construction. Using this parameter
-%orientation $\lambda$ and position $p_X = (d_X,\varphi _X)$\footnote{Position uses polar coordinates
-%with the origin in the central sensor.} of sensors can be expressed. Parameter $r$ is length
-%of module edges with sensor in the center. Sensor PIR-STD by B+B Sensors has $250\times 250\times 200~\text{mm}$;
-%therefore $r > 250~\text{mm}$.
-
-%\begin{subequations}
-%\begin{equation}
-%\lambda_C = 0
-%\end{equation}
-%\begin{equation}
-%\lambda_L = -\lambda_R = 180 - \Omega
-%\end{equation}
-%\end{subequations}
-
-%\begin{subequations}
-%\begin{equation}
-%\varphi_C = 0
-%\end{equation}
-%\begin{equation}
-%\varphi_L = -\varphi_R = 90 + \frac{180 - \Omega}{2}
-%\end{equation}
-%\end{subequations}
-
-%\begin{subequations}
-%\begin{equation}
-%d_C = 0
-%\end{equation}
-%\begin{equation}
-%d_L = d_R = \frac{r}{2} (r - 4cos(\Omega))
-%\end{equation}
-%\end{subequations}
-
-
 \section{Classification server}
 \label{section:classification}
 On the used communication medium is running application listening to the channel.
-This server parses the segments sent by the devices and performs the classification.
+This server parses the chunks sent by the devices and performs the classification.
 
 
 \subsection*{Artefact extraction and fuzzification}
@@ -518,16 +467,12 @@ There are parts, that are constant, divided by abruptly changing edges, when the
 characteristics of the movement change character of the signal.
 
 The signal first is segmented using {\it continuous wavelet transformation}
-\footnote{
-Continuous wavelet transformation is a signal processing technique transforming a signal to frequency domain.
-The process is quite similar to fourier tranformation, instead of sinusoid it uses wavelet, a finite signal with
-energy $E=0$, and therefore reacts better to abrupt changes.\cite{WaveletTour}}
-with Morlet wavelet (\ref{eq:morlet})
-and scale $s_{cwt} = 1.33846$, and the extrems are detected comparing to the $N_{n} = 8$ neighbors on both sides.
-Detected extrems are used as the borders of the segments, that lies in between them. These numbers were
-discovered experimentally minimizing the sum of the within-segment variances of the recorded data using formula \ref{eq:cwtparamssearch}
-
-
+\footnote{Continuous wavelet transformation is a signal processing technique transforming a
+signal to frequency domain. The process is quite similar to fourier tranformation, instead
+of sinusoid it uses wavelet, a finite signal with energy $E=0$, and therefore reacts better
+to abrupt changes.\cite{WaveletTour}}
+with Morlet wavelet (\ref{eq:morlet}) and scale $s_{cwt} = 1.33846$, and the extrems are
+detected comparing to the $N_{n} = 8$ neighbors on both sides.
 
 % Morlet "mexican hat" wavelet.
 \begin{equation}
@@ -535,11 +480,17 @@ discovered experimentally minimizing the sum of the within-segment variances of 
 \label{eq:morlet}
 \end{equation}
 
+
+Detected extrems are used as the borders of the segments, that lay in between them. These numbers were
+discovered experimentally minimizing the sum of the within-segment variances of the recorded data using
+formula \ref{eq:cwtparamssearch}
+
 % Experimental optimalization of parameters.
 \begin{equation}
 s_{cwt}, N_{n} = \text{argmin} ( \sum_{\sigma_i \in \sigma_{s,N}} \sigma_i )
 \label{eq:cwtparamssearch}
 \end{equation}
+
 
 In the next step segment distances are evaluated. Distance of two adjoining segments aka {\it edge} is computed as numerical
 difference of their within-segment mean values.
@@ -548,6 +499,7 @@ difference of their within-segment mean values.
 \begin{equation}
 ||\textbf{AB}|| = \mu_\textbf{B} - \mu_\textbf{A}
 \end{equation}
+
 
 Here comes to the game fuzzification. A designed set of fuzzy membership functions $\xi_F$, $\xi_S$ and $\xi_R$
 corresponds with artefacts falling edge (\textbf{F}), stagnating signal (\textbf{S}) and rising edge (\textbf{R}).
@@ -571,29 +523,34 @@ in the figure \ref{fig:fuzzysets} with $t=10$.
 
 \begin{figure}[h!]
 \begin{center}
-\includegraphics[width=0.6\textwidth]{render/fuzzysets.png}
+\includegraphics[width=0.5\textwidth]{render/fuzzysets.png}
 \caption{Fuzzy sets used for fuzzification.\label{fig:fuzzysets}}
 \end{center}
 \end{figure}
 
-Every edge gets assigned its fuzzy values for each of the classes. Now borders of artefacts need to be found.
-Score of border $\xi[i]$ for the edge $x_i$ is evaluated using formula \ref{fig:artefactborder}.
+Every edge gets assigned its fuzzy value for each of the classes. This leads to determining {\it artefacts},
+groups of neighboring segments, which has similar characteristic (falling, rising, stagnating), but it
+changes in time and CWT separated them as isolated segments.
+
+Score of border $\xi_{ABC}(x_i)$ for the edge $x_i$ is evaluated using formula \ref{fig:artefactborder}.
 \footnote{Operator $\land_P$ here means {\it product fuzzy T-norm}: $A \land_P B = f_A(x)\cdot f_B(x)$.}
-The calculation is done for all the artefact combinations $ABC$ here, where $A$ is artefact of precedent $x_{i-1}$, $B$ for the
-$x_i$ itself and $C$ for the follower $x_{i+1}$. $A,B,C \in \{F,S,B\}$.
+The calculation is done for all the artefact combinations $ABC$ here, where $A$ is characteristic of 
+precedent $x_{i-1}$, $B$ for the $x_i$ itself and $C$ for the follower $x_{i+1}$. $A,B,C \in \{F,S,B\}$.
 
 % Artefact combination fuzzy formula.
 \begin{equation}
-\xi_{ABC}[i] = (\xi_{A}[i-1]) \land_P (\xi_{B}[i]) \land_P (\xi_{C}[i+1])
+\xi_{ABC}(x_i) = (\xi_{A}(x_{i-1})) \land_P (\xi_{B}(x_i)) \land_P (\xi_{C}(x_{i+1}))
 \label{fig:artefactborder}
 \end{equation}
 
 The combination indicating artefact border are put together as same as the rest. That is reached
 using formula \ref{eq:edgemerger}.\footnote{Operator $\lor_{p\Sigma}$ here means
 {\it probability sum fuzzy S-norm/T-conorm}: $A \lor_{p\Sigma} B = f_A(x) + f_B(x) - f_A(x)f_B(x)$.
-Other variants could be considered too - maximum, Lukasiewicz, etc. } Border indicating
-combinations are those, whose precedent and own combination differ, aka. {\it \{SF*, FS*, RF*, FR*, RS*, SR*\} }.
-The rest, {\it \{FF*, SS*, RR*\}}, means no edge. The results are tresholded for $T = 0.5$.
+Other variants could be considered too - maximum, Lukasiewicz, etc. }
+
+Border indicating combinations are those, whose precedent and own combination differ, aka.
+{\it \{SF*, FS*, RF*, FR*, RS*, SR*\} }. The rest, {\it \{FF*, SS*, RR*\}}, means no edge.
+The results are tresholded for $T = 0.5$.
 
 % Artefact border fuzzy formula.
 \begin{subequations}
@@ -608,12 +565,14 @@ f_{0}[i] = \bigvee\limits_{\xi \in \xi_0}{}_{p\Sigma} (\xi)
 
 
 Newly created artefacts will be used to form feature vectors, filled with each one's characteristics.
-Suggested metrics are variance and mean value of samples within artefact, scope of line, that 
-can be counted using formula \ref{eq:artefactline}, etc.
-$l_0$, $l_1$ are $y$ coordinates of first and last point of the line respectively,
-\textbf{A} is a artefact samples vector. $k$ is the searched line scope,
-$\Delta_{\textbf{A},k}$ is the difference score of artefact \textbf{A} and line with scope
-$k$. It can also be used as a feature. This representation is to be seen in the figure \ref{fig:siglines}.
+Suggested metrics are variance and mean value of samples within artefact, linear extrapolation scope
+of the artefact, linear extrapolation scope of predecessor etc.
+
+The linear extrapolation scope can be found by formula \ref{eq:artefactline}, where $l_0$, $l_1$ are
+$y$ coordinates of first and last point of the line respectively, \textbf{A} is a artefact samples vector.
+$k$ is the searched line scope, $\Delta_{\textbf{A},k}$ is the difference score of artefact \textbf{A} and
+line with scope $k$. It can also be used as a feature. Graphical representation is to be seen in the figure
+\ref{fig:siglines}.
 
 \begin{subequations}
 \begin{equation}
@@ -641,16 +600,15 @@ l_0,l_1 = \text{argmin} ( \Delta_{\textbf{A},k} )
 \subsection*{Classification}
 Extracted feature vectors for every detected artefact will undergo classification procedure
 consisting of multiple dichotomic classifiers, each evaluating single decision - whether
-the movement is present or not, if the movement is towards center or aside, if the
-movement is closer to sensor of far, and if possible, if the person is on the left side
+the movement is present or not, if the movement is in the center or on the aside, if the
+movement is closer to sensor or far, and if possible, if the person is on the left side
 or right.
 
-The classification is process based on linear regression, searching for the best linear
+The suggested solution of classification is based on linear regression, searching for the best linear
 separation of the training data using linear classifier \ref{eq:linearclassifier}, where 
 $\overline{x}$ is an input, $\sigma(a)$ is activation function mapping
 $\mathbb{R} \rightarrow \langle 0;1\rangle$ and $\overline{w}$,$w_0$ are searched parameters
 of the classifier.
-
 
 \begin{equation}
 y(x) = \sigma (\overline{w}^T \overline{x} + w_0)
@@ -688,7 +646,7 @@ w^{(\tau + 1)} = w^{(\tau)} - \eta \nabla E(\overline{w})
 \end{equation}
 \end{subequations}
 
-The classifier's output is a 2D fuzzy value matrix, representing the space in from of the sensor.
+The classifier's output is a 2D fuzzy value matrix, representing the area in front of the sensor.
 It is inspired by the space representation by cellular automata, which carves it into small
 homogenous segments. The fuzzy value at certain index expresses a presence of a person
 at the position. Even though the space because of the construction of sensor has a shape of
@@ -702,7 +660,7 @@ circular sector, it can be easily represented by classical 2D matrix, as it is s
 \end{figure}
 
 Each of the scores is fuzzified using sigmoid function and merged together using formula \ref{eq:regressionmerger},
-creating the resulting matrix, as shown in the figure \ref{fig:areamatrixweighting}. {\it Consider action characteristics (speed, direction, multiple people) and state engine.}
+creating the resulting matrix, as shown in the figure \ref{fig:areamatrixweighting}.
 
 \begin{equation}
 TODO
@@ -722,71 +680,20 @@ TODO
 Using more sensors brings advantages: the measuring might be more precise since the person presence
 classified by two independent sensors is not only more probable but the computed position
 can get more accurate than when using only one sensor. The disadvantage is higher price and need
-to know the mutual orientation and position of the sensors. 
+to know the mutual orientation and position of the sensors.
 
-%If more sensors are used it is necessary to merge their space segments matrixes in one,
-%as shown in the figure \ref{fig:3pir_area}. To do so, a fuzzy logic mechanism
-%{\it Takagi-Sugeno rules} can be used as described in \cite{InsightIntoFuzzyModelling}.
-%The form of rules is [IF {\it antecendent} THEN {\it succendent}] as shown in the table
-%\ref{table:takagisugeno}. During the calculation all the antecendentes are evaluated
-%and the most relevant leads to application of corresponding succendent to the output.
+Suggested mechanism for matrix merging is first stating the overlapping. When merging two
+area matrices $A$ and $B$, one ($A$) is taken as reference, and for each index is constructed
+a matrix of influence of the indexes of the other matrix ($B$) with the same dimensions.
 
-%\begin{figure}[h!]
-%\begin{center}
-%\includegraphics[width=0.5\textwidth]{img/3pir_area.png}
-%\caption{Fusion of detection areas.\label{fig:3pir_area}}
-%\end{center}
-%\end{figure}
+To merge the two matrixes, $B$ is put over matrix of influence and corresponding indexes
+are fuzzy conjuncted. Indexes of such matrix are all put to fuzzy disjunction.
+The result is then fuzzy conjuncted with the index of $A$, whose matrix of influence was used.
 
-%\begin{table}[h!]
-%\begin{center}
-%\begin{tabular}{|c|c|c|} \hline
-%\textbf{Rule}   & \textbf{Antecendent}                                & \textbf{Succendent}                             \\ \hline
-%$R_1$           & $X_1$ is $A_{11}$ and \dots and $X_n$ is $A_{1n}$   & $Y = b_{10} + b_{11}X_1 + \dots + b_{1n}X_n$    \\ \hline
-%$R_2$           & $X_1$ is $A_{21}$ and \dots and $X_n$ is $A_{2n}$   & $Y = b_{20} + b_{21}X_1 + \dots + b_{2n}X_n$    \\ \hline
-%\multicolumn{3}{|c|}{\dots}                                                                                             \\ \hline
-%$R_m$           & $X_1$ is $A_{m1}$ and \dots and $X_n$ is $A_{mn}$   & $Y = b_{m0} + b_{m1}X_1 + \dots + b_{mn}X_n$    \\ \hline
-%\end{tabular}
-%\caption{Takagi-Sugeno rules. $X$ is input, $A$ is a matrix of fuzzy numbers, $b$ is a matrix of fuzzy coefficients.\label{table:takagisugeno} \cite{InsightIntoFuzzyModelling}}
-%\end{center}
-%\end{table}
+If the same matrix is used, then influence matrix has one only in the position of the index
+we are trying to compute. Then it depends on the choice of the operation, the operation
+either results in the same number as input or the output is amplified (e.g. $0.1 \land 0.1 = 0.01$).
 
-%The designed fusion fuzzy system is to be seen in the table \ref{table:fuzzyfusion}. To be able to merge
-%the space segments, overlap must be known and then vector $X$ is created, containing pairs of values
-%from each vector ($X[i]_L$ and $X[i]_R$). Each of these pairs is input to the fusion algorithm, which
-%merges it to one fuzzy number result. 
-
-%$C_{L}$ and $C_{R}$ are 2D matrixes of coefficients with indexing $[i,j]$, where $i,j \in \{0,L,M,H\}$.
-%The fuzzy sets LOW, MEDIUM and HIGH of $X$ composes a basic evaluative trichotomy extended for unknown state OUT.
-%The optimal values of coefficients and the fuzzy sets parameters have to be found experimentally. 
-
-%\begin{table}[h!]
-%\begin{center}
-%\begin{tabular}{|c|c c|rcl|} \hline
-%\textbf{Rule}   & \textbf{$X_L$}  & \textbf{$X_R$}  & \multicolumn{3}{|c|}{\textbf{Y}}  \\ \hline
-%$R_1$           & OUT             & OUT             & $C_{L}[0,0]    $&+&$ C_{R}[0,0]   $   \\ \hline
-%$R_2$           & OUT             & LOW             & $C_{L}[0,L]    $&+&$ C_{R}[L,0]X_R$   \\ \hline
-%$R_3$           & OUT             & MEDIUM          & $C_{L}[0,M]    $&+&$ C_{R}[M,0]X_R$   \\ \hline
-%$R_4$           & OUT             & HIGH            & $C_{L}[0,H]    $&+&$ C_{R}[H,0]X_R$   \\ \hline
-%$R_5$           & LOW             & OUT             & $C_{L}[L,0]X_L $&+&$ C_{R}[0,L]   $   \\ \hline
-%$R_6$           & LOW             & LOW             & $C_{L}[L,L]X_L $&+&$ C_{R}[L,L]X_R$   \\ \hline
-%$R_7$           & LOW             & MEDIUM          & $C_{L}[L,M]X_L $&+&$ C_{R}[M,L]X_R$   \\ \hline
-%$R_8$           & LOW             & HIGH            & $C_{L}[L,H]X_L $&+&$ C_{R}[H,L]X_R$   \\ \hline
-%$R_9$           & MEDIUM          & OUT             & $C_{L}[M,0]X_L $&+&$ C_{R}[0,M]$      \\ \hline
-%$R_{10}$        & MEDIUM          & LOW             & $C_{L}[M,L]X_L $&+&$ C_{R}[L,M]X_R$   \\ \hline
-%$R_{11}$        & MEDIUM          & MEDIUM          & $C_{L}[M,M]X_L $&+&$ C_{R}[M,M]X_R$   \\ \hline
-%$R_{12}$        & MEDIUM          & HIGH            & $C_{L}[M,H]X_L $&+&$ C_{R}[H,M]X_R$   \\ \hline
-%$R_{13}$        & HIGH            & OUT             & $C_{L}[H,0]X_L $&+&$ C_{R}[0,H]   $   \\ \hline
-%$R_{14}$        & HIGH            & LOW             & $C_{L}[H,L]X_L $&+&$ C_{R}[L,H]X_R$   \\ \hline
-%$R_{15}$        & HIGH            & MEDIUM          & $C_{L}[H,M]X_L $&+&$ C_{R}[M,H]X_R$   \\ \hline
-%$R_{16}$        & HIGH            & HIGH            & $C_{L}[H,H]X_L $&+&$ C_{R}[H,H]X_R$   \\ \hline
-%\end{tabular}
-%\caption{Design fuzzy system to fuseTakagi-Sugeno rules. $X$ is input, $A$ is a matrix of fuzzy numbers, $b$ is a matrix of fuzzy coefficients.\label{table:fuzzyfusion} \cite{InsightIntoFuzzyModelling}}
-%\end{center}
-%\end{table}
-
-%For three sectors as in the figure \ref{fig:3pir_area} the situation is analogous. The table also depends
-%on whether the areas of the side sensors overlap or not. Or they can be merged successively.
 
 \subsection*{Defuzzification}
 
@@ -799,43 +706,43 @@ medoid is used to represent the cluster instead of mean.
 \mathit{PAM}(k, data) = argmin \left( \sum_{i=1}^{k} \sum_{j=1}^{k} ||data_{i} data_{j}||  \right)
 \end{equation}
 
-\begin{lstlisting}[style=python]
-def PAM(k,data):
-  # pick medoids
-  medoids = [].generate(k,data.random())
-  # compute dissimilarity matrix
-  dm = DissimilarityMatrix(data,calculateDistance)
-  # create clusters
-  changed = True
-  while changed:
-    changed = False
-    clusters = []
-    for medoid_idx,medoid in medoids.enum():
-      cluster = []
-      for d in data:
-        # add to cluster with closest distance to its medoid
-        if dm[d,medoid] == dm[d,medoids].min():
-          cluster.append(d)
-      # set new center (SWAP phase)
-      cluster.append(medoid)
-      if medoid is not cluster.center():
-        medoids[medoid_idx] = cluster.center()
-        changed = True
-      clusters.append(cluster)
-  return clusters
-\end{lstlisting}
+%\begin{lstlisting}[style=python]
+%def PAM(k,data):
+%  # pick medoids
+%  medoids = [].generate(k,data.random())
+%  # compute dissimilarity matrix
+%  dm = DissimilarityMatrix(data,calculateDistance)
+%  # create clusters
+%  changed = True
+%  while changed:
+%    changed = False
+%    clusters = []
+%    for medoid_idx,medoid in medoids.enum():
+%      cluster = []
+%      for d in data:
+%        # add to cluster with closest distance to its medoid
+%        if dm[d,medoid] == dm[d,medoids].min():
+%          cluster.append(d)
+%      # set new center (SWAP phase)
+%      cluster.append(medoid)
+%      if medoid is not cluster.center():
+%        medoids[medoid_idx] = cluster.center()
+%        changed = True
+%      clusters.append(cluster)
+%  return clusters
+%\end{lstlisting}
 
-\begin{lstlisting}[style=python]
-function elbow(data):
-  # try all k
-  best = inf
-  for k in <1,K_MAX>:
-    clusters = PAM(data, k)
-    # take minimal
-    if WCSS(clusters) < best:
-      best = clusters
-  return best
-\end{lstlisting}
+%\begin{lstlisting}[style=python]
+%function elbow(data):
+%  # try all k
+%  best = inf
+%  for k in <1,K_MAX>:
+%    clusters = PAM(data, k)
+%    # take minimal
+%    if WCSS(clusters) < best:
+%      best = clusters
+%  return best
+%\end{lstlisting}
 
 To estimate the $k$, elbow method can be used: calculating k-means for different k values and taking the one with
 minimal within-cluster sum of square (WCSS).\cite{ClusterAnalysis} \cite{VagueNatureInformation}
@@ -924,18 +831,23 @@ shown and described by the appendix \ref{appendix:PIRSignal}.
 
 \chapter{Implementation}
 
+The implementation was done in two parts -- implementation of sensor device, that senses
+the signal and sends it in chunks, described in \ref{chapter:sensorHW}, and the server,
+that reads the data sent by sensor device and performs the classification, described in
+\ref{chapter:serverImplementation}.
+
 \section{Sensor device}
+\label{chapter:sensorHW}
 
 The sensor device consists of PIR sensor and programmed MCU that samples analog signal from
-sensor and writes in chunks called segments it via WiFi to local multicast group.
+sensor and sends it via WiFi to a local multicast group.
 
-Nowadays most of the PIR sensors sold have only a binary {\it switching} output.
-When signal reaches a set treshold output is set to logic "1" for a unit of time.
+Nowadays most of the PIR sensors available on market have only a binary {\it switching} output.
+When signal reaches a set treshold, output is set to logic "1" for a unit of time.
 This mechanism is suitable for a light sensor or door sonsor, completely useless
 for the needs of this project though.
 
-The only found sensor that offers an analog output was {\it PIR STD} by
-{\it B+B Sensors}.
+The only found sensor that offers an analog output was {\it PIR STD} by {\it B+B Sensors}.
 
 \subsection*{PIR STD}
 {\it PIR STD} is a product of {\it B+B Sensors}. It is the only found passive infrared
@@ -965,8 +877,8 @@ Pin layout table from the sensor operational manual is shown in the table \ref{f
 \end{table}
 
 The {\it PIR STD} scheme shown in the figure \ref{fig:pirstdscheme} processes the signal
-in three stages going from left to right. The first two filter and amplify the signal
-resulting with analog output. The third generates binary output from analog.
+in three stages going from left to right. The first two stages filter and amplify the signal,
+output of this is the sensor analog output. The third phase generates binary output from the analog.
 
 \begin{figure}[h!]
 \begin{center}
@@ -976,7 +888,7 @@ resulting with analog output. The third generates binary output from analog.
 \end{figure}
 
 \paragraph{I. stage}
-The first one starts at S of the PIR sensor, following with noise/lowpass filter consisting
+The first stage starts at S of the PIR sensor, following with noise/lowpass filter consisting
 of the amplifier $U1A$ and the feedback components $R3$, $C4$, $C8$, $R14$, $C9$, $R14$.
 There is also highpass filter done by $R6$ and $C3$. The output of this stage is a signal
 with frequency between $f_{L1}$ and $f_{H1}$ amplified $A_{U1A}$ times.
@@ -991,9 +903,9 @@ f_{H1}^{'} = \frac{1}{2 \pi R_{3,15} C_{4,9}}
 \end{equation}
 \end{subequations}
 
-The choice of resistor $R_{3,14} / R_{3,15}$ and capacitator $C_{4,8} / C_{4,9}$
-is done by connected switch. The value of resistance and capacitance of the
-components can be counted with formula for parallel connection.
+The choice of resistor $R_{3,14} / R_{3,15}$ and capacitator $C_{4,8} / C_{4,9}$ is done by
+connected switch. The value of resistance and capacitance of the components can be counted
+with formula for parallel connection.
 
 \begin{equation}
 R_{A,B}^{p} = \frac{1}{R_A} + \frac{1}{R_B}
@@ -1014,7 +926,7 @@ f_{L1} = \frac{1}{2 \pi R_6 C_3}
 A_{U1A} = 1 + \frac{R_{3,14}}{R_2}
 \end{equation}
 \begin{equation}
-A_{U1A} = 1 + \frac{R_{3,15}}{R_2}
+A_{U1A}' = 1 + \frac{R_{3,15}}{R_2}
 \end{equation}
 \end{subequations}
 
@@ -1025,17 +937,28 @@ amplification is also made by the divider bridge ($R8$, $R9$, $R10$, $R11$) conn
 positive input. The output of frequency between $max(f_{L1}, f_{L2})$ and $min(f_{H1}, f_{H2})$
 amplified $A_{U1A} \cdot A_{U1B}$ times is an analog output connected to the pin 1.
 
+\begin{subequations}
 \begin{equation}
-f_{H2} = \frac{1}{2 \pi R_5 C_6}
+f_{H2} = \frac{1}{2 \pi R_{5,16} C_{6,10}}
 \end{equation}
+
+\begin{equation}
+f_{H2}^{'} = \frac{1}{2 \pi R_{5,17} C_{6,11}}
+\end{equation}
+\end{subequations}
 
 \begin{equation}
 f_{L2} = \frac{1}{2 \pi R_4 C_5}
 \end{equation}
 
+\begin{subequations}
 \begin{equation}
-A_{U1B} = -\frac{R_5}{R_4}
+A_{U1B} = 1 + \frac{R_{5,16}}{R_4}
 \end{equation}
+\begin{equation}
+A_{U1B}' = 1 + \frac{R_{5,17}}{R_4}
+\end{equation}
+\end{subequations}
 
 \paragraph{III. stage}
 The third phase performs top-bottom tresholding generating binary output
@@ -1044,7 +967,7 @@ used in simple industrial application. It is not used in the project.\cite{PIRSc
 
 \subsection*{Connecting the sensor}
 PIR sensor is connected to the MCU. Except for source, ground and output which are connected directly,
-{\it PIR STD} has also reference voltage input, that should be approximately $\frac{V_cc}{2}~V$.
+{\it PIR STD} has also reference voltage input, that should be approximately $\frac{V_{cc}}{2}~V$.
 To ensure that a voltage divider is used with two resistors of the same resistance $R_X$.
 During the testing $100~k\Omega$ resistors were used. The circuit is shown in the figure \ref{fig:PIRcircuit}.
 
@@ -1068,8 +991,6 @@ During the testing $100~k\Omega$ resistors were used. The circuit is shown in th
   (2,0.5) to[short,*-]
   (2,2.5) to[R={\tiny $R_{X}$}]
   (4,2.5) to[short,-*] (4,2) 
-  
-  
   
   % vcc
   (0,1.5) to[short, l={\tiny $VCC$}, o-]
@@ -1134,7 +1055,7 @@ c: A \rightarrow D = x_A \rightarrow \frac{1023x_A}{V_{cc}}, x_A \in D
 
 \paragraph{Sampling frequency}
 The usable sampling frequency can be estimated: the fresnel lens of {\it PIR STD} splits the
-area into $10^{\circ}$ circular sectors. Object moving around the sensor in the distance $0.5~m$
+area into $10^{\circ} = \frac{\pi}{18}$ circular sectors. Object moving around the sensor in the distance $0.5~m$
 with speed $15~km.h^{-1} = 4.1667~m.s^{-1}$ (very fast run) passes the central circular sector in
 
 \begin{equation}
@@ -1163,7 +1084,7 @@ resulting with $2B$ sample in throughput $\mu$
 
 
 \subsection*{MCU Program}
-The MCU is programmed to sample data with fixed sampling frequency and form the sequential
+The NodeMCU is programmed to sample data with fixed sampling frequency and form the sequential
 segments out of it. A $N$-sized segment is then sent away using ESP8266 present at the module.
 A multicast technology is used, enabling multiple servers to work over the data concurrently
 and also ease of initialization of communication, where the channel is predefined, so
@@ -1175,23 +1096,103 @@ F_{send} = \frac{F_s}{N}
 \label{eq:sendfrequency}
 \end{equation}
 
-MCU runs a HTTP server, enabling the MCU to be configured remotely. It is possible to set
-sampling frequency or period with the altering other correspondingly as same as sending period,
-frequency, or segment size with a maximal segment size \textbf{here will be MAXSEGMENTSIZE}.
+The program is written in C++ and programming the module is done with Arduino IDE. Several libraries
+are used that need to be downloaded to the IDE from its repository. ESP8266 libraries for networking
+(multicast, HTTP) and EEPROM library to operate EEPROM persistent memory.
+
+MCU runs HTTP server, enabling remote configuration of the MCU at the runtime without reprogramming
+and reset. It is possible to set sampling frequency or period with the altering other correspondingly
+as same as sending period, frequency, or segment size with a preset implementation limit.
 The REST API also enables to set the multicast channel, both address and port, turning
 debugging informations on/off to serial line.
 
-The complete REST API description is to be seen in the appendix \ref{appendix:mcu_restapi}.
+\subsection*{REST API of MCU HTTP server}
+The MCU runs a REST API, that can configure it. The API includes following options:
 
+\begin{table}[h!]
+    \begin{tabular}{|l|l|} \hline
+        \textbf{Resource} & \textbf{Description} \\ \hline
+        \texttt{/} & Welcome page. \\ \hline
+        \texttt{/config} & Configuration of module. \\ \hline
+        \texttt{/config/mcast}  & Configuration of multicast channel. \\ \hline
+        \texttt{/config/sample} & Configuration of sampling. \\ \hline
+        \texttt{/config/send}   & Configuration of sending. \\ \hline
+        \texttt{/log}         & Logs. \\ \hline
+    \end{tabular}
+    \caption{REST API resources overview.}
+\end{table}
 
+\paragraph{\texttt{/config/mcast}}
+Configures the multicast channel.
+\begin{itemize}
+    \item[] \texttt{enabled} Enables/disables sending. Defaultly enabled.
+    \item[] \texttt{address} Sets multicast channel address. Defaultly \texttt{224.0.0.1}.
+    \item[] \texttt{port}    Sets multicast channel port. Defaultly \texttt{1234}.
+\end{itemize}
+
+\paragraph{\texttt{/config/sample}}
+Configures the sampling.
+\begin{itemize}
+    \item[] Exactly one of the parameters must be present (ignored otherwise):
+    \item[] \texttt{frequency} Sets sampling frequency, subsequently changing sampling period (\ref{eq:period_frequency}) and segment size (\ref{eq:segmentsize}). Defaultly $100$.
+    \item[] \texttt{period}    Sets sampling period, subsequently changing sampling frequency (\ref{eq:period_frequency}) and segment size (\ref{eq:segmentsize}). Defaultly $0.01$.
+\end{itemize}
+
+\paragraph{\texttt{/config/send}}
+Configures the sending.
+\begin{itemize}
+    \item[] Exactly one of the parameters must be present (ignored otherwise):
+    \item[] \texttt{frequency} Sets sampling frequency, subsequently changing sampling period (\ref{eq:period_frequency}) and segment size (\ref{eq:segmentsize}). Defaultly $0.5$.
+    \item[] \texttt{period}    Sets sampling period, subsequently changing sampling frequency (\ref{eq:period_frequency}) and segment size (\ref{eq:segmentsize}). Defaultly $2$.
+    \item[] \texttt{N}         Sets segment size, subsequently changing sampling frequency and period (\ref{eq:period_frequency}). Defaultly $200$.
+\end{itemize}
+
+The segment size must lay between 10 and 1024. If set value causes invalid value of segment size,
+request will be ignored. The conversion to segment size $N$ is shown in the formula \ref{eq:segmentsize}.
+
+\begin{subequations}
+\begin{equation}
+f = T^{-1}
+\end{equation}
+\begin{equation}
+T = f^{-1}
+\end{equation}
+%\caption{Conversion period $T$ to frequency $f$ and vice versa.}
+\label{eq:period_frequency}
+\end{subequations}
+
+\begin{subequations}
+\begin{equation}
+N = T_{send}T_s^{-1}
+\end{equation}
+\begin{equation}
+N = f_sf_{send}^{-1}
+\end{equation}
+\begin{equation}
+N = f_sT_{send}
+\end{equation}
+\begin{equation}
+N = (T_sf_{send})^{-1}
+\end{equation}
+%\caption{Computation of segment size $N$.}
+\label{eq:segmentsize}
+\end{subequations}
+
+\paragraph{\texttt{/log}}
+Shows last events of the sensor in a form of logs.
 
 
 \section{Classification server}
+\label{chapter:serverImplementation}
 {\it Monitor} is the classification server, that collects data from the sensors and performs
-classification algorithms described in \ref{section:classification} with it. {\it Finish}
+classification algorithms described in \ref{section:classification} with it.
+
+The main software design is based on MVC (model-view-controller). The model reads the data from
+file (offline), or right from serial line or multicast channel (online, realtime) and performs
+a classification over them. The view is presenting the output of the model calculation to the user.
 
 \subsection*{Data sources}
-Monitor enables reading data from serial port, multicast channel and replaying saved data from file.
+Monitor can read data from serial port, multicast channel or replay saved data from a file.
 This feature is done using class \texttt{Reader} from the module \texttt{comm} and inherited classes
 in modules \texttt{comm\_serial}, \texttt{comm\_mcast}, \texttt{comm\_replay}.
 
@@ -1199,9 +1200,18 @@ Class Reader corresponds with the design pattern Singleton, holding one single i
 serial port, multicast channel and file to avoid opening multiple handles and potential data race.
 
 Instantiation of the object is done in the first demand for it in the call of static method \texttt{getReader()}.
-Each object then possess separate reading thread, that ensures updating of the data. Getting the last
-received segment is through method \texttt{getSegment()}, a thread lock is used. The whole design is shown
+Each object then possesses separate reading thread, that ensures updating of the data. Getting the last
+received segment is through the method \texttt{getSegment()}, a thread lock is used. The whole design is shown
 in the figure \ref{fig:class_src}.
+
+The data source objects, inherited from \texttt{Reader} are assigned to the objects in view part. These graphical
+objects hold reference to the \texttt{getSegment()} method of linked object in model part for access to the updated
+data and to present them to the user.
+
+The example of reading data using the \texttt{Reader} interface and its inherited classes is shown at the
+listings \ref{listing:readFile} (offline) and  \ref{listing:readSerial} and \ref{listing:readMCast} (online).
+When the data are read offline from file, the data are read as one chunk per file and processed together,
+the online reading is performed in loop waiting for chunk to come from the sensor module.
 
 \begin{figure}[!ht]
 \begin{center}
@@ -1210,11 +1220,49 @@ in the figure \ref{fig:class_src}.
 \end{center}
 \end{figure}
 
-{\it ...}
+\begin{figure}[!ht]
+\begin{lstlisting}[style=python]
+import comm_replay
+# ...
+x = comm_replay.Reader.readFile(path+'/'+filename+'.csv')
+# ...
+\end{lstlisting}
+\caption{Reading file using \texttt{comm\_replay.py} module.\label{listing:readFile}}
+\end{figure}
+
+\begin{figure}[!ht]
+\begin{lstlisting}[style=python]
+import comm_serial
+# ...
+reader = comm_serial.Reader.getReader('/dev/ttyS0')
+while True:
+  x = reader.getSegment()
+  # ...
+\end{lstlisting}
+\caption{Reading serial file using \texttt{comm\_serial.py} module.\label{listing:readSerial}}
+\end{figure}
+
+\begin{figure}[!ht]
+\begin{lstlisting}[style=python]
+import comm_mcast
+# ...
+reader = comm_mcast.Reader.getReader('224.0.0.1',1234)
+while True:
+  x = reader.getSegment()
+  # ...
+\end{lstlisting}
+\caption{Reading multicast channel using \texttt{comm\_mcast.py} module.\label{listing:readMCast}}
+\end{figure}
+
+
 
 \subsection*{Classification model}
-The segmentation 
-{\it Implementation of linear regression.}
+The segmentation and parsing into artefacts, which cover the feature extraction, is held by the module \texttt{segment.py}
+with class diagram \ref{fig:class_segment}. The \texttt{parseArtefacts()} in this case is a factory for artefact vector.
+In implementation it uses both \texttt{Segment} and \texttt{Edge}, these classes can be even used separately,
+but the recommended way how to perform the feature extraction using this module is presented at the listing
+\ref{listing:featureExtraction}.
+
 
 \begin{figure}[!ht]
 \begin{center}
@@ -1224,13 +1272,39 @@ The segmentation
 \end{figure}
 
 \begin{figure}[!ht]
+\begin{lstlisting}[style=python]
+import segment
+# ...
+artefactsVector = segment.Artefact.parseArtefacts(x)
+featuresVectorVector = [a.getFeatures() for a in artefactsVector]
+# ...
+\end{lstlisting}
+\caption{Feature extraction using \texttt{segment.py} module.\label{listing:featureExtraction}}
+\end{figure}
+
+
+The each of the feature vectors is then separate input to the classifier, represented by the module
+\texttt{model.py}. The recommended usage is shown at the listing \ref{listing:classification}
+
+\begin{figure}[!ht]
+\begin{lstlisting}[style=python]
+import model
+# ...
+classifiers = model.Classification.getTrained()
+for featuresVector in featuresVectorVector:
+  areaMatrix = classifiers.evaluate()
+  # ...
+\end{lstlisting}
+\caption{Classification using \texttt{model.py} module.\label{listing:classification}}
+\end{figure}
+
+\begin{figure}[!ht]
 \begin{center}
 \includegraphics[width=0.8\textwidth]{img/class_model.png}
 \caption{UML diagram of Model classes. \label{fig:class_model}}
 \end{center}
 \end{figure}
 
-\subsection*{Postprocessing}
 The output of each classifier was postprocessed in order to maximize the possible score. The evaluation
 metrics is described in the section \ref{section:evaluationMetrics}. The postprocessing is doing over each
 received chunk separately.
@@ -1399,14 +1473,21 @@ Total rate      & $87.0651$         & $$                & $$              & $$  
 \end{center}
 \end{table}
 
-\section{TO DELETE}
-{\it
-Metodika a vysledky. Muze zahrnovat i matematicke dukazu, postupy...
+{\it Interpretation of results. Practical usage. }
 
-Interpretace vysledku a moznosti nasazeni v praxi.
+\subsection*{Suggestions for improvement}
+For the results 117 15~s long measurements were done, 72 with movement present, 45 with no movement.
+To improve the accuracy of the results, different types of movements could have been recorded, as same
+as more measurements in different speeds, or different surrounding.
 
-HW narocnost -- CPU, pamet, chovani pri paralelizaci apod.
-}
+The multiple persons present during the measuring were not tested or measured at all. The suggested mechanism
+could be used in this case as well, though it was not tested for it whatsoever.
+
+The speed of the processing program is not breakneck. Possible way could be profiling the program and optimizing
+the critical parts by rewriting them in compiled language (C++). Since the program includes a lot of vector
+algebra, optimalization with moving the computation to GPU / SSE / AVX could be also a solution.
+
+During the offline processing, parallelism could be a good approach to increase a speed of processing.
 
 
 
