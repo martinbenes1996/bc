@@ -485,10 +485,8 @@ class LinearRegression(Classifier):
     @classmethod
     def postprocessPresence(cls, presence, Ns):
         # smooth from forwards and backwards
-        #forward = cls.smoothen(presence, Ns,cls.smoothenSlopePresenceForwards )
-        #backward = np.flip( cls.smoothen( np.flip(presence,0), Ns,cls.smoothenSlopePresenceBackwards ),0 )
-        #return [fuzzy.TConorm.maximum(forward[i],backward[i]) for i in range(len(forward))]
         #presence = np.absolute( np.array(presence) - np.mean(presence) )
+        presence = presence
         return cls.smoothenBothSides(presence, Ns, cls.smoothenSlopePresenceForwards, cls.smoothenSlopePresenceBackwards)
     
     smoothenSlopeDistanceForwards = -0.001
@@ -501,10 +499,15 @@ class LinearRegression(Classifier):
         smoothened = cls.smoothenBothSides(grounded, Ns, cls.smoothenSlopeDistanceForwards, cls.smoothenSlopeDistanceBackwards)
         return np.minimum(np.array(smoothened), np.array(presence))
     
+    smoothenSlopeCenterForwards = -0.005
+    smoothenSlopeCenterBackwards = -0.015
     @classmethod
     def postprocessCenter(cls, center, presence, Ns):
         # process
-        return np.minimum(np.array(center), np.array(presence))
+        ncenter = fuzzy.Negator.standard(center)
+        grounded = np.absolute( np.array(ncenter) - np.mean(ncenter) )
+        smoothened = cls.smoothenBothSides(grounded, Ns, cls.smoothenSlopeCenterForwards, cls.smoothenSlopeCenterBackwards)
+        return np.minimum(np.array(grounded), np.array(presence))
     
     @classmethod
     def smoothenBothSides(cls, x, Ns, kF, kB):

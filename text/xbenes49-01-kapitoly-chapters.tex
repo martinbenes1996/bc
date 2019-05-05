@@ -667,32 +667,12 @@ TODO
 \label{eq:regressionmerger}
 \end{equation}
 
-
-
 \begin{figure}[h!]
 \begin{center}
 \includegraphics[width=0.3\textwidth]{img/pir_area.png}
 \caption{Weighting of regression score to area matrix.\label{fig:areamatrixweighting}}
 \end{center}
 \end{figure}
-
-\subsection*{Fusion}
-Using more sensors brings advantages: the measuring might be more precise since the person presence
-classified by two independent sensors is not only more probable but the computed position
-can get more accurate than when using only one sensor. The disadvantage is higher price and need
-to know the mutual orientation and position of the sensors.
-
-Suggested mechanism for matrix merging is first stating the overlapping. When merging two
-area matrices $A$ and $B$, one ($A$) is taken as reference, and for each index is constructed
-a matrix of influence of the indexes of the other matrix ($B$) with the same dimensions.
-
-To merge the two matrixes, $B$ is put over matrix of influence and corresponding indexes
-are fuzzy conjuncted. Indexes of such matrix are all put to fuzzy disjunction.
-The result is then fuzzy conjuncted with the index of $A$, whose matrix of influence was used.
-
-If the same matrix is used, then influence matrix has one only in the position of the index
-we are trying to compute. Then it depends on the choice of the operation, the operation
-either results in the same number as input or the output is amplified (e.g. $0.1 \land 0.1 = 0.01$).
 
 
 \subsection*{Defuzzification}
@@ -759,6 +739,27 @@ azimuth.
 \begin{equation}
 |P_{1} P_{2}| = \sqrt{(d_{1})^{2} + (d_{2})^{2} - 2d_{1}d_{2}(\alpha_1 - \alpha_2)}
 \end{equation}
+
+\subsection*{Fusion}
+It could be possible to use multiple sensors. Using more sensors brings advantages: the measuring
+might be more precise since the person presence classified by two independent sensors is not only
+more probable but the computed position can get more accurate than when using only one sensor.
+
+The disadvantage is higher price and need for mechanism to process the configuration: mutual
+orientation and position of the sensors, as same as position of the objects in the room
+like doors or windows as "human sources", or borders of the room.
+
+Fusion precedes fuzzification. All the computed sensor areas represented by fuzzy matrices
+are merged into emptily-preinitialized whole area representation by \ref{eq:mergeAreas}.
+Since these relations between the indices are stacionary, it can be precounted after the
+setting the configuration for the room.
+
+\begin{subequations}
+\begin{equation}
+TODO
+\end{equation}
+\label{eq:mergeAreas}
+\end{subequations}
 
 
 
