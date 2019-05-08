@@ -211,8 +211,12 @@ class Artefact:
         features.append(var)
         # length of segment
         features.append(N)
-        # mean value of segment
+        # mean value of artefact
         features.append(mu)
+        # minimum of artefact
+        #features.append(smin)
+        # maximum of artefact
+        #features.append(smax)
         # ...
         # <add more features>
         return features

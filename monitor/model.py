@@ -480,13 +480,13 @@ class LinearRegression(Classifier):
     def save(self, filename):
         externals.joblib.dump(self.clf, 'classifiers/'+filename+'.sav')
     
-    smoothenSlopePresenceForwards = -0.085
+    smoothenSlopePresenceForwards = -0.05#-0.085
     smoothenSlopePresenceBackwards = -0.001#-0.0025
     @classmethod
     def postprocessPresence(cls, presence, Ns):
         # smooth from forwards and backwards
         #presence = np.absolute( np.array(presence) - np.mean(presence) )
-        presence = presence
+        #presence = presence
         return cls.smoothenBothSides(presence, Ns, cls.smoothenSlopePresenceForwards, cls.smoothenSlopePresenceBackwards)
     
     smoothenSlopeDistanceForwards = -0.001
@@ -504,9 +504,10 @@ class LinearRegression(Classifier):
     @classmethod
     def postprocessCenter(cls, center, presence, Ns):
         # process
-        ncenter = fuzzy.Negator.standard(center)
-        grounded = np.absolute( np.array(ncenter) - np.mean(ncenter) )
-        smoothened = cls.smoothenBothSides(grounded, Ns, cls.smoothenSlopeCenterForwards, cls.smoothenSlopeCenterBackwards)
+        #ncenter = fuzzy.Negator.standard(center)
+        #grounded = np.absolute( np.array(ncenter) - np.mean(ncenter) )
+        grounded = center
+        #smoothened = cls.smoothenBothSides(grounded, Ns, cls.smoothenSlopeCenterForwards, cls.smoothenSlopeCenterBackwards)
         return np.minimum(np.array(grounded), np.array(presence))
     
     @classmethod

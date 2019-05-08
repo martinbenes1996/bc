@@ -1379,7 +1379,7 @@ in case area is empty. The operation in the table \ref{table:3stateLogicOp} is
 represents comparing the computed score and the real label returning a score
 of success of the decision.
 
-Input conditions for fuzzy number $a \in \in \langle 0;1 \rangle$
+Input conditions for fuzzy number $a \in \langle 0;1 \rangle$
 and $\kappa \in \{ 1, 0, N\}$, which is in {\it json} file format represented
 by {\it True}, {\it False} and {\it None} literals respectively. The output
 is a success rate, multiplied by $100$ can be converted to percentage.
@@ -1435,7 +1435,7 @@ as a weight. To do so, alternation \ref{eq:artefactWeightedAverage} with the
 weight added is suggested.
 
 \begin{equation}
-\overline{A_{X}} = \sum_{a\in A} (a_{X} \cdot \kappa_{X}(a))\frac{|a|}{\sum_{A}|a|}
+\overline{A_{X}}' = \frac{1}{\sum_{A}|a|}\sum_{a\in A} (a_{X} \cdot \kappa_{X}(a)) |a|
 \label{eq:artefactWeightedAverage}
 \end{equation}
 
@@ -1444,10 +1444,6 @@ weight added is suggested.
 Optimalization of parameters in postprocessing smoothing function was performed
 according to the \ref{eq:smootheningOptimalization}. The parameters for each trait
 were computed, as shown by the table \ref{table:smootheningParameters}.
-
-For computing the distance parameter was computed, 4m\_* and 5m\_* testing
-and training data were not used. Due to the lack of other more distinct data
-in this trait (for example 8m\_*) they significantly distort the negative results.
 
 \begin{table}[!ht]
 \begin{center}
@@ -1462,19 +1458,56 @@ Backwards           & $-0.0025$         & $-0.1$            & $$              & 
 
 \section{Results}
 
+The table \ref{table:results} includes certainty of decision to presence or absence of the trait,
+equal to $100\overline{A_{X}}'$. In the case of presence, positive means presence of body in area,
+negative means absence, for distance it is body being further than $4.5~m$ when positive, closer when negative.
+Center is positive for body being in front of the sensor, negative for body on the side.
+
+Since the training is done by numerical solving of gradient descent, every training results in different
+result. To have more reflective results, accuracy was measured as mean of results of 10 successive trainings
+and evaluating of the test data set for each trait.
+
+When all data are used, the peak value of the presence trait rise up to values in the column Presence* of the
+table \ref{table:results}. The parts of data set (4m\_* and 5m\_*) were not used due to the lack of other
+more distinct data especially in the distance trait (for example 8m\_*) which significantly distorts the negative rate.
+
+
 \begin{table}[!ht]
 \begin{center}
 \begin{tabular}{|c|c c c c|} \hline
-\textbf{Aspect} & \textbf{Presence} & \textbf{Distance}*& \textbf{Center} & \textbf{Left} \\ \hline
-Positive rate   & $84.506$          & $78.281$          & $$              & $52.540$       \\
-Negative rate   & $88.3344$         & $75.441$          & $$              & $53.451$       \\ \hline
-Total rate      & $87.0651$         & $$                & $$              & $$             \\ \hline
+\textbf{Aspect} & \textbf{Presence} & \textbf{Distance} & \textbf{Center} & \textbf{Left} \\ \hline
+Positive rate   & $75.491$          & $74.266$          & $53.930$              & $52.540$       \\
+Negative rate   & $87.083$          & $70.681$          & $54.366$              & $53.451$       \\ \hline
+Total rate      & $83.743$          & $$                & $$                    & $$             \\ \hline
 \end{tabular}
 \caption{Resulting accurracy on testing data.\label{table:results} }
 \end{center}
 \end{table}
 
+Reading the table \ref{table:results} as probability would be miscomprehension, to achieve the posterior probability for
+these traits, the outputs must be converted from fuzzy to bool logic (e.g. tresholding) and the formula \ref{eq:posteriorProb}
+to compute the resulting posterior probability is used over them. $T(x) \rightarrow {0,1}$ is tresholding function mapping
+fuzzy values to bool values with treshold 0.5.
+
+\begin{equation}
+p(\kappa \in {0,1}|A)_{X} = \frac{1}{\sum_{A^{\kappa}}|a|} \sum_{a\in A^{\kappa}} (T(a_{X}))|a|
+\label{eq:posteriorProb}
+\end{equation}
+
+\begin{table}[!ht]
+\begin{center}
+\begin{tabular}{|c|c c c c c|} \hline
+\textbf{Aspect} & \textbf{Presence} & \textbf{Presence}* & \textbf{Distance} & \textbf{Center} & \textbf{Left} \\ \hline
+Positive rate   & $75.491$          & $84.506$           & $78.281$          & $$              & $52.540$       \\
+Negative rate   & $87.083$          & $88.3344$          & $75.441$          & $$              & $53.451$       \\ \hline
+Total rate      & $83.743$          & $87.0651$          & $$                & $$              & $$             \\ \hline
+\end{tabular}
+\caption{Posterior probability on testing data.\label{table:results} }
+\end{center}
+\end{table}
+
 {\it Interpretation of results. Practical usage. }
+
 
 \subsection*{Suggestions for improvement}
 For the results 117 15~s long measurements were done, 72 with movement present, 45 with no movement.
@@ -1495,6 +1528,17 @@ During the offline processing, parallelism could be a good approach to increase 
 
 \chapter{User Interface}
 \label{Label:UI}
+
+{\it Monitor} as a classification server is endowed with simple GUI for the needs of monitoring
+the signal real-time and recording of the data sets used for training, testing and evaluating the results.
+The interface is shown in the figure \ref{fig:monitorGUI}.
+
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[width=0.5\textwidth]{img/visualizer.png}
+\caption{Monitor GUI prototype with sample data. {\it Will be replaced.} \label{fig:monitorGUI}}
+\end{center}
+\end{figure}
 
 \section{TO DELETE}
 {\it Description of visualizer}

@@ -90,17 +90,27 @@ class Evaluator:
         # optimize
         for ki in (-0.1,-0.05,-0.01,-0.005,-0.001):
             for kj in (-0.1,-0.05,-0.01,-0.005,-0.001):
-                model.LinearRegression.smoothenSlopeCenterForwards = ki
-                model.LinearRegression.smoothenSlopeCenterBackwards = kj
+                model.LinearRegression.smoothenSlopePresenceForwards = ki
+                model.LinearRegression.smoothenSlopePresenceBackwards = kj
                 pscore,nscore = self.evaluate(key)
                 print(ki,kj,">",pscore,nscore)
+    
+    def meanCertainty(self,key):
+        pscore,nscore = [],[]
+        for i in range(0,10):
+            c = model.Classification.retrain()
+            p,n = self.evaluate(key)
+            pscore.append(p)
+            nscore.append(n)
+        print("Mean positive score:", np.mean(pscore))
+        print("Mean negative score:", np.mean(nscore))
 
 
 
 
 def main():
     e = Evaluator()
-    e.evaluate('center')
+    e.meanCertainty('center')
    
     
 
