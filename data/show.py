@@ -47,7 +47,7 @@ y_ref = []
 x_ref = []
 for k in segments:
     for v in range(k['start'],k['start']+k['length']):
-        if k['key'][0] == False:
+        if k['key'][1] == False:
             y_ref.append(0)
             x_ref.append(v/100.)
         elif k['key'][1] == True:

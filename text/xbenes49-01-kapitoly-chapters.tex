@@ -1449,8 +1449,8 @@ were computed, as shown by the table \ref{table:smootheningParameters}.
 \begin{center}
 \begin{tabular}{|c|c c c c|} \hline
 \textbf{Direction}  & \textbf{Presence} & \textbf{Distance}*& \textbf{Center} & \textbf{Left} \\ \hline
-Forwards            & $-0.085$          & $-0.001$          & $$              & N             \\
-Backwards           & $-0.0025$         & $-0.1$            & $$              & N             \\ \hline
+Forwards            & $-0.085$          & $-0.001$          & $-0.005$        & N             \\
+Backwards           & $-0.0025$         & $-0.1$            & $-0.01$         & N             \\ \hline
 \end{tabular}
 \caption{Experimentally computed smoothening parameters values.\label{table:smootheningParameters} }
 \end{center}
@@ -1467,17 +1467,15 @@ Since the training is done by numerical solving of gradient descent, every train
 result. To have more reflective results, accuracy was measured as mean of results of 10 successive trainings
 and evaluating of the test data set for each trait.
 
-When all data are used, the peak value of the presence trait rise up to values in the column Presence* of the
-table \ref{table:results}. The parts of data set (4m\_* and 5m\_*) were not used due to the lack of other
-more distinct data especially in the distance trait (for example 8m\_*) which significantly distorts the negative rate.
-
+The parts of data set (4m\_* and 5m\_*) were not used due to the lack of other more distinct data especially in
+the distance trait (for example 8m\_*) which significantly distorts the negative rate.
 
 \begin{table}[!ht]
 \begin{center}
 \begin{tabular}{|c|c c c c|} \hline
 \textbf{Aspect} & \textbf{Presence} & \textbf{Distance} & \textbf{Center} & \textbf{Left} \\ \hline
-Positive rate   & $75.491$          & $74.266$          & $53.930$              & $52.540$       \\
-Negative rate   & $87.083$          & $70.681$          & $54.366$              & $53.451$       \\ \hline
+Positive rate   & $75.491$          & $74.266$          & $61.866$              & $52.540$       \\
+Negative rate   & $87.083$          & $70.681$          & $52.823$              & $53.451$       \\ \hline
 Total rate      & $83.743$          & $$                & $$                    & $$             \\ \hline
 \end{tabular}
 \caption{Resulting accurracy on testing data.\label{table:results} }
@@ -1497,10 +1495,10 @@ p(\kappa \in {0,1}|A)_{X} = \frac{1}{\sum_{A^{\kappa}}|a|} \sum_{a\in A^{\kappa}
 \begin{table}[!ht]
 \begin{center}
 \begin{tabular}{|c|c c c c c|} \hline
-\textbf{Aspect} & \textbf{Presence} & \textbf{Presence}* & \textbf{Distance} & \textbf{Center} & \textbf{Left} \\ \hline
-Positive rate   & $75.491$          & $84.506$           & $78.281$          & $$              & $52.540$       \\
-Negative rate   & $87.083$          & $88.3344$          & $75.441$          & $$              & $53.451$       \\ \hline
-Total rate      & $83.743$          & $87.0651$          & $$                & $$              & $$             \\ \hline
+\textbf{Aspect} & \textbf{Presence} & \textbf{Distance} & \textbf{Center} & \textbf{Left} \\ \hline
+Positive rate   & $$                & $$                & $$              & $$            \\
+Negative rate   & $$                & $$                & $$              & $$            \\ \hline
+Total rate      & $$                & $$                & $$              & $$            \\ \hline
 \end{tabular}
 \caption{Posterior probability on testing data.\label{table:results} }
 \end{center}

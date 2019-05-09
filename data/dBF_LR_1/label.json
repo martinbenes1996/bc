@@ -1,1 +1,578 @@
-{"dBF_LR_1_1": [{"key": [false, null, null, null], "start": 0, "length": 283}, {"key": [true, true, true, false], "start": 283, "length": 12}, {"key": [true, true, true, false], "start": 295, "length": 59}, {"key": [true, true, true, false], "start": 354, "length": 66}, {"key": [true, true, false, true], "start": 420, "length": 75}, {"key": [true, true, false, true], "start": 495, "length": 53}, {"key": [true, true, false, true], "start": 548, "length": 14}, {"key": [true, false, false, true], "start": 562, "length": 21}, {"key": [true, false, false, true], "start": 583, "length": 19}, {"key": [true, false, false, true], "start": 602, "length": 56}, {"key": [true, false, false, true], "start": 658, "length": 35}, {"key": [true, false, false, true], "start": 693, "length": 30}, {"key": [true, false, false, true], "start": 723, "length": 43}, {"key": [false, null, null, null], "start": 766, "length": 50}, {"key": [false, null, null, null], "start": 816, "length": 10}, {"key": [false, null, null, null], "start": 826, "length": 24}, {"key": [false, null, null, null], "start": 850, "length": 93}, {"key": [false, null, null, null], "start": 943, "length": 38}, {"key": [false, null, null, null], "start": 981, "length": 254}], "dBF_LR_1_2": [{"key": [false, null, null, null], "start": 0, "length": 283}, {"key": [true, true, true, false], "start": 283, "length": 40}, {"key": [true, true, true, false], "start": 323, "length": 20}, {"key": [true, true, true, false], "start": 343, "length": 17}, {"key": [true, true, true, false], "start": 360, "length": 33}, {"key": [true, true, false, true], "start": 393, "length": 83}, {"key": [true, true, false, true], "start": 476, "length": 47}, {"key": [true, true, false, true], "start": 523, "length": 37}, {"key": [true, false, false, true], "start": 560, "length": 59}, {"key": [true, false, false, true], "start": 619, "length": 15}, {"key": [true, false, false, true], "start": 634, "length": 36}, {"key": [true, false, false, true], "start": 670, "length": 36}, {"key": [false, null, null, null], "start": 706, "length": 30}, {"key": [false, null, null, null], "start": 736, "length": 68}, {"key": [false, null, null, null], "start": 804, "length": 82}, {"key": [false, null, null, null], "start": 886, "length": 16}, {"key": [false, null, null, null], "start": 902, "length": 391}], "dBF_LR_1_3": [{"key": [false, null, null, null], "start": 0, "length": 283}, {"key": [true, false, true, false], "start": 283, "length": 21}, {"key": [true, true, true, false], "start": 304, "length": 19}, {"key": [true, true, true, false], "start": 323, "length": 13}, {"key": [true, true, true, false], "start": 336, "length": 30}, {"key": [true, true, true, false], "start": 366, "length": 98}, {"key": [true, true, false, true], "start": 464, "length": 20}, {"key": [true, true, false, true], "start": 484, "length": 42}, {"key": [true, true, false, true], "start": 526, "length": 32}, {"key": [true, false, false, true], "start": 558, "length": 18}, {"key": [true, false, false, true], "start": 576, "length": 13}, {"key": [true, false, false, true], "start": 589, "length": 54}, {"key": [true, false, false, true], "start": 643, "length": 32}, {"key": [true, false, false, true], "start": 675, "length": 28}, {"key": [false, null, null, null], "start": 703, "length": 15}, {"key": [false, null, null, null], "start": 718, "length": 35}, {"key": [false, null, null, null], "start": 753, "length": 10}, {"key": [false, null, null, null], "start": 763, "length": 24}, {"key": [false, null, null, null], "start": 787, "length": 74}, {"key": [false, null, null, null], "start": 861, "length": 12}, {"key": [false, null, null, null], "start": 873, "length": 361}]}
+{
+    "dBF_LR_1_1": [
+        {
+            "key": [
+                false,
+                null,
+                null,
+                null
+            ],
+            "start": 0,
+            "length": 283
+        },
+        {
+            "key": [
+                true,
+                false,
+                true,
+                false
+            ],
+            "start": 283,
+            "length": 12
+        },
+        {
+            "key": [
+                true,
+                false,
+                true,
+                false
+            ],
+            "start": 295,
+            "length": 59
+        },
+        {
+            "key": [
+                true,
+                true,
+                true,
+                false
+            ],
+            "start": 354,
+            "length": 66
+        },
+        {
+            "key": [
+                true,
+                true,
+                false,
+                true
+            ],
+            "start": 420,
+            "length": 75
+        },
+        {
+            "key": [
+                true,
+                true,
+                false,
+                true
+            ],
+            "start": 495,
+            "length": 53
+        },
+        {
+            "key": [
+                true,
+                true,
+                false,
+                true
+            ],
+            "start": 548,
+            "length": 14
+        },
+        {
+            "key": [
+                true,
+                true,
+                false,
+                true
+            ],
+            "start": 562,
+            "length": 21
+        },
+        {
+            "key": [
+                true,
+                false,
+                false,
+                true
+            ],
+            "start": 583,
+            "length": 19
+        },
+        {
+            "key": [
+                true,
+                false,
+                false,
+                true
+            ],
+            "start": 602,
+            "length": 56
+        },
+        {
+            "key": [
+                true,
+                false,
+                false,
+                true
+            ],
+            "start": 658,
+            "length": 35
+        },
+        {
+            "key": [
+                true,
+                false,
+                false,
+                true
+            ],
+            "start": 693,
+            "length": 30
+        },
+        {
+            "key": [
+                true,
+                false,
+                false,
+                true
+            ],
+            "start": 723,
+            "length": 43
+        },
+        {
+            "key": [
+                false,
+                null,
+                null,
+                null
+            ],
+            "start": 766,
+            "length": 50
+        },
+        {
+            "key": [
+                false,
+                null,
+                null,
+                null
+            ],
+            "start": 816,
+            "length": 10
+        },
+        {
+            "key": [
+                false,
+                null,
+                null,
+                null
+            ],
+            "start": 826,
+            "length": 24
+        },
+        {
+            "key": [
+                false,
+                null,
+                null,
+                null
+            ],
+            "start": 850,
+            "length": 93
+        },
+        {
+            "key": [
+                false,
+                null,
+                null,
+                null
+            ],
+            "start": 943,
+            "length": 38
+        },
+        {
+            "key": [
+                false,
+                null,
+                null,
+                null
+            ],
+            "start": 981,
+            "length": 254
+        }
+    ],
+    "dBF_LR_1_2": [
+        {
+            "key": [
+                false,
+                null,
+                null,
+                null
+            ],
+            "start": 0,
+            "length": 283
+        },
+        {
+            "key": [
+                true,
+                false,
+                true,
+                false
+            ],
+            "start": 283,
+            "length": 40
+        },
+        {
+            "key": [
+                true,
+                false,
+                true,
+                false
+            ],
+            "start": 323,
+            "length": 20
+        },
+        {
+            "key": [
+                true,
+                true,
+                true,
+                false
+            ],
+            "start": 343,
+            "length": 17
+        },
+        {
+            "key": [
+                true,
+                true,
+                true,
+                false
+            ],
+            "start": 360,
+            "length": 33
+        },
+        {
+            "key": [
+                true,
+                true,
+                false,
+                true
+            ],
+            "start": 393,
+            "length": 83
+        },
+        {
+            "key": [
+                true,
+                true,
+                false,
+                true
+            ],
+            "start": 476,
+            "length": 47
+        },
+        {
+            "key": [
+                true,
+                true,
+                false,
+                true
+            ],
+            "start": 523,
+            "length": 37
+        },
+        {
+            "key": [
+                true,
+                false,
+                false,
+                true
+            ],
+            "start": 560,
+            "length": 59
+        },
+        {
+            "key": [
+                true,
+                false,
+                false,
+                true
+            ],
+            "start": 619,
+            "length": 15
+        },
+        {
+            "key": [
+                true,
+                false,
+                false,
+                true
+            ],
+            "start": 634,
+            "length": 36
+        },
+        {
+            "key": [
+                true,
+                false,
+                false,
+                true
+            ],
+            "start": 670,
+            "length": 36
+        },
+        {
+            "key": [
+                false,
+                null,
+                null,
+                null
+            ],
+            "start": 706,
+            "length": 30
+        },
+        {
+            "key": [
+                false,
+                null,
+                null,
+                null
+            ],
+            "start": 736,
+            "length": 68
+        },
+        {
+            "key": [
+                false,
+                null,
+                null,
+                null
+            ],
+            "start": 804,
+            "length": 82
+        },
+        {
+            "key": [
+                false,
+                null,
+                null,
+                null
+            ],
+            "start": 886,
+            "length": 16
+        },
+        {
+            "key": [
+                false,
+                null,
+                null,
+                null
+            ],
+            "start": 902,
+            "length": 391
+        }
+    ],
+    "dBF_LR_1_3": [
+        {
+            "key": [
+                false,
+                null,
+                null,
+                null
+            ],
+            "start": 0,
+            "length": 283
+        },
+        {
+            "key": [
+                true,
+                false,
+                true,
+                false
+            ],
+            "start": 283,
+            "length": 21
+        },
+        {
+            "key": [
+                true,
+                false,
+                true,
+                false
+            ],
+            "start": 304,
+            "length": 19
+        },
+        {
+            "key": [
+                true,
+                false,
+                true,
+                false
+            ],
+            "start": 323,
+            "length": 13
+        },
+        {
+            "key": [
+                true,
+                true,
+                true,
+                false
+            ],
+            "start": 336,
+            "length": 30
+        },
+        {
+            "key": [
+                true,
+                true,
+                true,
+                false
+            ],
+            "start": 366,
+            "length": 98
+        },
+        {
+            "key": [
+                true,
+                true,
+                false,
+                true
+            ],
+            "start": 464,
+            "length": 20
+        },
+        {
+            "key": [
+                true,
+                true,
+                false,
+                true
+            ],
+            "start": 484,
+            "length": 42
+        },
+        {
+            "key": [
+                true,
+                true,
+                false,
+                true
+            ],
+            "start": 526,
+            "length": 32
+        },
+        {
+            "key": [
+                true,
+                false,
+                false,
+                true
+            ],
+            "start": 558,
+            "length": 18
+        },
+        {
+            "key": [
+                true,
+                false,
+                false,
+                true
+            ],
+            "start": 576,
+            "length": 13
+        },
+        {
+            "key": [
+                true,
+                false,
+                false,
+                true
+            ],
+            "start": 589,
+            "length": 54
+        },
+        {
+            "key": [
+                true,
+                false,
+                false,
+                true
+            ],
+            "start": 643,
+            "length": 32
+        },
+        {
+            "key": [
+                true,
+                false,
+                false,
+                true
+            ],
+            "start": 675,
+            "length": 28
+        },
+        {
+            "key": [
+                false,
+                null,
+                null,
+                null
+            ],
+            "start": 703,
+            "length": 15
+        },
+        {
+            "key": [
+                false,
+                null,
+                null,
+                null
+            ],
+            "start": 718,
+            "length": 35
+        },
+        {
+            "key": [
+                false,
+                null,
+                null,
+                null
+            ],
+            "start": 753,
+            "length": 10
+        },
+        {
+            "key": [
+                false,
+                null,
+                null,
+                null
+            ],
+            "start": 763,
+            "length": 24
+        },
+        {
+            "key": [
+                false,
+                null,
+                null,
+                null
+            ],
+            "start": 787,
+            "length": 74
+        },
+        {
+            "key": [
+                false,
+                null,
+                null,
+                null
+            ],
+            "start": 861,
+            "length": 12
+        },
+        {
+            "key": [
+                false,
+                null,
+                null,
+                null
+            ],
+            "start": 873,
+            "length": 361
+        }
+    ]
+}

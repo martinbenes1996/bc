@@ -10,8 +10,10 @@ This module contains interface for data reading.
 Developed as a part of bachelor thesis "Counting of people using PIR sensor".
 """
 
+import logging
 import sys
-import _thread
+import threading
+
 import conf
 
 
@@ -25,7 +27,8 @@ class Reader:
         change          Change indicator.
         filename        Filename of file Reader records to. Not recording if empty.
     """
-    
+    log = logging.getLogger(__name__)
+
     @classmethod
     def getReader(cls, name, port=None):
         """Singleton Reader instance getter."""
@@ -36,7 +39,7 @@ class Reader:
         """Constructor."""
         self.started = False
         self.segment = []
-        self.segmentLock = _thread.allocate_lock()
+        self.segmentLock = threading.Lock()
         self.change = False
         self.filename = ""
     
@@ -53,7 +56,7 @@ class Reader:
         """Gets segment."""
         # reader not started
         if not self.started:
-            print("No data received.", file=sys.stderr)
+            self.log.info("No data received.")
             segmentN = conf.Config.segment()[0]
             return [0 for _ in range(0,segmentN)]
         # multithread access

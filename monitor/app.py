@@ -52,6 +52,7 @@ class App:
         # create variables
         self.getReader = lambda _ : None
         self.getRecorder = lambda _ : None
+        self.getExtractor = lambda _ : None
 
     @classmethod
     def get(cls):
@@ -112,9 +113,12 @@ class App:
         tab = tk.Frame(self.tabControl)
         # get handlers
         reader,recorder = self.getReader(name), self.getRecorder(name)
+        extractor = self.getExtractor(name)
 
         # create signal view
         self.create_signalview(tab, reader, recorder)
+        # create area view
+        self.create_areaview(tab,extractor)
         # add to tab control
         self.tabControl.add(tab, text=name)
         self.tabs[name] = tab
@@ -147,6 +151,18 @@ class App:
         sv = views.SignalView(self.root, master, reader, recorder)
         # place view
         sv.canvas.get_tk_widget().grid(row=0, column=1, rowspan=20, sticky=tk.N)
+
+    def create_areaview(self, master, reader):
+        """Creates view of sensed area represented by matrix.
+        
+        Keyword arguments:
+            master      Element to show in.
+            reader      Callback for getting data.
+        """
+        # create view
+        sv = views.AreaView(master, reader)
+        # place view
+        sv.canvas.get_tk_widget().grid(row=0, column=2, rowspan=20, sticky=tk.N)
 
     def create_recorderview(self):
         self.recorderView = record.View(self.root, self.switchRecording)

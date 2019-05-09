@@ -43,9 +43,15 @@ class Segment:
         # changes using CWT
         coefs = signal.cwt(x, signal.ricker, [cls.cwtCoef])[0]
         extrems = signal.argrelextrema(coefs, np.greater, order=cls.edgeOrder)[0]
-        if extrems[0] != 0:
+        try:
+            if extrems[0] != 0:
+                extrems = np.concatenate(([0],extrems))
+        except IndexError:
             extrems = np.concatenate(([0],extrems))
-        if extrems[-1] != len(x) - 1:
+        try:
+            if extrems[-1] != len(x) - 1:
+                extrems = np.concatenate((extrems,[len(x) - 1]))
+        except IndexError:
             extrems = np.concatenate((extrems,[len(x) - 1]))
         # segment borders
         segmentBorders = np.array([ (extrems[i-1],extrems[i]) for i in range(1,len(extrems)) ])
@@ -231,6 +237,10 @@ class Artefact:
     @classmethod
     def parseArtefacts(cls, x):
         segments = Segment.segmentize(x)
+        if len(segments) == 1:
+            a = cls()
+            a.append(segments[0])
+            return [a]
         edges = [ Edge(segments[i:i+2]) for i in range(len(segments) - 1) ]
         # triades
         allTriades = set([ a+b+c for a in "FSR" for b in "FSR" for c in "FSR"])

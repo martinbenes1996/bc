@@ -12,24 +12,21 @@ Developed as a part of bachelor thesis "Counting of people using PIR sensor".
 
 import json
 import numpy as np
+import logging
 import sklearn.linear_model as linear_model
 import sklearn.externals as externals
 import sys
 
 import comm_replay
+import datetime
 import fuzzy
 import globals
 import segment
-
-# to delete
-import datetime
+import threading
 import time
-import _thread
-sys.path.insert(0, '../collector-py/')
-import cwt
 
 class Extractor:
-    """Adapter of CWT in monitor from collector.
+    """Adapter of classification methods.
     
     Attributes:
         indicate    Callback to indicate update in style of Test&Set.
@@ -38,6 +35,22 @@ class Extractor:
         buffer      Buffer to save CWT result in.
         filename    Filename of file to save recorded signal to.
     """
+    # reader instances
+    extractors = {}
+    log = logging.getLogger(__name__)
+    @classmethod
+    def getExtractor(cls, name, source):
+        """Returns extractor singleton instance.
+        
+        Arguments:
+            name    Name.
+        """
+        # instantiate
+        if name not in cls.extractors:
+            cls.extractors[name] = cls(source.indicate, source.getSegment)
+        # return existing
+        return cls.extractors[name]
+
     def __init__(self, indicate, source):
         """Constructs object.
         
@@ -49,27 +62,53 @@ class Extractor:
         self.indicate = indicate
         self.getData = source
         self.filename = ''
-        self.buffer = []
-        self.bufferLock = _thread.allocate_lock()
+        self.buffer = np.array([[0,0],[0,0]])
+        self.bufferLock = threading.Lock()
+        self._stop = False
+        self.stopLock = threading.Lock()
         # connect to collector
-        self.engine =  cwt.Transformer()
+        self.engine = Classification.getTrained()
 
         # run processing thread
-        _thread.start_new_thread(self.process, ())
+        threading.Thread(target=self.process).start()
 
     def process(self):
         """Processes data to CWT. Main for separated thread."""
         while True:
             # if changed
             if self.indicate(False):
-                # CWT
-                b = self.engine.process( self.getData() )
+
+                # feature extraction
+                try:
+                    features = self.extract( self.getData() )
+                except Exception as e:
+                    self.log.warning("data parsing error")
+                    continue
+
+                # classification
+                try:
+                    area = self.engine.classify( features )
+                except Exception as e:
+                    self.log.warning("classification error")
+                    continue
+                #for f in features: # for each artefact
+                #    pass
+                
+                # update shared buffer
                 with self.bufferLock:
-                    self.buffer = b
-                self.write(b)
+                    self.buffer = area
+                # write to file, when recording
+                self.write(area)
+
             # wait 100 ms
-            else:
-                time.sleep(0.1)
+            time.sleep(0.1)
+
+            with self.stopLock:
+                if self._stop:
+                    return
+    def stop(self):
+        with self.stopLock:
+            self._stop = True
     
     def getBuffer(self):
         """Returns buffer."""
@@ -87,14 +126,14 @@ class Extractor:
         if not name:
             # end recording
             if self.filename:
-                print("Recording to", self.filename, "ended.")
+                self.log.info("recording ended")
                 self.filename = ''
                 return
             # generate name
             name = "CWT " + str(datetime.datetime.now()) + ".dat"
         # start recording
         self.filename = name
-        print("Recording to", self.filename, "started.")
+        self.log.info("recording started")
         f = open(self.filename, 'w')
 
     def write(self, data):
@@ -137,7 +176,6 @@ class Reference:
         start_artefact = self.artefactOfSample(range_start)
         end_artefact = self.artefactOfSample(range_end, start_artefact)
         if start_artefact == end_artefact:
-            #print("Same artefact:", range_start, start_artefact, range_end, end_artefact)
             return self.getArtefactReference(start_artefact)
         r = {}
         for artefactindex in range(start_artefact, end_artefact+1):
@@ -207,6 +245,7 @@ class Reference:
 class Classification:
     trainSet = None
     testSet = None
+    log = logging.getLogger(__name__)
     def __init__(self, featureDimension = 5):
         self.rows,self.columns = 2,3
         self.area = [[0 for _ in range(self.columns)] for _ in range(self.rows)]
@@ -218,12 +257,12 @@ class Classification:
     def load(self):
         for k,c in self.classifiers.items():
             c.load('classifier-'+k)
-        print("Classifier loaded.")
+        self.log.info("classifier loaded")
         return self
 
     def addTrainData(self, dirname):
         references,_ = Reference.generateReferences(dirname,traintest=True)
-        print("Training with", dirname+'...')
+        self.log.info("reading "+dirname)
         for filename,trainReference in references.items():
             x = comm_replay.Reader.readFile('../data/'+dirname+'/'+filename+'.csv')
             artefacts = segment.Artefact.parseArtefacts(x)
@@ -231,7 +270,7 @@ class Classification:
             startIt = 0
             for i,a in enumerate(artefacts):
                 N = a.len()
-                referenceKey = trainReference.getArtefactReference(i)#startIt,startIt+N)
+                referenceKey = trainReference.getArtefactReference(i)
                 presenceKey,centerKey,leftKey,distanceKey = referenceKey["presence"],referenceKey["center"],referenceKey["left"],referenceKey["distance"]
                 features = a.getFeatures()
                 self.classifiers['presence'].addTrainData(features, presenceKey)
@@ -242,9 +281,9 @@ class Classification:
 
 
     def train(self, save=False):
+        self.log.info("training")
         for k,c in self.classifiers.items():
             c.train()
-        print("Classifiers trained.")
         if save:
             self.save()
 
@@ -254,10 +293,9 @@ class Classification:
             try:
                 c.save('classifier-'+k)
             except Exception as e:
-                print(e, file=sys.stderr)
                 status = False
         if status:
-            print("Classifiers saved.")
+            self.log.info("classifiers saved")
     
     def test(self, testSet = None):
         if testSet == None:
@@ -273,7 +311,7 @@ class Classification:
             result[testItem],Ns[testItem] = self.performTest(testItem,True)
         return result,Ns
 
-    def classify(self, featuresVector):
+    def classify(self, featuresVector, partial=False):
         areaM = [[0 for _ in range(2)] for _ in range(2)] # 2x2 matrix
         rawPresence,rawDistance,rawLeft,rawCenter = [],[],[],[]
         artefactsLengths = [segment.Artefact.artefactLength(x) for x in featuresVector]
@@ -297,11 +335,14 @@ class Classification:
         left = N(left)
         distance = self.classifiers['distance'].postprocessDistance(distance, presence, artefactsLengths)
 
-        # delete
-        score = []
-        for i,_ in enumerate(presence):
-            score.append( {'presence':presence[i],'distance':distance[i],'left':left[i],'center':center[i]} )
-        return score
+        
+
+        score = {'presence': np.mean(presence), 'distance': np.mean(distance), 'center': np.mean(center), 'left': np.mean(left)}
+        if partial:
+            score=[]
+            for i,_ in enumerate(presence):
+                score.append( {'presence':presence[i],'distance':distance[i],'left':left[i],'center':center[i]} )
+            return score
         
         AND = fuzzy.SNorm.method('product')
         areaM[0][0] = AND(score['presence'],   score['distance'],    score['left'])
@@ -363,7 +404,7 @@ class Classification:
     
     def performTest(self, dirname, segmentsizes=False):
         _,tests = Reference.generateReferences(dirname, True)
-        print("Testing with", dirname+'...')
+        self.log.info("reading "+dirname)
         results = []
         testNs = []
         for testName,testReference in tests.items():
@@ -371,7 +412,7 @@ class Classification:
             artefacts = segment.Artefact.parseArtefacts(x)
             featureSet = [ a.getFeatures() for a in artefacts]
 
-            scoreSet = self.classify(featureSet)
+            scoreSet = self.classify(featureSet, partial=True)
             
             startIt = 0
             artefactNs = []
@@ -507,8 +548,9 @@ class LinearRegression(Classifier):
         #ncenter = fuzzy.Negator.standard(center)
         #grounded = np.absolute( np.array(ncenter) - np.mean(ncenter) )
         grounded = center
-        #smoothened = cls.smoothenBothSides(grounded, Ns, cls.smoothenSlopeCenterForwards, cls.smoothenSlopeCenterBackwards)
-        return np.minimum(np.array(grounded), np.array(presence))
+        smoothened = cls.smoothenBothSides(grounded, Ns, cls.smoothenSlopeCenterForwards, cls.smoothenSlopeCenterBackwards)
+        #smoothened = grounded
+        return np.minimum(np.array(smoothened), np.array(presence))
     
     @classmethod
     def smoothenBothSides(cls, x, Ns, kF, kB):

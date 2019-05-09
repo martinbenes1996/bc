@@ -12,6 +12,7 @@ Developed as a part of bachelor thesis "Counting of people using PIR sensor".
 
 import csv
 import datetime
+import logging
 import serial
 import _thread
 import time
@@ -31,6 +32,7 @@ class Reader(comm.Reader):
     """
     # reader instances
     readers = {}
+    log = logging.getLogger(__name__)
     @classmethod
     def getReader(cls, name):
         """Returns reader singleton instance.
@@ -60,10 +62,15 @@ class Reader(comm.Reader):
         # check if singleton
         assert(self.devicename not in self.readers)
         # connect to serial port
-        self.port = serial.Serial(devicename)
-        self.readers[self.devicename] = self
-        # start reader thread
-        _thread.start_new_thread(self.read, ())
+        try:
+            self.port = serial.Serial(devicename)
+        except:
+            raise
+        else:
+            self.port = None
+            self.readers[self.devicename] = self
+            # start reader thread
+            _thread.start_new_thread(self.read, ())
 
     # Data getter
     def getSegment(self):
@@ -86,14 +93,14 @@ class Reader(comm.Reader):
         if not filename:
             # stop recording
             if self.filename:
-                print("Recording to", self.filename, "ended.")
+                self.log.info("recording ended")
                 self.filename = ''
                 return
             # generate name
             filename = "PIR " + str(datetime.datetime.now()) + ".csv"
         # start recording
         self.filename = filename
-        print("Recording to", self.filename, "started.")
+        self.log.info("recording started")
         f = open(self.filename, 'w')
 
 
@@ -104,6 +111,7 @@ class Reader(comm.Reader):
             i += 1
             # read
             s = self.readSegment()
+                
             with self.segmentLock:
                 self.segment = s
 
@@ -145,7 +153,10 @@ class Reader(comm.Reader):
             l = self.mem
             self.mem = ''
         while l == '':
-            l = self.port.readline()[:-2]
+            try:
+                l = self.port.readline()[:-2]
+            except:
+                return 0
 
         if len(l) > 3 and l[3] == b'\r':
             self.mem = l[4:]

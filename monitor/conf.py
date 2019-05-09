@@ -11,6 +11,7 @@ Developed as a part of bachelor thesis "Counting of people using PIR sensor".
 """
 
 import json
+import logging
 import numpy as np
 
 class Config:
@@ -41,8 +42,11 @@ class Config:
             self.channel_address = data["channel"]["address"]
             self.channel_port = data["channel"]["port"]
 
+            logging.basicConfig(format='%(levelname)s\t%(name)s: %(funcName)s(): %(lineno)i: %(message)s', level=logging.INFO)
+
     # configuration instance
     uniqueConf = None
+    @classmethod
     def get(cls):
         """Configuration getter. Instantiates, if not instantiated yet."""
         # instantiate
@@ -50,11 +54,14 @@ class Config:
             cls.uniqueConf = cls.ConfigSingleton()
         # return existing
         return cls.uniqueConf
+    @classmethod
+    def init(cls):
+        cls.get()
     
     @classmethod
     def segment(cls):
         """Returns segment informations (N, overlap)."""
-        return cls.get(cls).samples, cls.get(cls).overlap
+        return cls.get().samples, cls.get().overlap
     
     @classmethod
     def fs(cls):
@@ -66,15 +73,16 @@ class Config:
     @classmethod
     def period(cls):
         """Returns sending period."""
-        return cls.get(cls).period
+        return cls.get().period
     
     @classmethod
     def channel(cls):
         """Returns multicast channel informations (IP, port)."""
-        return (cls.get(cls).channel_address, cls.get(cls).channel_port)
+        return (cls.get().channel_address, cls.get().channel_port)
 
 
 
+Config.init()
 
 # called directly
 if __name__ == '__main__':

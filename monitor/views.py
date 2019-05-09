@@ -14,6 +14,7 @@ Developed as a part of bachelor thesis "Counting of people using PIR sensor".
 import os
 import re
 
+import numpy as np
 import tkinter as tk
 
 from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg)
@@ -199,6 +200,102 @@ class SignalView:
             self.canvas.get_tk_widget().config(highlightcolor='black', highlightbackground='black')
         # reemit signal
         self.record(filename)
+
+
+class AreaView:
+    """View of signal on serial port.
+    
+    Attributes:
+        master  Item to show in.
+        fig     MatPlotLib figure.
+        subplt  Subplot to plot in.
+        canvas  Connection of TKinter and MatPlotLib.
+        getData Callback for getting data.
+        record  Callback to control recording.
+        afterId TKinter ID of planned call.
+    """
+
+    
+    def __init__(self, master=None, reader=lambda:np.array([[0,0],[0,0]])):
+        """Constructs object.
+        
+        Arguments:
+            master      Item to show in.
+            reader      Callback for getting data.
+            recorder    Callback to control recording.
+        """
+        # create variables
+        self.master = master
+        if master == None:
+            self.master = tk.Frame()
+        self.reader = reader
+        self.afterId = None
+
+        # initiate MatPlotLib view
+        self.fig = Figure(figsize=(6,4))
+        self.subplt = self.fig.add_subplot(111)
+        self.subplt.set_xlabel("Orientation")
+        self.subplt.set_ylabel("Distance")
+        self.subplt.set_ylim(0, 12)
+        self.canvas = FigureCanvasTkAgg(self.fig, master=self.master)
+        self.canvas.draw()
+        # set border
+        self.canvas.get_tk_widget().config(highlightcolor='black', highlightbackground='black', highlightthickness=3, bd=0)
+
+        # set mouse handlers
+        self.canvas.get_tk_widget().bind('<ButtonRelease-1>', self.manualUpdate)
+        #self.canvas.get_tk_widget().bind('<ButtonRelease-3>', self.showMenu)
+        # create right-click menu
+        #self.menu = RightMenu(self.master, self.manualUpdate, self.recordMenuHandler)
+
+        # run update in separate thread
+        self.update()
+    
+    def __del__(self):
+        """Destructs object."""
+        if self.afterId:
+            self.master.after_cancel(self.afterId)
+    
+    def show(self, data):
+        """Actualizes view with new data.
+        
+        Arguments:
+            data    New data to show.
+        """
+        # clear view
+        self.subplt.cla()
+        # set view
+        self.subplt.set_xlabel("Orientation")
+        self.subplt.set_ylabel("Distance")
+        self.subplt.set_ylim(0, 12)
+        # plot data
+        print(data)
+        print(self.reader)
+        self.subplt.pcolormesh(data, color='magenta')
+        # paint
+        self.canvas.draw()
+        self.canvas.flush_events()
+        print("AreaView: update")
+        
+    def update(self):
+        """Updates view. Runs in separated thread."""
+        # show new data
+        self.show( self.reader() )
+        # plan next update after 300 ms
+        self.afterId = self.master.after(conf.Config.period(), self.update)
+
+    def manualUpdate(self, event):
+        """Updates view. Handler for mouse events.
+        
+        Arguments:
+            event       Event descriptor.
+        """
+        # cancel updater thread
+        if self.afterId:
+            self.master.after_cancel(self.afterId)
+        # run new thread
+        self.update()
+
 
         
 class RightMenu:

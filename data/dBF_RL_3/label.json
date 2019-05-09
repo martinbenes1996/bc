@@ -53,7 +53,7 @@
         {
             "key": [
                 true,
-                true,
+                false,
                 true,
                 true
             ],
@@ -132,10 +132,10 @@
         },
         {
             "key": [
+                true,
                 false,
-                null,
-                null,
-                null
+                true,
+                true
             ],
             "start": 668,
             "length": 36
@@ -397,7 +397,7 @@
         {
             "key": [
                 true,
-                false,
+                true,
                 false,
                 false
             ],

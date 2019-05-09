@@ -90,8 +90,8 @@ class Evaluator:
         # optimize
         for ki in (-0.1,-0.05,-0.01,-0.005,-0.001):
             for kj in (-0.1,-0.05,-0.01,-0.005,-0.001):
-                model.LinearRegression.smoothenSlopePresenceForwards = ki
-                model.LinearRegression.smoothenSlopePresenceBackwards = kj
+                model.LinearRegression.smoothenSlopeCenterForwards = ki
+                model.LinearRegression.smoothenSlopeCenterBackwards = kj
                 pscore,nscore = self.evaluate(key)
                 print(ki,kj,">",pscore,nscore)
     
@@ -110,7 +110,7 @@ class Evaluator:
 
 def main():
     e = Evaluator()
-    e.meanCertainty('center')
+    e.evaluate('presence')
    
     
 

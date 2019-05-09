@@ -30,9 +30,20 @@ def getReaderInstance(name, port=None):
         return comm_mcast.Reader.getReader(name, port)
     else:
         raise Exception("Unknown device type: "+name)
+def getExtractorInstance(name, port=None):
+    """Singleton Extractor instance getter."""
+    if name[0:2] in {"S:","M:"}:
+        return model.Extractor.getExtractor(name[2:], getReaderInstance(name, port))
+    elif port:
+        return model.Extractor.getExtractor(name, port, getReaderInstance(name, port))
+    else:
+        raise Exception("Unknown device type: "+name)
 def getReader(name, port=None):
     """Reader callback getter."""
     return getReaderInstance(name, port).getSegment
+def getExtractor(name, port=None):
+    """Extractor callback getter."""
+    return getExtractorInstance(name, port).getBuffer
 def getRecorder(name, port=None):
     """Recorder callback getter."""
     return getReaderInstance(name, port).record
@@ -55,6 +66,7 @@ def main():
     # connect callbacks
     v.getReader = getReader
     v.getRecorder = getRecorder
+    v.getExtractor = getExtractor
 
     # run main loop
     v.mainloop()
