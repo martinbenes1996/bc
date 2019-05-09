@@ -12,6 +12,7 @@ Developed as a part of bachelor thesis "Counting of people using PIR sensor".
 
 import tkinter as tk
 from tkinter import ttk
+from tkinter import filedialog
 
 import record
 import ui
@@ -79,7 +80,7 @@ class App:
     def create_menu(self):
         """Creates top menu."""
         menu = ui.Menu(self.root)
-        menu.addDropdown( {'name':'File','content':{'Record':self.startRecordingSession,'Exit':self.root.quit}} )
+        menu.addDropdown( {'name':'File','content':{'Replay...':self.startReplaySession, 'Record':self.startRecordingSession,'Exit':self.root.quit}} )
         menu.addDropdown( {'name':'Help','content':{'About':self.showAbout}} )
     
     def create_multicastview(self):
@@ -174,6 +175,9 @@ class App:
             return
         tabName = self.tabControl.tab(tabid, "text")
         self.recorderView.begin(tabName, self.getRecorder(tabName))
+    def startReplaySession(self):
+        replayfile = tk.filedialog.askopenfilename(initialdir='../data',title='Load recording',filetypes=(('Recordings (.csv)','*.csv'),) )
+        print(replayfile)
     
     def switchRecording(self, recording):
         if recording:

@@ -239,6 +239,7 @@ class AreaView:
         self.subplt.set_ylim(0, 12)
         self.canvas = FigureCanvasTkAgg(self.fig, master=self.master)
         self.canvas.draw()
+        self.y,self.x = np.mgrid[slice(0,13,6),slice(0,13,6)]
         # set border
         self.canvas.get_tk_widget().config(highlightcolor='black', highlightbackground='black', highlightthickness=3, bd=0)
 
@@ -269,13 +270,10 @@ class AreaView:
         self.subplt.set_ylabel("Distance")
         self.subplt.set_ylim(0, 12)
         # plot data
-        print(data)
-        print(self.reader)
-        self.subplt.pcolormesh(data, color='magenta')
+        self.subplt.pcolormesh(self.x, self.y, data, color='magenta')
         # paint
         self.canvas.draw()
         self.canvas.flush_events()
-        print("AreaView: update")
         
     def update(self):
         """Updates view. Runs in separated thread."""
