@@ -26,6 +26,8 @@ def normalize(l):
     else:
         return np.array(l)-minimum
 
+quit = False
+
 # called directly
 if __name__ == '__main__':
     raise NotCallableModuleError

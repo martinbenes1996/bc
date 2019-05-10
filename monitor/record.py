@@ -13,7 +13,7 @@ Developed as a part of bachelor thesis "Counting of people using PIR sensor".
 
 import json
 import os
-import _thread
+import threading
 import time
 
 import tkinter as tk
@@ -29,7 +29,7 @@ class Recorder:
     def start(self, session, setMarked, setDelayMarked):
         self.session = session
         self.setMarked, self.setDelayMarked = setMarked, setDelayMarked
-        _thread.start_new_thread(self.run, ())
+        threading.Thread(target=self.run).start()
 
     def run(self):
         print("Record")

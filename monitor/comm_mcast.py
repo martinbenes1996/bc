@@ -12,12 +12,15 @@ Developed as a part of bachelor thesis "Counting of people using PIR sensor".
 
 import csv
 import datetime
+import globals
+import logging
 import socket
 import struct
-import _thread
+import threading
 import time
 
 import comm
+import conf
 
 
 class Reader(comm.Reader):
@@ -29,6 +32,7 @@ class Reader(comm.Reader):
     """
     # Reader instances (singletons)
     _sockets = {}
+    log = logging.getLogger(__name__)
     @classmethod
     def getReader(cls, key, port=None):
         """Instance getter (singleton).
@@ -61,27 +65,28 @@ class Reader(comm.Reader):
         # create variables
         self.sock = sock
         # start reader thread
-        _thread.start_new_thread(self.read, ())
+        threading.Thread(target=self.read).start()
 
     def read(self):
         """Reads multicast channel. Done in separated thread."""
         i = 0
         while True:
-            i += 1
+            
             # read
             s = self.readSegment()
+            i += 1
+
             with self.segmentLock:
                 self.segment = s
-                #self.setStatus("Update received.")
-                #print("Reader: Read ", i)
 
             # record
             self.write(s)
             # indicate change
             self.indicate(True)
             self.started = True
-            # wait 300 ms
-            time.sleep(0.3)
+            if globals.quit == True:
+                self.log.info("multicast reader finished")
+                return
 
     def readSegment(self):
         """Reads single segment from socket."""
@@ -89,11 +94,11 @@ class Reader(comm.Reader):
             packet,addr = self.sock.recvfrom(1024)
         # no connection
         except socket.timeout as e:
-            print("Comm.MCastClient: no update received, empty data generated.")
-            return []
+            self.log.debug("no update")
+            return [0 for _ in range(conf.Config.segment()[0])]
         # parse data
         data = struct.unpack('i'*int(len(packet)/4), packet)
-        #print("Comm.MCastClient: received update from ", addr)
+        self.log.debug("update")
         return data
     
     def record(self, filename=None):
@@ -156,7 +161,7 @@ class Reader(comm.Reader):
         # mreq
         mreq = struct.pack('4sL', socket.inet_aton(addr), socket.INADDR_ANY)
         sock.setsockopt(socket.IPPROTO_IP, socket.IP_ADD_MEMBERSHIP, mreq)
-        #sock.settimeout(1)
+        sock.settimeout(conf.Config.period()/1000)
         return sock
 
     @classmethod

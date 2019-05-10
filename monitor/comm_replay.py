@@ -12,6 +12,7 @@ Developed as a part of bachelor thesis "Counting of people using PIR sensor".
 
 import csv
 import datetime
+import logging
 import numpy as np
 import threading
 import time
@@ -26,6 +27,7 @@ class Reader(comm.Reader):
     Attributes:
     """
     # socket instances
+    log = logging.getLogger(__name__)
     _readers = {}
     @classmethod
     def getReader(cls, name):
@@ -53,17 +55,25 @@ class Reader(comm.Reader):
         # create variables
         self.name = name
         # start reader thread
+        self.readThrdLock = threading.Lock()
+        self.readThrd = None
         self.run()
 
     def run(self):
-        self.readThrd = threading.Thread(target=self.read)
-        self.readThrd.start()
+        with self.readThrdLock:
+            if self.readThrd is None:
+                self.readThrd = threading.Thread(target=self.read)
+                self.readThrd.start()
+            else:
+                self.log.warning("reading thread already exists")
 
     def read(self):
         """Reads segments from file. Done in separated thread."""
         for s in self.readSegment():
             with self.segmentLock:
                 self.segment = s
+        with self.readThrdLock:
+            self.readThrd = None
 
 
     def readSegment(self):
@@ -80,7 +90,6 @@ class Reader(comm.Reader):
 
                     # segment full
                     if len(segment) == segmentN:
-                        #print("Comm_replay.Reader.read: segment received")
                         yield segment
                         segment = segment[-overlap:]
                         # record
@@ -90,6 +99,7 @@ class Reader(comm.Reader):
                         self.started = True
                         # sleep one period
                         time.sleep( T/1000. )
+
     
     def record(self, filename=None):
         """Controls recording.
@@ -110,6 +120,10 @@ class Reader(comm.Reader):
         self.filename = filename
         print("Recording to", self.filename, "started.")
         f = open(self.filename, 'w')
+    
+    def replay(self):
+        self.log.debug("replay")
+        self.run()
 
     def write(self, segment):
         """Saves segment to file.

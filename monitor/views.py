@@ -10,7 +10,7 @@ This module contains main block entities for GUI of the app.
 Developed as a part of bachelor thesis "Counting of people using PIR sensor".
 """
 
-
+import logging
 import os
 import re
 
@@ -27,9 +27,10 @@ import conf
 import ui
 
 class SerialView:
+    log = logging.getLogger(__name__)
     def __init__(self, root):
         self.root = root
-        self.serials = []
+        self.buttons = {}
 
     def begin(self, create, close):
         # look up serials
@@ -41,19 +42,27 @@ class SerialView:
 
         # generate checkbutons
         for f in serialfiles:
-            checkbutton = ui.CheckButton(self.root, "S:/dev/" + f)
+            serialname = "S:/dev/" + f
+            checkbutton = ui.CheckButton(self.root, serialname)
             checkbutton.checked, checkbutton.unchecked = create, close
             checkbutton.alive = comm_serial.Reader.getReader
             checkbutton.button.grid(column=0, sticky=tk.W+tk.S, padx=30)
             checkbutton.run()
-            self.serials.append(checkbutton)
+            self.buttons[serialname] = checkbutton
     
     def disable(self):
-        for chb in self.serials:
+        for _,chb in enumerate(self.buttons):
             chb.disable()
     def update(self):
-        for chb in self.serials:
+        for _,chb in enumerate(self.buttons):
             chb.manualUpdate()
+        self.log.debug("update serial view")
+
+    def uncheck(self, name):
+        try:
+            self.buttons[name].off()
+        except KeyError:
+            pass
         
 
     @staticmethod
@@ -75,14 +84,22 @@ class SerialView:
 class MulticastView:
     def __init__(self, root):
         self.root = root
+        self.buttons = {}
     
     def begin(self, create, close):
         tk.Label(self.root, text=u"Multicast channel", font=30).grid(column=0, sticky=tk.W+tk.N, padx=30)
         btnname = "M:"+str(conf.Config.channel())
-        self.checkbutton_mcast = ui.CheckButton(self.root, btnname)
-        self.checkbutton_mcast.checked, self.checkbutton_mcast.unchecked = create, close
-        self.checkbutton_mcast.button.grid(column=0, sticky=tk.W+tk.N, padx=30)
-        self.checkbutton_mcast.run()
+        checkbutton_mcast = ui.CheckButton(self.root, btnname)
+        checkbutton_mcast.checked, checkbutton_mcast.unchecked = create, close
+        checkbutton_mcast.button.grid(column=0, sticky=tk.W+tk.N, padx=30)
+        checkbutton_mcast.run()
+        self.buttons[btnname] = checkbutton_mcast
+    
+    def uncheck(self, name):
+        try:
+            self.buttons[name].off()
+        except KeyError:
+            pass
 
 
 
@@ -99,7 +116,7 @@ class SignalView:
         afterId TKinter ID of planned call.
     """
 
-    
+    log = logging.getLogger(__name__)
     def __init__(self, root, master, reader, recorder):
         """Constructs object.
         
@@ -165,6 +182,7 @@ class SignalView:
         self.show( self.getData() )
         # plan next update after 300 ms
         self.afterId = self.master.after(conf.Config.period(), self.update)
+        self.log.debug("update signal view")
 
     def manualUpdate(self, event):
         """Updates view. Handler for mouse events.
@@ -214,7 +232,7 @@ class AreaView:
         record  Callback to control recording.
         afterId TKinter ID of planned call.
     """
-
+    log = logging.getLogger(__name__)
     
     def __init__(self, master=None, reader=lambda:np.array([[0,0],[0,0]])):
         """Constructs object.
@@ -270,7 +288,7 @@ class AreaView:
         self.subplt.set_ylabel("Distance")
         self.subplt.set_ylim(0, 12)
         # plot data
-        self.subplt.pcolormesh(self.x, self.y, data, color='magenta')
+        self.subplt.pcolormesh(self.x, self.y, data, vmin=0, vmax=1)
         # paint
         self.canvas.draw()
         self.canvas.flush_events()
@@ -281,6 +299,7 @@ class AreaView:
         self.show( self.reader() )
         # plan next update after 300 ms
         self.afterId = self.master.after(conf.Config.period(), self.update)
+        self.log.debug("update area view")
 
     def manualUpdate(self, event):
         """Updates view. Handler for mouse events.
@@ -293,6 +312,24 @@ class AreaView:
             self.master.after_cancel(self.afterId)
         # run new thread
         self.update()
+
+class ReplayView:
+    """Replay controller.
+    
+    Attributes:
+        master  Item to show in.
+    """
+    log = logging.getLogger(__name__)
+    def __init__(self, master=None, replay=lambda:None):
+        self.master = master
+        self.frame = tk.Frame(master)
+        self.replay = replay
+        self.replayBtn = tk.Button(self.frame, text="Replay", command=self.restart)
+        self.replayBtn.grid(sticky=tk.N)
+    
+    def restart(self):
+        self.log.debug("restart replaying with "+str(self.replay))
+        self.replay()
 
 
         

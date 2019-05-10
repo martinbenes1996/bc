@@ -12,7 +12,10 @@ Developed as a part of bachelor thesis "Counting of people using PIR sensor".
 
 import json
 import logging
+import signal
 import numpy as np
+
+import globals
 
 class Config:
     """Includes global configuration for the whole program read from file.
@@ -42,7 +45,14 @@ class Config:
             self.channel_address = data["channel"]["address"]
             self.channel_port = data["channel"]["port"]
 
-            logging.basicConfig(format='%(levelname)s\t%(name)s: %(funcName)s(): %(lineno)i: %(message)s', level=logging.INFO)
+            # initialize logging
+            logging.basicConfig(format='%(levelname)s\t%(name)s: %(funcName)s(): %(lineno)i: %(message)s', level=logging.DEBUG)
+            logging.getLogger('matplotlib').setLevel(logging.WARNING)
+
+            # initialize signal handlers
+            def signal_handler(signal,frame):
+                globals.quit = True
+            signal.signal(signal.SIGINT, signal_handler)
 
     # configuration instance
     uniqueConf = None

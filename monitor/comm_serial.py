@@ -14,7 +14,7 @@ import csv
 import datetime
 import logging
 import serial
-import _thread
+import threading
 import time
 import sys
 
@@ -70,7 +70,7 @@ class Reader(comm.Reader):
             self.port = None
             self.readers[self.devicename] = self
             # start reader thread
-            _thread.start_new_thread(self.read, ())
+            threading.Thread(target=self.read).start()
 
     # Data getter
     def getSegment(self):

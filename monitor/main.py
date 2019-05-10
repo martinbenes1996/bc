@@ -10,10 +10,12 @@ This module is the main, which is first to run.
 Developed as a part of bachelor thesis "Counting of people using PIR sensor".
 """
 
+import os.path
 import time
 
 import app
 import comm_mcast
+import comm_replay
 import comm_serial
 import model
 
@@ -28,6 +30,8 @@ def getReaderInstance(name, port=None):
         return comm_mcast.Reader.getReader(name[2:])
     elif port:
         return comm_mcast.Reader.getReader(name, port)
+    elif os.path.isfile(name):
+        return comm_replay.Reader.getReader(name)
     else:
         raise Exception("Unknown device type: "+name)
 def getExtractorInstance(name, port=None):
@@ -36,6 +40,8 @@ def getExtractorInstance(name, port=None):
         return model.Extractor.getExtractor(name[2:], getReaderInstance(name, port))
     elif port:
         return model.Extractor.getExtractor(name, port, getReaderInstance(name, port))
+    elif os.path.isfile(name):
+        return model.Extractor.getExtractor(name, getReaderInstance(name))
     else:
         raise Exception("Unknown device type: "+name)
 def getReader(name, port=None):
@@ -47,6 +53,9 @@ def getExtractor(name, port=None):
 def getRecorder(name, port=None):
     """Recorder callback getter."""
     return getReaderInstance(name, port).record
+def getReplayer(name):
+    """Replayer callback getter."""
+    return comm_replay.Reader.getReader(name).replay
 
 
 def main():
@@ -67,6 +76,7 @@ def main():
     v.getReader = getReader
     v.getRecorder = getRecorder
     v.getExtractor = getExtractor
+    v.getReplayer = getReplayer
 
     # run main loop
     v.mainloop()

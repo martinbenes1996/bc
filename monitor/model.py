@@ -100,9 +100,11 @@ class Extractor:
                 # write to file, when recording
                 self.write(area)
 
-            # wait 100 ms
-            time.sleep(0.1)
+            # wait 200 ms
+            time.sleep(0.2)
 
+            if globals.quit:
+                return
             with self.stopLock:
                 if self._stop:
                     return
