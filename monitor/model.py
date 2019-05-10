@@ -347,10 +347,10 @@ class Classification:
             return score
         
         AND = fuzzy.SNorm.method('product')
-        areaM[0][0] = AND(score['presence'],   score['distance'],    score['left'])
-        areaM[0][1] = AND(score['presence'],   score['distance'],  N(score['left']))
-        areaM[1][0] = AND(score['presence'], N(score['distance']),   score['left'])
-        areaM[1][1] = AND(score['presence'], N(score['distance']), N(score['left']))
+        areaM[0][0] = AND(score['presence'], score['distance'] )
+        areaM[0][1] = AND(score['presence'], score['distance'] )
+        areaM[1][0] = AND(score['presence'], N(score['distance']) )
+        areaM[1][1] = AND(score['presence'], N(score['distance']) )
         return areaM
 
 

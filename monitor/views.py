@@ -288,7 +288,7 @@ class AreaView:
         self.subplt.set_ylabel("Distance")
         self.subplt.set_ylim(0, 12)
         # plot data
-        self.subplt.pcolormesh(self.x, self.y, data, vmin=0, vmax=1)
+        self.subplt.pcolormesh(self.x, self.y, data, vmin=0, vmax=1, cmap='hot')
         # paint
         self.canvas.draw()
         self.canvas.flush_events()
