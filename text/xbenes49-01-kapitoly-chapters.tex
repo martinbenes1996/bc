@@ -829,14 +829,29 @@ R_2 = S + r_2*(cos(\omega + \varphi_R), sin(\omega + \varphi_R))
 \label{eq:trapezoidCircularSector}
 \end{subequations}
 
-
-
 \begin{figure}[!ht]
 \begin{center}
 \includegraphics[width=0.4\textwidth]{img/area_triangles.png}
 \caption{Sensed area converted to triangles.\label{fig:area2triangles}}
 \end{center}
 \end{figure}
+
+All the objects were transformed into triangles. Now we get back to the global
+area matrix representation. Formula \ref{eq:2triangles} specifies how to compute
+size of areas intersection of two triangles. If the global area is split into
+homogenous mosaic of triangle sectors, the ones intersecting with sensor area
+ones can be found in advance, just once and saved as a part of configuration.
+
+The ratio of the intersecting sectors of sensor output matrixes over the
+global area sector gives the coefficient of their influence in the fusion.
+The not-covered parts of sector are considered as absence.
+
+\begin{subequations}
+\begin{equation}
+TODO
+\end{equation}
+\label{eq:2triangles}
+\end{subequations}
 
 \begin{subequations}
 \begin{equation}
@@ -1633,11 +1648,22 @@ opens a new tab with a real-time view of the signal of the source as well as the
 classified by the system. 
 
 In order to record a signal into a file, a recording session needs to be created and arranged.
+The session is made from recordings. The lengths of recordings and time delays before each recording
+are adjustable. This enables recording session to fulfil the needs for any kind of movement to be made.
+To work properly with the program, the names of the exercises must match the name of the session and they
+must have appendixes \_1, \_2, ... . An example is shown in the figure \ref{fig:monitorRecordGUI}.
 
 \begin{figure}[h!]
 \begin{center}
 \includegraphics[width=0.9\textwidth]{render/gui.png}
 \caption{Monitor GUI prototype with sample data. \label{fig:monitorGUI}}
+\end{center}
+\end{figure}
+
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[width=0.9\textwidth]{render/record.png}
+\caption{Monitor GUI recording session dialog.\label{fig:monitorRecordGUI}}
 \end{center}
 \end{figure}
 
