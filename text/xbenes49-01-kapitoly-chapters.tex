@@ -777,9 +777,8 @@ orientation and position of the sensors, as same as position of the objects in t
 like doors or windows as "human sources", or borders of the room.
 
 Fusion precedes defuzzification. All the computed sensor areas represented by fuzzy matrices
-are merged into emptily-preinitialized whole area representation by \ref{eq:mergeAreas}.
-Since these relations between the indices are stacionary, it can be precounted after the
-setting the configuration for the room.
+are merged into emptily-preinitialized whole area representation. Since these relations between
+the indices are stacionary, it can be precounted after the setting the configuration for the room.
 
 As shown in the figure \ref{fig:area2triangles}, the resulting matrix with fuzzy values
 creates fragments with shape of either a circular sector of a circle, or a circular sector
@@ -837,8 +836,8 @@ R_2 = S + r_2*(cos(\omega + \varphi_R), sin(\omega + \varphi_R))
 \end{figure}
 
 All the objects were transformed into triangles. Now we get back to the global
-area matrix representation. Formula \ref{eq:2triangles} specifies how to compute
-size of areas intersection of two triangles. If the global area is split into
+area matrix representation. Below is described how to compute
+size of area intersection of two triangles. If the global area is split into
 homogenous mosaic of triangle sectors, the ones intersecting with sensor area
 ones can be found in advance, just once and saved as a part of configuration.
 
@@ -846,19 +845,45 @@ The ratio of the intersecting sectors of sensor output matrixes over the
 global area sector gives the coefficient of their influence in the fusion.
 The not-covered parts of sector are considered as absence.
 
+\paragraph{Two triangles intersection}
+In order to count an intersection of two triangles, we will need formulas \ref{eq:2triangles}.
+
+Let's consider two triangles $\Delta ABC$ and $\Delta DEF$, whose intersection is needed
+to be found. Firstly for each of the edges of $\Delta ABC$, $AB$, $BC$ and $CA$,
+collisions with points $D$, $E$, $F$ using $lp_{collide}$ and edges $DE$, $EF$, $FD$
+with $ll_{collide}$ are evaluated and separately sorted for each "hit" by ascending
+parameter $p$.
+
+After that each of the vertices $D$, $E$, $F$ are tested for laying inside the triangle
+(not on the edge though). If so, they are marked. Finally all these three lists are
+merged together with vertices, if they are marked, in clockwise order, aka $DE$, $D^{*}$,
+$EF$, $F^{*}$, $FD$, $D^{*}$.
+
 \begin{subequations}
+
 \begin{equation}
-TODO
+L_{A,B,p \in \langle 0;1)}(X) = A + p\cdot\overline{AB} - X
 \end{equation}
+
+\begin{equation}
+lp_{collide}(A,B,C) = \begin{cases} L_{A,B,p}(X)       & L_{A,B,p} = 0 \\
+                                    \text{not~on~line} & \text{otherwise}
+                        \end{cases}
+\end{equation}
+
+\begin{equation}
+ll_{collide}(A,B,C,D) = \begin{cases} X                       & lp_{A,B,X} \land L_{C,D,X} \\
+                                      \text{no~intersection}  & \text{otherwise}
+                        \end{cases}
+\end{equation}
+
 \label{eq:2triangles}
 \end{subequations}
 
-\begin{subequations}
-\begin{equation}
-TODO
-\end{equation}
-\label{eq:mergeAreas}
-\end{subequations}
+What needs to be point out, the object whose vertices were just counted is always convex.
+Provided this is acknowledged the area of the object can be counted using altered 
+Pined filling algorithm or another filling algorithm as same as for a triangle.
+
 
 
 
@@ -1420,7 +1445,7 @@ where 0 means no influence and $-1$ means absolute influence of previous artefac
 \begin{equation}
 S(x) =\begin{cases} 1 & x > 1           \\
                     0 & x < 0           \\
-                    x & text{otherwise}
+                    x & \text{otherwise}
       \end{cases}
 \end{equation}
 \begin{equation}
