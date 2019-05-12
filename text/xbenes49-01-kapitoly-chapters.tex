@@ -659,13 +659,40 @@ circular sector, it can be easily represented by classical 2D matrix, as it is s
 \end{center}
 \end{figure}
 
-Each of the scores is fuzzified using sigmoid function and merged together using formula \ref{eq:regressionmerger},
-creating the resulting matrix, as shown in the figure \ref{fig:areamatrixweighting}.
+Each of the scores is merged together, creating the resulting matrix, as shown
+in the figure \ref{fig:areamatrixweighting}. Formula \ref{eq:regressionmerger} illustrates
+the base of merging process. The trait "object is closer than $T$" is scored as 
+direct output of the classifier for the distance trait, for "object is further than T",
+the score of the assertion is a fuzzy negation of the classifier output.
+Classifier for $\kappa = distance$ must be trained for classes with distances $<T$,$>T$.
 
+In this case, the area has only two distance states -- closer or more distant than T.
+These traits are directly dependent on the labelling. With a sufficient number of training
+data, a lot of traits can be created, enlarging the matrix and making the results more accurate.
+
+For the assertions "object is on the left" and "object is on the right", a classifier trained
+with appropriate labels is used, and the logic of evaluation is the same. Merging statements
+is reaching the index score, and is designed using fuzzy T-norm of traits.
+
+
+\begin{subequations}
 \begin{equation}
-TODO
-\label{eq:regressionmerger}
+M_{<T} = A^{\kappa = distance}
 \end{equation}
+\begin{equation}
+M_{>T} = N(A^{\kappa = distance})
+\end{equation}
+\begin{equation}
+M_{<0^{\circ}} = A^{\kappa = left}
+\end{equation}
+\begin{equation}
+M_{>0^{\circ}} = N(A^{\kappa = left})
+\end{equation}
+\begin{equation}
+M_{<0^{\circ}, <T~M} = N(A^{\kappa = left}) \land_P A^{\kappa = distance}
+\end{equation}
+\label{eq:regressionmerger}
+\end{subequations}
 
 \begin{figure}[h!]
 \begin{center}
@@ -749,7 +776,7 @@ The disadvantage is higher price and need for mechanism to process the configura
 orientation and position of the sensors, as same as position of the objects in the room
 like doors or windows as "human sources", or borders of the room.
 
-Fusion precedes fuzzification. All the computed sensor areas represented by fuzzy matrices
+Fusion precedes defuzzification. All the computed sensor areas represented by fuzzy matrices
 are merged into emptily-preinitialized whole area representation by \ref{eq:mergeAreas}.
 Since these relations between the indices are stacionary, it can be precounted after the
 setting the configuration for the room.
@@ -1530,6 +1557,20 @@ During the offline processing, parallelism could be a good approach to increase 
 {\it Monitor} as a classification server is endowed with simple GUI for the needs of monitoring
 the signal real-time and recording of the data sets used for training, testing and evaluating the results.
 The interface is shown in the figure \ref{fig:monitorGUI}.
+
+As the programming language used for the Monitor was Python3 due to many libraries connected with the
+machine learning and classification (numpy, scipy, matplotlib), for GUI was chosen library {\it TKinter} -- as a part of
+standard Python3 library is always present whenever Python3 is present, the usage is pretty simple
+and it is easy to connect with matplotlib. The whole GUI is still designed as a prototype,
+for the system deployed to the real situations it would be probably too slow and not flexible enough.
+
+The classical menu bar with dropdowns appears in the top of the window. Dropdown {\it File} contains
+option to switch to the record mode over the source in the active tab and opening the tab with a
+source from file.
+
+The side menu contains possible sources to read: multicast channels or serial ports. Checking
+opens a new tab with a real-time view of the signal of the source as well as the area view,
+classified by the system. 
 
 \begin{figure}[h!]
 \begin{center}

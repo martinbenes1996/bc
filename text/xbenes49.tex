@@ -132,37 +132,41 @@
   supervisor.title.p={prof. Ing., Dipl.-Ing.},   %titul před jménem (nepovinné) / title before the name (optional)
   supervisor.title.a={Ph.D.},    %titul za jménem (nepovinné) / title after the name (optional)
   % Klíčová slova / keywords
-  keywords.cs={Sem budou zapsána jednotlivá klíčová slova v českém (slovenském) jazyce, oddělená čárkami.}, % klíčová slova v českém či slovenském jazyce / keywords in czech or slovak language
-  keywords.en={Sem budou zapsána jednotlivá klíčová slova v anglickém jazyce, oddělená čárkami.}, % klíčová slova v anglickém jazyce / keywords in english
+  keywords.cs={PIR sensor, klasifikace, fuzzy model, lineární regrese}, % klíčová slova v českém či slovenském jazyce / keywords in czech or slovak language
+  keywords.en={PIR sensor, classification, fuzzy model, linear regression}, % klíčová slova v anglickém jazyce / keywords in english
   %keywords.en={Here, individual keywords separated by commas will be written in English.},
   % Abstrakt / Abstract
   abstract.cs={
     PIR (pasivní infračervený) senzor se používá zejména pro detekci přítomnosti osoby a oznámení systému pro příslušnou reakci.
-    Zaměřením této práce je užití PIR senzorů pro rozpoznávání pozice osoby, rychlosti a směru pohybu nebo počtu lidí ve snímaném prostoru.
-    Za tímto účelem je navržen způsob zpracování jeho výstupního analogového signálu, počínající extrakcí příznaků pomocí vlnkové transformace,
-    následnou klasifikací a generování výstupu na základě sběru dat z více senzorů pomocí speciálního systému, který ze vstupní matice fuzzy
-    čísel generované klasifikátorem pro každý senzor generuje na výstup pozice přítomných osob.
+    Cílem této práce je užití PIR senzorů pro lokalizaci osoby a návrh způsobu pro určení počtu lidí ve snímaném prostoru.
+    Pro tento účelem je navržen způsob zpracování jeho výstupního analogového signálu, počínající extrakcí příznaků pomocí spojité
+    vlnkové transformace, klasifikačního modelu založeném na fuzzy logice a lineární regresi. Na konci jsou představeny a
+    vyhodnoceny experimentálně získané výsledky.
 
   }, % abstrakt v českém či slovenském jazyce / abstract in czech or slovak language
   abstract.en={
     PIR (passive infrared) sensor are mainly used to detect a presence of a parson and notifying a system to react appropriately.
-    The aim of this thesis is to use the PIR sensors to recognize position of person, speed and direction of movement or count of people.
-    To do so, thesis suggests a heat signal processing pipeline including wavelet transformation feature extraction, classifier and fuzzy
-    logic system, collecting data from multiple sensors, processing them and merging them together into a result.
+    The aim of this thesis is to try using the PIR sensors to localize the person and present approach to estimate a count of people.
+    To do so, thesis suggests a heat signal processing pipeline including wavelet transformation feature extraction, fuzzy logic system
+    with classifiers based on linear regression. The performed experiment and its results are presented an evaluated.
   }, % abstrakt v anglickém jazyce / abstract in english
   %abstract.en={An abstract of the work in English will be written in this paragraph.},
   % Prohlášení (u anglicky psané práce anglicky, u slovensky psané práce slovensky) / Declaration (for thesis in english should be in english)
-  declaration={Prohlašuji, že jsem tuto bakalářskou práci vypracoval samostatně pod vedením pana X...
-Další informace mi poskytli...
-Uvedl jsem všechny literární prameny a publikace, ze kterých jsem čerpal.},
-  %declaration={Hereby I declare that this bachelor's thesis was prepared as an original author’s work under the supervision of Mr. X
-% The supplementary information was provided by Mr. Y
-% All the relevant information sources, which were used during preparation of this thesis, are properly cited and included in the list of references.},
+  declaration={Prohlašuji, že jsem tuto bakalářskou práci vypracoval samostatně pod vedením Prof. Ing., Dipl.-Ing. Martina Drahanského, Ph.D.
+  a Prof. (FH) Univ.-Doz. Mag. Dr. habil. Guido Kemptera. 
+  %Další informace mi poskytli...
+  Uvedl jsem všechny literární prameny a publikace, ze kterých jsem čerpal.},
+  declaration={Hereby I declare that this bachelor's thesis was prepared as an original author’s work under the supervision of
+  Prof. Ing., Dipl.-Ing. Martin Drahansky, Ph.D. a Prof. (FH) Univ.-Doz. Mag. Dr. habil. Guido Kempter.
+  % The supplementary information was provided by Mr. Y
+  All the relevant information sources, which were used during preparation of this thesis, are properly cited and included in the list of references.},
   % Poděkování (nepovinné, nejlépe v jazyce práce) / Acknowledgement (optional, ideally in the language of the thesis)
-  acknowledgment={V této sekci je možno uvést poděkování vedoucímu práce a těm, kteří poskytli odbornou pomoc
-(externí zadavatel, konzultant, apod.).},
-  %acknowledgment={Here it is possible to express thanks to the supervisor and to the people which provided professional help
-%(external submitter, consultant, etc.).},
+  %acknowledgment={V této sekci je možno uvést poděkování vedoucímu práce a těm, kteří poskytli odbornou pomoc
+  %(externí zadavatel, konzultant, apod.).},
+  acknowledgment={I want to express a great gratitude to my Czech and Austrian supervisors Prof. Drahansky and Prof. Kempter as well as Dipl.-Ing. Ritter
+  from FH Vorarlberg for assigning me to this amazing topic and aiming the focus of the research. My sincere thank you also goes to Ing. Tomas Goldmann
+  and Ing. Daniel Sadjak for providing facilities for the research. Last but not the least, I am greatful to my family and friends for
+  unceasing support and encouragement.},
   % Rozšířený abstrakt (cca 3 normostrany) - lze definovat zde nebo níže / Extended abstract (approximately 3 standard pages) - can be defined here or below
   %extendedabstract={Do tohoto odstavce bude zapsán rozšířený výtah (abstrakt) práce v českém (slovenském) jazyce.},
   %faculty={FIT}, % FIT/FEKT/FSI/FA/FCH/FP/FAST/FAVU/USI/DEF
