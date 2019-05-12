@@ -781,6 +781,63 @@ are merged into emptily-preinitialized whole area representation by \ref{eq:merg
 Since these relations between the indices are stacionary, it can be precounted after the
 setting the configuration for the room.
 
+As shown in the figure \ref{fig:area2triangles}, the resulting matrix with fuzzy values
+creates fragments with shape of either a circular sector of a circle, or a circular sector
+of a annulus. To avoid overcomplicated computations, these shapes can be simplified by
+representing them with triangles.
+
+We have a circular sector with center $S$, radius $r$, arc edge points $L,R$ and their
+polar angular deviations from the center are being $\varphi_L, \varphi_R$, global azimuth
+of the sensor is $\omega$. Such a circular sector can be represented with a triangle $SLR$,
+as shown in the formula \ref{eq:triangleCircularSector}.
+
+Such object is in the figure \ref{fig:area2triangles} displayed split by its height.
+Height can be easily found, it is a vector $SH$, where $H = L + \frac{1}{2}\overline{LR}$.
+
+\begin{subequations}
+\begin{equation}
+S = S
+\end{equation}
+\begin{equation}
+L = S + r*(cos(\omega + \varphi_L), sin(\omega + \varphi_L))
+\end{equation}
+\begin{equation}
+R = S + r*(cos(\omega + \varphi_R), sin(\omega + \varphi_R))
+\end{equation}
+\label{eq:triangleCircularSector}
+\end{subequations}
+
+In the case of the circular sector of annulus, we have center $S$, polar angular deviations
+$\varphi_L$,$\varphi_R$ and radiuses of the bordering arcs, minimal radius $r_1$ and 
+maximal radius $r_2$. This can be overlaid by trapezoid $L_1,R_1,R_2,L_2$, the
+$\Delta\varphi_L\varphi_R$ should not be to big, otherwise a significant discrepancies can occur. 
+The formulas for stating the trapezoid points are shown in the formula \ref{eq:trapezoidCircularSector}.
+
+\begin{subequations}
+\begin{equation}
+L_1 = S + r_1*(cos(\omega + \varphi_L), sin(\omega + \varphi_L))
+\end{equation}
+\begin{equation}
+R_1 = S + r_1*(cos(\omega + \varphi_R), sin(\omega + \varphi_R))
+\end{equation}
+\begin{equation}
+L_2 = S + r_2*(cos(\omega + \varphi_L), sin(\omega + \varphi_L))
+\end{equation}
+\begin{equation}
+R_2 = S + r_2*(cos(\omega + \varphi_R), sin(\omega + \varphi_R))
+\end{equation}
+\label{eq:trapezoidCircularSector}
+\end{subequations}
+
+
+
+\begin{figure}[!ht]
+\begin{center}
+\includegraphics[width=0.4\textwidth]{img/area_triangles.png}
+\caption{Sensed area converted to triangles.\label{fig:area2triangles}}
+\end{center}
+\end{figure}
+
 \begin{subequations}
 \begin{equation}
 TODO
@@ -1558,11 +1615,14 @@ During the offline processing, parallelism could be a good approach to increase 
 the signal real-time and recording of the data sets used for training, testing and evaluating the results.
 The interface is shown in the figure \ref{fig:monitorGUI}.
 
-As the programming language used for the Monitor was Python3 due to many libraries connected with the
-machine learning and classification (numpy, scipy, matplotlib), for GUI was chosen library {\it TKinter} -- as a part of
-standard Python3 library is always present whenever Python3 is present, the usage is pretty simple
-and it is easy to connect with matplotlib. The whole GUI is still designed as a prototype,
+Since the programming language used for the Monitor was Python3 due to many amazing libraries focused on the
+machine learning and classification (numpy, scipy, matplotlib), for GUI was chosen a library {\it TKinter}
+-- as a part of standard Python3 library is always present whenever Python3 is, the usage is pretty simple
+and it is easy to connect with matplotlib, graph plotting library. The whole GUI is still designed as a prototype,
 for the system deployed to the real situations it would be probably too slow and not flexible enough.
+As an alternative, Qt might be considered.
+
+\subsection*{Structure of the view}
 
 The classical menu bar with dropdowns appears in the top of the window. Dropdown {\it File} contains
 option to switch to the record mode over the source in the active tab and opening the tab with a
@@ -1572,14 +1632,17 @@ The side menu contains possible sources to read: multicast channels or serial po
 opens a new tab with a real-time view of the signal of the source as well as the area view,
 classified by the system. 
 
+In order to record a signal into a file, a recording session needs to be created and arranged.
+
 \begin{figure}[h!]
 \begin{center}
-\includegraphics[width=0.8\textwidth]{render/gui.png}
+\includegraphics[width=0.9\textwidth]{render/gui.png}
 \caption{Monitor GUI prototype with sample data. \label{fig:monitorGUI}}
 \end{center}
 \end{figure}
 
 \subsection*{Structure}
+
 \begin{figure}[h!]
 \begin{center}
 \includegraphics[width=1\textwidth]{img/class_gui.png}
@@ -1594,18 +1657,34 @@ classified by the system.
 
 \chapter{Conclusion}
 
-\section{TO DELETE}
-Shrnuti zameru prace. Zhodnoceni splneni (i formalnich bodu).
+Nowadays PIR sensors are mostly used to detect a presence of a person. The main aim of the research was to try to use PIR sensors
+for monitoring the situation in the sensed area and state the count of people. For this matter a system, that would use the data
+from the PIR sensors and scan the monitor situation, should have been designed. To do so, various classification and recognition
+algorithms were studied and considered. Suggested solutions by the task were using either predefined fuzzy logic system or
+artificial learning system. One of the tasks was also to implement suggested algorithm and verify its functionality on real situations.
 
-Zhodnoceni z pohledu dalsiho vyvoje. Co se nestihlo (a dalo by se jeste).
+The issues related to the topic, PIR sensor and MCU as for hardware and classification algorithms and fuzzy logic in particular, were
+studied in detail. To understand the area even more thoroughly, a number of theses and articles were read. The approach of evaluating
+the room occupancy using infrared radiation is still new and seems very promising.
 
-Bez odkazu do textu / literatury. Zadne nove poznatky, cisla a grafy.
+Acquired data enabled designing a theoretical system based on fuzzy logic and linear regression for classification itself. The system
+could be used not only to state either presence or absence of a person in front of the sensor, but also his position and possibly
+even the count of people, if multiple are present. The design also suggests a way how to use multiple sensors.
 
-Pekny postreh k praci (co jsem se naucil).
+The implementation of the design includes the main processing pipeline for one sensor, where the signal can be either pre-recorded
+and read from a file, or sensed in real time and transferred by serial port, or by multicast group. For monitoring and debugging
+purposes, a prototype of GUI was made, showing the real time signal and the processing output.
 
-Vyhled do budoucna, rozdeleni na casti.
+The PCB of a possible product, a sensing device, and the look of it, was suggested as well. A prototype of PCB was drilled.
 
-20 stranek SEP, 40 bakalarka.
+The classifiers were trained with supervisor. To do so, a train and test data set wer recorded and labelled with simple labelling method,
+and experiments were done over it. The specified formal points of the task were all fulfilled.
+
+The designed system considers much wider usage, than was implemented, as multiple-sensor usage and the fusion algorithm. Multiple-person
+situations were not tested. Still the usage of PIR sensors in this application has bright prospects and despite the challenges, that
+are still in the way, it is definitely worth being focus for onward research.
+
+
 
 
 

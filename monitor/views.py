@@ -51,10 +51,10 @@ class SerialView:
             self.buttons[serialname] = checkbutton
     
     def disable(self):
-        for _,chb in enumerate(self.buttons):
+        for _,chb in self.buttons.items():
             chb.disable()
     def update(self):
-        for _,chb in enumerate(self.buttons):
+        for _,chb in self.buttons.items():
             chb.manualUpdate()
         self.log.debug("update serial view")
 

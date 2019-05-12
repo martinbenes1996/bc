@@ -100,7 +100,11 @@ class View:
 
         self.recordFrame = tk.Frame(self.root, highlightcolor='black', highlightbackground='black', highlightthickness=3, bd=0)
         self.recordFrame.grid(row=0, column=3, rowspan=100, sticky=tk.N+tk.S+tk.E)
-        self.headerFrame = tk.Label(self.recordFrame, text=u"Recording: "+source, font=30).grid(row=0, column=0, sticky=tk.N+tk.W)
+        if len(source) > 15:
+            titletext = u"Recording: ..."+source[-15:]
+        else:
+            titletext = u"Recording: "+source
+        self.headerFrame = tk.Label(self.recordFrame, text=titletext, font=30).grid(row=0, column=0, sticky=tk.N+tk.W)
         self.closeRecord = tk.Button(self.recordFrame, text="Close", command=self.endRecordingSession).grid(row=0, column=1, sticky=tk.N+tk.E)
 
         self.sessionName = tk.Text(self.recordFrame, height=1, width=40)
