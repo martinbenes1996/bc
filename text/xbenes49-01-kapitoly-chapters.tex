@@ -667,7 +667,7 @@ the score of the assertion is a fuzzy negation of the classifier output.
 Classifier for $\kappa = distance$ must be trained for classes with distances $<T$,$>T$.
 
 In this case, the area has only two distance states -- closer or more distant than T.
-These traits are directly dependent on the labelling. With a sufficient number of training
+These traits are directly dependent on the labeling. With a sufficient number of training
 data, a lot of traits can be created, enlarging the matrix and making the results more accurate.
 
 For the assertions "object is on the left" and "object is on the right", a classifier trained
@@ -950,6 +950,37 @@ wscalogram('image', cwt(data));
 
 The training and testing data were recorded as a part of the work, results are
 shown and described by the appendix \ref{appendix:PIRSignal}.
+
+\subsection*{Labeling the data set}
+Classification is implemented as supervised learning. The supervisory is implemented
+as labels for recorded files. For achieving such labels a special script {\it classifiers/labeller.py}
+was made. This script uses {\it segment.py} of Monitor app to make the labeling possible.
+
+The labeling itself is made by human. We have a recorded file with signal in the format .csv
+and video file of the area as well in the format *.mp4. During the labeling, firstly the 
+signal is segmented ino artefacts using classes Segment, Edge and Artefact. After that
+artefacts are shown to the person performing the labeling.
+
+When the program is started, it requires entering a session name to label. After that
+measurements of the session are being processed. In order to work properly, if the
+session is named X, the session measurements must be called X\_1.csv, X\_2.csv, ... .
+
+Each artefact is shown as a signal plot, center frame of the video and the questions,
+that the person ought to answer. The first question is "Is the person present?".
+Clicking 0 or 1 on the keyboard with active window with a frame the program shows
+another frame or question dependent on the answer. The consequent questions 
+in the case of presence of the person are "Is the person in the center?", "Is the
+parson on the left?" and "Is the person close?". After answering the next artefact
+is processed.
+
+The labeling process is shown in the figure \ref{fig:labeling}.
+
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[width=0.8\textwidth]{img/labeling2.png}
+\caption{Labeling method of the data set.\label{fig:labeling}}
+\end{center}
+\end{figure}
 
 
 
@@ -1618,32 +1649,63 @@ p(\kappa \in {0,1}|A)_{X} = \frac{1}{\sum_{A^{\kappa}}|a|} \sum_{a\in A^{\kappa}
 
 \begin{table}[!ht]
 \begin{center}
-\begin{tabular}{|c|c c c c c|} \hline
+\begin{tabular}{|c|c c c c|} \hline
 \textbf{Aspect} & \textbf{Presence} & \textbf{Distance} & \textbf{Center} & \textbf{Left} \\ \hline
-Positive rate   & $$                & $$                & $$              & $$            \\
-Negative rate   & $$                & $$                & $$              & $$            \\ \hline
+Positive rate   & $75.244$          & $$                & $$              & $$            \\
+Negative rate   & $86.539$          & $$                & $$              & $$            \\ \hline
 Total rate      & $$                & $$                & $$              & $$            \\ \hline
 \end{tabular}
-\caption{Posterior probability on testing data.\label{table:results} }
+\caption{Posterior probability on testing data.\label{table:resultsProbability} }
 \end{center}
 \end{table}
 
-{\it Interpretation of results. Practical usage. }
+The results of posterior probability, shown in the table \ref{table:resultsProbability}, show,
+that it is definitely possible to use PIR sensors for the purpose of localization of people
+and possibly even counting them. The results itself in the tables \ref{table:results} and
+\ref{table:resultsProbability} are probably not sufficient for a deployment in the real situations.
+The relatively low results can be caused by multiple aspects.
+
+The most obvious aspect that could influence the accuracy of the classification of the testing data
+is the method of labeling. The reference medium for labeling were video recordings, synchronized
+with the recording session in the monitor by a Monitor generating a sound at the beginning of each
+recording and then synchronisation using the sound track of the video to mark and crop the recording.
+
+Another aspect causing unfavourable result values could be labeling itself. It was done manually,
+so the human aspect is one of the reasons as same as the fact, that labels were created for each
+splitted artefact itself. Potential mistakes in segmenting and merging the segments into artefacts
+could be propagated into the results, even though there was an effort to reduce this threat in
+class Reference, which performs operations across the artefacts.
+
+Not mentioned, though quite important is a size of dataset. During the whole development, about 200
+15~s recordings were done, each then splitted into 10 - 30 artefacts, which each possess a separate
+label. For the training and testing purposes only 81 recordings were later included, 45 with no
+movement (empty area) and 36 included movement.
 
 
 \subsection*{Suggestions for improvement}
-For the results 117 15~s long measurements were done, 72 with movement present, 45 with no movement.
-To improve the accuracy of the results, different types of movements could have been recorded, as same
-as more measurements in different speeds, or different surrounding.
+As mentioned before, the results are not very positive for the deployment in the real situation, e.g.
+controlling of objects etc. With further improvements and reducing of the mentioned risks it could
+be a very good and promising principle for certain fields, as physical security, internet of things
+and others.
 
-The multiple persons present during the measuring were not tested or measured at all. The suggested mechanism
-could be used in this case as well, though it was not tested for it whatsoever.
+The improvement is necessary to reach it. Firstly, more data and different movement types must be
+recorded in order to improve both the accuracy and possibility to use the sensor in general. 
+The possible way could be changing not only the orientations and trajectories of the movement,
+but also the speed, different surroundings, sizes of the area, temperature differences in the
+background (usage in sauna or a room freezers).
+
+The multiple persons present, even though mechanism considered possibility of counting the people,
+were not tested or measured at all during the measuring.
 
 The speed of the processing program is not breakneck. Possible way could be profiling the program and optimizing
 the critical parts by rewriting them in compiled language (C++). Since the program includes a lot of vector
 algebra, optimalization with moving the computation to GPU / SSE / AVX could be also a solution.
-
 During the offline processing, parallelism could be a good approach to increase a speed of processing.
+
+Multiple sensors do not only have to be used in one single room being merged by fusion, but
+another improvement could be designing a server, monitoring and identification of the people by
+a network of PIR sensors and cameras. Such a mechanism was already matter of research in
+several theses, such as \cite{KenyaThesis}.
 
 
 
@@ -1664,10 +1726,16 @@ As an alternative, Qt might be considered.
 
 \subsection*{Structure of the view}
 
+\begin{figure}[!ht]
+\begin{center}
+\includegraphics[width=0.7\textwidth]{render/gui.png}
+\caption{Monitor GUI prototype with sample data. \label{fig:monitorGUI}}
+\end{center}
+\end{figure}
+
 The classical menu bar with dropdowns appears in the top of the window. Dropdown {\it File} contains
 option to switch to the record mode over the source in the active tab and opening the tab with a
 source from file.
-
 The side menu contains possible sources to read: multicast channels or serial ports. Checking
 opens a new tab with a real-time view of the signal of the source as well as the area view,
 classified by the system. 
@@ -1678,16 +1746,9 @@ are adjustable. This enables recording session to fulfil the needs for any kind 
 To work properly with the program, the names of the exercises must match the name of the session and they
 must have appendixes \_1, \_2, ... . An example is shown in the figure \ref{fig:monitorRecordGUI}.
 
-\begin{figure}[h!]
+\begin{figure}[!ht]
 \begin{center}
-\includegraphics[width=0.9\textwidth]{render/gui.png}
-\caption{Monitor GUI prototype with sample data. \label{fig:monitorGUI}}
-\end{center}
-\end{figure}
-
-\begin{figure}[h!]
-\begin{center}
-\includegraphics[width=0.9\textwidth]{render/record.png}
+\includegraphics[width=0.2\textwidth]{render/record.png}
 \caption{Monitor GUI recording session dialog.\label{fig:monitorRecordGUI}}
 \end{center}
 \end{figure}
@@ -1700,6 +1761,22 @@ must have appendixes \_1, \_2, ... . An example is shown in the figure \ref{fig:
 \caption{Class diagram of view part. \label{fig:classGUI}}
 \end{center}
 \end{figure}
+
+The whole Monitor is made as model-view-controller pattern. The view consists of module {\it app.py} with
+the class App controlling the processes inside of the view. Two more modules are present, {\it ui.py}
+and {\it views.py}.
+
+The {\it ui.py} is a adapter over several TKinter classes with slight extension of its functionality according
+to the needs of App class. It contains CheckButton connected with a data source, which repeats testing the 
+connected source availability and enables or disables itself by that. Notebook extends {\it TKinter.ttk.Notebook}
+with a simple graphical widget, Menu represents the menubar.
+
+The whole graphical design consists of multiple parts with various roles, assembled together in one window.
+For scalability reasons each of this "views" is implemented as a separate class inside the module {\it views.py}.
+Classes MulticastView and SerialView are used in the side menus with checkbuttons for each data source, multicast
+channel or serial port. SignalView and AreaView are the main part of the tab system (notebook), visualizing the
+received segment and the counted area fuzzy matrix. The ReplayView can be seen when a replay is shown as a data
+source, it contains the button controlling the replaying of the file.
 
 
 
@@ -1728,7 +1805,7 @@ purposes, a prototype of GUI was made, showing the real time signal and the proc
 
 The PCB of a possible product, a sensing device, and the look of it, was suggested as well. A prototype of PCB was drilled.
 
-The classifiers were trained with supervisor. To do so, a train and test data set wer recorded and labelled with simple labelling method,
+The classifiers were trained with supervisor. To do so, a train and test data set wer recorded and labelled with simple labeling method,
 and experiments were done over it. The specified formal points of the task were all fulfilled.
 
 The designed system considers much wider usage, than was implemented, as multiple-sensor usage and the fusion algorithm. Multiple-person

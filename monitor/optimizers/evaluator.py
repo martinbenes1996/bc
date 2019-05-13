@@ -8,12 +8,17 @@ import model
 
 class Evaluator:
 
+    def __init__(self, probability = False):
+        self.probability = probability
+
     def sigmoid(self,kappa):
-        #if kappa >= 0.5:
-        #    return 1
-        #else:
-        #    return 0
-        return kappa
+        if not self.probability:
+            if kappa >= 0.5:
+                return 1
+            else:
+                return 0
+        else:
+            return kappa
 
     def evaluate(self, key):
         # train
@@ -76,6 +81,7 @@ class Evaluator:
 
         return (positivescore,negativescore)
 
+
     def optimize(self, key):
 
         # train
@@ -109,8 +115,8 @@ class Evaluator:
 
 
 def main():
-    e = Evaluator()
-    e.evaluate('presence')
+    e = Evaluator(probability=True)
+    e.meanCertainty('presence')
    
     
 

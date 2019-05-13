@@ -12,8 +12,9 @@ Developed as a part of bachelor thesis "Counting of people using PIR sensor".
 
 import json
 import logging
-import signal
 import numpy as np
+import signal
+import sys
 
 import globals
 
@@ -52,6 +53,7 @@ class Config:
             # initialize signal handlers
             def signal_handler(signal,frame):
                 globals.quit = True
+                sys.exit()
             signal.signal(signal.SIGINT, signal_handler)
 
     # configuration instance
@@ -59,6 +61,8 @@ class Config:
     @classmethod
     def get(cls):
         """Configuration getter. Instantiates, if not instantiated yet."""
+        if globals.quit:
+            quit()
         # instantiate
         if not cls.uniqueConf:
             cls.uniqueConf = cls.ConfigSingleton()
