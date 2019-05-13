@@ -116,7 +116,7 @@ class Evaluator:
 
 def main():
     e = Evaluator(probability=True)
-    e.meanCertainty('presence')
+    e.meanCertainty('distance')
    
     
 
