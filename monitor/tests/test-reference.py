@@ -2,6 +2,7 @@
 import sys
 
 sys.path.insert(0, '.')
+import conf
 import model
 
 
@@ -30,6 +31,7 @@ def my_assert(cond):
 
 
 def main():
+    conf.Config.setDebug(False)
     trains,tests = model.Reference.generateReferences("c4m_LR_3", traintest=True)
 
     test(trains["c4m_LR_3_1"].artefactOfSample(153), 1)

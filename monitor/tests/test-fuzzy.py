@@ -3,6 +3,7 @@ import sys
 
 sys.path.insert(0, '.')
 import fuzzy
+import conf
 import segment
 
 i = 0
@@ -129,6 +130,8 @@ def testOperations():
 
 
 def main():
+    conf.Config.setDebug(False)
+    
     testSet()
     testKhi()
 

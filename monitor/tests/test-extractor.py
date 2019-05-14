@@ -39,7 +39,7 @@ def generalTest():
 
 def main():
     global status
-    conf.Config.init()
+    conf.Config.setDebug(False)
     try:
         generalTest()
     except Exception as e:

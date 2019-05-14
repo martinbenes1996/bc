@@ -884,8 +884,40 @@ What needs to be point out, the object whose vertices were just counted is alway
 Provided this is acknowledged the area of the object can be counted using altered 
 Pined filling algorithm or another filling algorithm as same as for a triangle.
 
+\paragraph{Global area representation}
+It is pretty simple to convert the problem of merging all segments of sensor output
+matrices into transforming all the segment shapes to triangles. Then they can be 
+all put together into global area dependently on their mutual positions.
 
+The global area must be segmented as well with a segment being representant of a part
+of the area. The fuzzy value for each such segment is derived from the sensor area segments,
+that correspond by position. Since the overlap does not have to be, and probably never
+will be perfect, there must be an algorithm, that would generate a polynome of areas
+influencing the value of the segment as well as coefficient for influencer.
 
+Intuitively, the global area could be segmented homogenously into squares. This layout
+has a lot of advantages. Problem is, that the algorithm generating the coefficients will
+count with a ratio of surfaces. The intersection of areas of triangle and square is not as easy
+as intersection of areas of two triangles. To use this, the area could be rather than
+into squares split into triangles, example shown in the figure \ref{fig:globalArea}.
+
+\begin{figure}[!ht]
+\begin{center}
+\includegraphics[width=0.4\textwidth]{img/global_area.png}
+\caption{Representation of global area by triangles.\label{fig:globalArea}}
+\end{center}
+\end{figure}
+
+Formally, formulas \ref{eq:globalArea} specify area as 3D function with third dimension
+being a bool, one of the values ${0,1}$ and conversion these 3D coordintes into
+2D coordinates of vertices of the triangle.
+
+\begin{subequations}
+\begin{equation}
+TODO
+\end{equation}
+\label{eq:globalArea}
+\end{subequations}
 
 
 \chapter{Data}
@@ -1651,9 +1683,8 @@ p(\kappa \in {0,1}|A)_{X} = \frac{1}{\sum_{A^{\kappa}}|a|} \sum_{a\in A^{\kappa}
 \begin{center}
 \begin{tabular}{|c|c c c c|} \hline
 \textbf{Aspect} & \textbf{Presence} & \textbf{Distance} & \textbf{Center} & \textbf{Left} \\ \hline
-Positive rate   & $75.972$          & $$                & $$              & $$            \\
-Negative rate   & $86.542$          & $$                & $$              & $$            \\ \hline
-Total rate      & $$                & $$                & $$              & $$            \\ \hline
+Positive rate   & $75.972$          & $75.785$          & $$              & $$            \\
+Negative rate   & $86.542$          & $69.793$          & $$              & $$            \\ \hline
 \end{tabular}
 \caption{Posterior probability on testing data.\label{table:resultsProbability} }
 \end{center}
@@ -1805,7 +1836,7 @@ purposes, a prototype of GUI was made, showing the real time signal and the proc
 
 The PCB of a possible product, a sensing device, and the look of it, was suggested as well. A prototype of PCB was drilled.
 
-The classifiers were trained with supervisor. To do so, a train and test data set wer recorded and labelled with simple labeling method,
+The classifiers were trained with supervisor. To do so, a train and test data set were recorded and labelled with simple labeling method,
 and experiments were done over it. The specified formal points of the task were all fulfilled.
 
 The designed system considers much wider usage, than was implemented, as multiple-sensor usage and the fusion algorithm. Multiple-person

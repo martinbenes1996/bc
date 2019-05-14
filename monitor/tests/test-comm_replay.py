@@ -4,14 +4,16 @@ import time
 import threading
 
 sys.path.insert(0, '.')
-#sys.path.insert(0, '..')
 import comm_replay
+import conf
 
 
 
 
 def main():
-    r = comm_replay.Reader.getReader("../data/3m_LR/3m_LR_1.csv")
+    conf.Config.setDebug(False)
+
+    r = comm_replay.Reader.getReader("../data/c4m_LR_1/c4m_LR_1_1.csv")
     time.sleep(2)
     r.readThrd.join()
 

@@ -34,7 +34,7 @@ train:
 .PHONY: evaluate
 evaluate:
 	@printf "";\
-	python3 optimizers/evaluator.py
+	python3 classifiers/evaluator.py
 
 
 .PHONY: enter

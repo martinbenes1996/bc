@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 
 sys.path.insert(0, '.')
 import comm_replay
+import conf
 import model
 import segment
 
@@ -94,19 +95,17 @@ def testRegression():
     test( sign(lr.classify([-0.5,-1])), -1 )
 
 def testClassification():
-    model.Classification.setTrainSet(['3m_LR','3m_RL2','6m_LR','6m90_LR','6m_RL','9m_LR'], persistent=True)
-    model.Classification.setTestSet(['6m_RL', '6m_LR'], persistent=True)
+    model.Classification.setTrainSet(['c4m_LR_1','c4m_RL_1','c5m_LR_1','c5m_RL_1'])
+    model.Classification.setTestSet(['c4m_LR_1', 'c4m_RL_1'])
     c = model.Classification.getTrained()
-    result = c.test(['3m_LR'])
+    result = c.test(['c4m_LR_1'])
     #print(result)
 
 
 def main():
-    #for m in range(0,10):
-    #    testGenerator(m,m/1000.)
+    conf.Config.setDebug(False)
 
-    testExtraction("../data/6m_RL/6m_RL_2.csv")
-    #testArtefacts("../data/6m_RL/6m_RL_2.csv")
+    testExtraction("../data/c4m_RL_1/c4m_RL_1_2.csv")
 
     testRegression()
 

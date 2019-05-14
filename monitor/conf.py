@@ -47,7 +47,7 @@ class Config:
             self.channel_port = data["channel"]["port"]
 
             # initialize logging
-            logging.basicConfig(format='%(levelname)s\t%(name)s: %(funcName)s(): %(lineno)i: %(message)s', level=logging.DEBUG)
+            logging.basicConfig(format='%(levelname)s\t%(name)s: %(funcName)s(): %(lineno)i: %(message)s', level=logging.WARNING)
             logging.getLogger('matplotlib').setLevel(logging.WARNING)
 
             # initialize signal handlers
@@ -93,10 +93,15 @@ class Config:
     def channel(cls):
         """Returns multicast channel informations (IP, port)."""
         return (cls.get().channel_address, cls.get().channel_port)
-
+    
+    @staticmethod
+    def setDebug(state=True):
+        """Hides debugging logging."""
+        logging.basicConfig(level=logging.DEBUG)
 
 
 Config.init()
+Config.setDebug()
 
 # called directly
 if __name__ == '__main__':
