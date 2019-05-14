@@ -47,7 +47,7 @@ class Config:
             self.channel_port = data["channel"]["port"]
 
             # initialize logging
-            logging.basicConfig(format='%(levelname)s\t%(name)s: %(funcName)s(): %(lineno)i: %(message)s', level=logging.WARNING)
+            logging.basicConfig(format='%(levelname)s\t%(name)s: %(funcName)s(): %(lineno)i: %(message)s', level=logging.DEBUG)
             logging.getLogger('matplotlib').setLevel(logging.WARNING)
 
             # initialize signal handlers
@@ -70,6 +70,7 @@ class Config:
         return cls.uniqueConf
     @classmethod
     def init(cls):
+        """Constructor of Config class. First call performs global initialization."""
         cls.get()
     
     @classmethod
@@ -97,9 +98,12 @@ class Config:
     @staticmethod
     def setDebug(state=True):
         """Hides debugging logging."""
-        logging.basicConfig(level=logging.DEBUG)
+        if state:
+            logging.basicConfig(level=logging.DEBUG)
+        else:
+            logging.basicConfig(level=logging.WARNING)
 
-
+# global call with initialization
 Config.init()
 Config.setDebug()
 

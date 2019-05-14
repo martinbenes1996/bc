@@ -914,10 +914,35 @@ being a bool, one of the values ${0,1}$ and conversion these 3D coordintes into
 
 \begin{subequations}
 \begin{equation}
-TODO
+A(x,y) = [x*a, y*a]
+\end{equation}
+\begin{equation}
+T(x,y,b) = \begin{cases}  {A(x,y), A(x+1,y), A(x+1,y+1)} & b = 0 \\
+                          {A(x,y), A(x+1,y+1), A(x,y+1)} & b = 1
+           \end{cases}
 \end{equation}
 \label{eq:globalArea}
 \end{subequations}
+
+\paragraph{Fusion}
+The algorithm for getting intersecting area of two triangles can be now iterated for all the
+pairs of triangles of global area and triangles from all sensor areas. The result will be
+fraction of overlap of each pair. For each area segment is held a vector of triangles from
+sensor areas, which overlaps it - the area is not zero. The coefficient of influence of these
+triangles and their fusion is shown in the formula \ref{eq:fusionAlgorithm}.
+
+
+\begin{subequations}
+\begin{equation}
+c_{T,a} = \frac{S(T \cap a)}{S(T)}
+\end{equation}
+\begin{equation}
+T_{val} = \bigvee\limits_{\forall a: S(T \cup a) > 0}{} (c_{T,a} \land a_{val})
+\end{equation}
+\label{eq:fusionAlgorithm}
+\end{subequations}
+
+
 
 
 \chapter{Data}
@@ -1682,9 +1707,9 @@ p(\kappa \in {0,1}|A)_{X} = \frac{1}{\sum_{A^{\kappa}}|a|} \sum_{a\in A^{\kappa}
 \begin{table}[!ht]
 \begin{center}
 \begin{tabular}{|c|c c c c|} \hline
-\textbf{Aspect} & \textbf{Presence} & \textbf{Distance} & \textbf{Center} & \textbf{Left} \\ \hline
-Positive rate   & $75.972$          & $75.785$          & $$              & $$            \\
-Negative rate   & $86.542$          & $69.793$          & $$              & $$            \\ \hline
+\textbf{Aspect} & \textbf{Presence} & \textbf{Distance} & \textbf{Center}       & \textbf{Left} \\ \hline
+Positive rate   & $75.972$          & $75.785$          & $63.725$              & $$            \\
+Negative rate   & $86.542$          & $69.793$          & $53.436$              & $$            \\ \hline
 \end{tabular}
 \caption{Posterior probability on testing data.\label{table:resultsProbability} }
 \end{center}

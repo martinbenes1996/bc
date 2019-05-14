@@ -179,6 +179,7 @@ class App:
         sv = views.AreaView(master, reader)
         # place view
         sv.canvas.get_tk_widget().grid(row=0, column=2, rowspan=20, sticky=tk.N)
+
     def create_replayview(self, master, replayer):
         """Creates controller for replaying.
         
@@ -189,26 +190,28 @@ class App:
         # create view
         rv = views.ReplayView(master, replayer)
         rv.frame.grid(row=0,column=3, sticky=tk.N)
-    def create_recorderview(self):
-        self.recorderView = record.View(self.root, self.switchRecording)
+    def startReplaySession(self):
+        """Starts the replaying session, opens the file dialog."""
+        replayfile = tk.filedialog.askopenfilename(initialdir='../data',title='Load recording',filetypes=(('Recordings (.csv)','*.csv'),) )
+        self.create_tab(replayfile, replayview=True)
 
+    def create_recorderview(self):
+        """Creates view for recording"""
+        self.recorderView = record.View(self.root, self.switchRecording)
     def startRecordingSession(self):
+        """Starts the recording session (after clicking the record button)."""
         # disable view
         tabid = self.tabControl.select()
         if not tabid:
             return
         tabName = self.tabControl.tab(tabid, "text")
         self.recorderView.begin(tabName, self.getRecorder(tabName))
-    def startReplaySession(self):
-        replayfile = tk.filedialog.askopenfilename(initialdir='../data',title='Load recording',filetypes=(('Recordings (.csv)','*.csv'),) )
-        self.create_tab(replayfile, replayview=True)
-    
     def switchRecording(self, recording):
+        """Disables the serial view during recording session."""
         if recording:
             self.serialView.disable()
         else:
             self.serialView.update()
-
 
     def showAbout(self):
         """Shows help."""
