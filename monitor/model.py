@@ -351,6 +351,7 @@ class Classification:
         areaM[0][1] = AND(score['presence'], score['distance'] )
         areaM[1][0] = AND(score['presence'], N(score['distance']) )
         areaM[1][1] = AND(score['presence'], N(score['distance']) )
+        print(areaM)
         return areaM
 
 

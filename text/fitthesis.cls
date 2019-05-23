@@ -19,7 +19,7 @@
 \newif\ifPrint \let\ifPrint\iffalse
 \newif\ifBarLogo \let\ifBarLogo\iffalse
 \newif\ifWis   \let\ifWis\iftrue
-\newif\ifzadani   \let\ifzadani\iffalse
+\newif\ifzadani   \let\ifzadani\iftrue
 \newif\iftwoside   \let\iftwoside\iffalse
 
 
@@ -489,11 +489,13 @@ Management}{\@fit@EN}%
 
 \end{center}
 
+
 %===================================================
 \newpage
 \fontfamily{\familydefault}\selectfont%
 \addtolength{\voffset}{0.95cm}
 }
+
 
 %-----------------------------------------------------------------------------
 % Abstrakt, klicova slova \makeabstract
@@ -769,12 +771,12 @@ Management}{\@fit@EN}%
 %zadani / assignment
 \iftoggle{zadaniTwop}{
   \cleardoublepage
-  \includepdf[pages=-,offset=0.6cm -1.7cm]{zadani.pdf}
-  %\ifzadani\includepdf[pages=-,offset=0.6cm -1.7cm]{assignment.pdf}\fi
+  \includepdf[pages=-,offset=0.6cm -1.7cm]{../sources/task.pdf}
+  %\ifzadani\includepdf[pages=-,offset=0.6cm -1.7cm]{../sources/task.pdf}\fi
 }{
   \ifzadani
-    \includepdf[pages=-,offset=0.6cm -1.7cm]{zadani.pdf}
-    %\ifzadani\includepdf[pages=-,offset=0.6cm -1.7cm]{assignment.pdf}\fi
+    \includepdf[pages=-,offset=0.6cm -1.7cm]{../sources/task.pdf}
+    %\ifzadani\includepdf[pages=-,offset=0.6cm -1.7cm]{../sources/task.pdf}\fi
   \fi
 }
 

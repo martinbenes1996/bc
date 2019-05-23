@@ -101,16 +101,27 @@ def testClassification():
     result = c.test(['c4m_LR_1'])
     #print(result)
 
+def testClassification2():
+    # get classifiers
+    c = model.Classification.getTrained()
+    # get artefacts
+    x = comm_replay.Reader.readFile(name)
+    artefacts = segment.Artefact.parseArtefacts(x)
+    for a in artefacts:
+        m = c.classify(a.getFeatures)
+        print(m)
 
 def main():
-    conf.Config.setDebug(False)
+    #conf.Config.setDebug(False)
 
-    testExtraction("../data/c4m_RL_1/c4m_RL_1_2.csv")
+    #testExtraction("../data/c4m_RL_1/c4m_RL_1_2.csv")
 
-    testRegression()
+    #testRegression()
 
-    testClassification()
-
+    #testClassification()
+     
+    testClassification2()
+    
     assert(status)
 
 
