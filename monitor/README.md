@@ -28,3 +28,6 @@ It can be activated with
 After that, the program can be launched.
 
 *$ python3 main.py*
+
+Leaving the environment is done by *deactivate* command.
+
