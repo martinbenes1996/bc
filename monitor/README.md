@@ -18,13 +18,13 @@ Recommended is the second option. To join it, following command must be ran and 
 
 The required libraries are listed in file *requirements.txt*, install them using
 
-*pip install -r requirements.txt*
+*$ pip install -r requirements.txt*
 
 Alternatively, a running environment with all the needed dependecies is present.
 It can be activated with
 
-*source env/bin/activate*
+*$ source env/bin/activate*
 
 After that, the program can be launched.
 
-*python3 main.py*
+*$ python3 main.py*
