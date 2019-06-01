@@ -5,26 +5,22 @@
 % Placing of table of contents of the memory media here should be consulted with a supervisor
 %\chapter{Obsah přiloženého paměťového média}
 
-%\chapter{Manuál}
-
-%\chapter{Konfigurační soubor} % Configuration file
-
-%\chapter{RelaxNG Schéma konfiguračního souboru} % Scheme of RelaxNG configuration file
-
-%\chapter{Plakát} % poster
-
 
 \chapter{PIR signal recording}
 \label{appendix:PIRSignal}
 
-The movements that data shows were prepared in several directions
-and the type of movement can be read from the figure captions.
+The training and testing data sets were done in two recording session.
+The sessions included movements in several directions, shown at the
+data as part of the appendix in the directory {\texttt data/}. The
+type of movement can be read from the data caption.
 
-The trajectories are concentred circles with sensor in center and radius values $3~m$, $6~m$, $9~m$ and $12~m$.
-The direction is either left-to-right (LR) or right-to-left (RL).
-The workplace is shown in the figure \ref{fig:measurement}.
-\footnote{For example {\it 6m\_RL} is movement $6~m$ from sensor right-to-left.}
-The movement was recorded multiple times.
+\paragraph{First recording}
+The first recording was made in a area shown at \ref{fig:measurement}.
+The trajectories were concentred circles with sensor in the center
+and the radius values $3m$, $6m$, $9m$ and $12m$.
+The direction was either left-to-right (LR) or right-to-left (RL).
+The marking of the data begins with "o", standing for older.
+For example {\it 6m\_RL} is movement $6m$ from sensor right-to-left.
 
 \begin{figure}[!ht]
 \begin{center}
@@ -35,6 +31,17 @@ The movement was recorded multiple times.
 
 Other cases are recorded as well: person walking towards ({\it C\_BF})
 or walking away ({\it C\_FB}) from the sensor and no movement ({\it E}). 
+
+\paragraph{Second recording}
+After the recording, a defect was found on the device and so the data
+collection was repeated. This recording has prefixes {\it c4m\_} and {\it c5m\_}
+for circular movement in radiuses $4m$ and $5m$, {\it dBF\_} and {\it dFB\_}
+for diagonal movement from the back to the front and from the front
+to the back and {\it e\_} for no movement.
+
+The movement is {\it LR} for movement left-to-right and {\it RL}
+for right-to-left. As an example, {\it dFB\_LR\_1} is movement
+for diagonal movement from the left front to the right back.
 
 \begin{figure}[!ht]
 \begin{center}
@@ -141,6 +148,115 @@ or walking away ({\it C\_FB}) from the sensor and no movement ({\it E}).
 \includegraphics[width=0.3\textwidth]{../data/c5m_RL_3/c5m_RL_3_2.png}
 \includegraphics[width=0.3\textwidth]{../data/c5m_RL_3/c5m_RL_3_3.png}
 \caption{c5m\_RL\_3.\label{fig:c5m_RL_3}}
+\end{center}
+\end{figure}
+
+\begin{figure}[!ht]
+\begin{center}
+\includegraphics[width=0.3\textwidth]{../data/dFB_LR_1/dFB_LR_1_1.png}
+\includegraphics[width=0.3\textwidth]{../data/dFB_LR_1/dFB_LR_1_2.png}
+\includegraphics[width=0.3\textwidth]{../data/dFB_LR_1/dFB_LR_1_3.png}
+\caption{dFB\_LR\_1.\label{fig:dFB_LR_1}}
+\end{center}
+\end{figure}
+
+\begin{figure}[!ht]
+\begin{center}
+\includegraphics[width=0.3\textwidth]{../data/dFB_LR_2/dFB_LR_2_1.png}
+\includegraphics[width=0.3\textwidth]{../data/dFB_LR_2/dFB_LR_2_2.png}
+\includegraphics[width=0.3\textwidth]{../data/dFB_LR_2/dFB_LR_2_3.png}
+\caption{dFB\_LR\_2.\label{fig:dFB_LR_2}}
+\end{center}
+\end{figure}
+
+\begin{figure}[!ht]
+\begin{center}
+\includegraphics[width=0.3\textwidth]{../data/dFB_LR_3/dFB_LR_3_1.png}
+\includegraphics[width=0.3\textwidth]{../data/dFB_LR_3/dFB_LR_3_2.png}
+\includegraphics[width=0.3\textwidth]{../data/dFB_LR_3/dFB_LR_3_3.png}
+\caption{dFB\_LR\_3.\label{fig:dFB_LR_3}}
+\end{center}
+\end{figure}
+
+\begin{figure}[!ht]
+\begin{center}
+\includegraphics[width=0.3\textwidth]{../data/dFB_RL_1/dFB_RL_1_1.png}
+\includegraphics[width=0.3\textwidth]{../data/dFB_RL_1/dFB_RL_1_2.png}
+\includegraphics[width=0.3\textwidth]{../data/dFB_RL_1/dFB_RL_1_3.png}
+\caption{dFB\_RL\_1.\label{fig:dFB_RL_1}}
+\end{center}
+\end{figure}
+
+\begin{figure}[!ht]
+\begin{center}
+\includegraphics[width=0.3\textwidth]{../data/dFB_RL_2/dFB_RL_2_1.png}
+\includegraphics[width=0.3\textwidth]{../data/dFB_RL_2/dFB_RL_2_2.png}
+\includegraphics[width=0.3\textwidth]{../data/dFB_RL_2/dFB_RL_2_3.png}
+\caption{dFB\_RL\_2.\label{fig:dFB_RL_2}}
+\end{center}
+\end{figure}
+
+\begin{figure}[!ht]
+\begin{center}
+\includegraphics[width=0.3\textwidth]{../data/dFB_RL_3/dFB_RL_3_1.png}
+\includegraphics[width=0.3\textwidth]{../data/dFB_RL_3/dFB_RL_3_2.png}
+\includegraphics[width=0.3\textwidth]{../data/dFB_RL_3/dFB_RL_3_3.png}
+\caption{dFB\_RL\_3.\label{fig:dFB_RL_3}}
+\end{center}
+\end{figure}
+
+
+\begin{figure}[!ht]
+\begin{center}
+\includegraphics[width=0.3\textwidth]{../data/dBF_LR_1/dBF_LR_1_1.png}
+\includegraphics[width=0.3\textwidth]{../data/dBF_LR_1/dBF_LR_1_2.png}
+\includegraphics[width=0.3\textwidth]{../data/dBF_LR_1/dBF_LR_1_3.png}
+\caption{dBF\_LR\_1.\label{fig:dBF_LR_1}}
+\end{center}
+\end{figure}
+
+\begin{figure}[!ht]
+\begin{center}
+\includegraphics[width=0.3\textwidth]{../data/dBF_LR_2/dBF_LR_2_1.png}
+\includegraphics[width=0.3\textwidth]{../data/dBF_LR_2/dBF_LR_2_2.png}
+\includegraphics[width=0.3\textwidth]{../data/dBF_LR_2/dBF_LR_2_3.png}
+\caption{dBF\_LR\_2.\label{fig:dBF_LR_2}}
+\end{center}
+\end{figure}
+
+\begin{figure}[!ht]
+\begin{center}
+\includegraphics[width=0.3\textwidth]{../data/dBF_LR_3/dBF_LR_3_1.png}
+\includegraphics[width=0.3\textwidth]{../data/dBF_LR_3/dBF_LR_3_2.png}
+\includegraphics[width=0.3\textwidth]{../data/dBF_LR_3/dBF_LR_3_3.png}
+\caption{dBF\_LR\_3.\label{fig:dBF_LR_3}}
+\end{center}
+\end{figure}
+
+\begin{figure}[!ht]
+\begin{center}
+\includegraphics[width=0.3\textwidth]{../data/dBF_RL_1/dBF_RL_1_1.png}
+\includegraphics[width=0.3\textwidth]{../data/dBF_RL_1/dBF_RL_1_2.png}
+\includegraphics[width=0.3\textwidth]{../data/dBF_RL_1/dBF_RL_1_3.png}
+\caption{dBF\_RL\_1.\label{fig:dBF_RL_1}}
+\end{center}
+\end{figure}
+
+\begin{figure}[!ht]
+\begin{center}
+\includegraphics[width=0.3\textwidth]{../data/dBF_RL_2/dBF_RL_2_1.png}
+\includegraphics[width=0.3\textwidth]{../data/dBF_RL_2/dBF_RL_2_2.png}
+\includegraphics[width=0.3\textwidth]{../data/dBF_RL_2/dBF_RL_2_3.png}
+\caption{dBF\_RL\_2.\label{fig:dBF_RL_2}}
+\end{center}
+\end{figure}
+
+\begin{figure}[!ht]
+\begin{center}
+\includegraphics[width=0.3\textwidth]{../data/dBF_RL_3/dBF_RL_3_1.png}
+\includegraphics[width=0.3\textwidth]{../data/dBF_RL_3/dBF_RL_3_2.png}
+\includegraphics[width=0.3\textwidth]{../data/dBF_RL_3/dBF_RL_3_3.png}
+\caption{dBF\_RL\_3.\label{fig:dBF_RL_3}}
 \end{center}
 \end{figure}
 

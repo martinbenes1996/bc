@@ -281,7 +281,6 @@ class AreaView:
         Arguments:
             data    New data to show.
         """
-        print(data)
         # clear view
         self.subplt.cla()
         # set view
