@@ -35,6 +35,8 @@ The localization using PIR is still matter of intense research, a number of arti
 written on it. This thesis suggests multisensor attitude and a usage of fuzzy logic to merge
 sensor's outputs.
 
+{\it Motivace, duvod, specifikace cilu}
+
 
 
 
@@ -53,7 +55,7 @@ we measure it.
 As it was already mentioned in the~chapter \ref{chapter:introduction}, every object whose temperature
 is higher than absolute zero emits an~electromagnetic radiation.
 \begin{equation}
-T_{obj}>0~K\equiv -273.15^{\circ}C
+T_{obj}>0K\equiv -273.15^{\circ}C
 \end{equation}
 It is caused by a~charged subatomical particles (electrons, protons) that are undergoing an~acceleration,
 emitting an~energy in a~form of photon -- electromagnetic radiation.
@@ -62,7 +64,7 @@ emitting an~energy in a~form of photon -- electromagnetic radiation.
 \subsection*{Characteristics}
 The~electromagnetic radiation have a~number of measurable characteristics. The~most significant ones
 are {\it frequency} $f$ and {\it wavelength} $\lambda$. Due to the~constant speed of the radiation $v$
-aka speed of light $c = v = 3\cdot10^{8}~m\cdot s^{-1}$ not dependent on the frequency, they are
+aka speed of light $c = v = 3\cdot10^{8}m\cdot s^{-1}$ not dependent on the frequency, they are
 propotional and mutually transferrable.
 \begin{equation}
 f=\frac{v}{\lambda}=\frac{c}{\lambda}=\frac{3\cdot10^{8}}{\lambda}
@@ -81,7 +83,7 @@ infrared (IR) and radio waves. This is called electromagnetic spectrum and it is
 \end{figure}
 
 Another measurable characteristic is an~energy of the~radiation $Q$,$E$ or $W$. It is linearly dependend
-on its frequency $f$ and can be computed using Planck constant $h=6.63\cdot10^{-34}~J\cdot s $.
+on its frequency $f$ and can be computed using Planck constant $h=6.63\cdot10^{-34}J\cdot s $.
 \cite{NasaEMSpectrum}
 \begin{equation}
 W = h\cdot f
@@ -159,23 +161,21 @@ it with basking in the sun. The thermal characteristics of these groups can be s
 
 Human body temperature $T_{HB}$ varies in $\langle 36^{\circ}C; 38^{\circ}C \rangle$, in the hyperthermia
 it can rise up to $40^{\circ}C$. The figure \ref{fig:bodywavelength} shows the radiation wavelength composition.
-The peak wavelength (temperature $37^{\circ}C$ or $310.15~K$) can be calculated with the Wien's displacement law.
+The peak wavelength (temperature $37^{\circ}C$ or $310.15K$) can be calculated with the Wien's displacement law.
+
 \begin{equation}
-\lambda_{max}=\frac{b}{T}=\frac{2.8977729 \cdot 10^{-3}}{310.15} = 9.3431~\mu m
+\lambda_{max}=\frac{b}{T}=\frac{2.8977729 \cdot 10^{-3}}{310.15} = 9.3431\mu m
 \end{equation}
 
 \begin{figure}[h!]
 \begin{center}
-\includegraphics[width=0.4\textwidth]{img/bodyradiation.png}
+\includegraphics[width=0.6\textwidth]{img/bodyradiation.png}
 \caption{Human body radiation wavelength.\cite{BodyRadiation}\label{fig:bodywavelength}}
 \end{center}    
 \end{figure}
 
 
 
-
-
-\newpage
 \section{Radiation perception}
 
 \subsection*{Radiation processed by organisms}
@@ -191,7 +191,7 @@ have thermoreceptors in~their skin so they can get information about intensity o
 \paragraph{Visible light}
 \label{subsection:eye}
 PIR~sensor structure is obviously inspired by a~human eye. Human eyes can process radiation
-$\lambda \in \langle 380~nm;760~nm \rangle$ called visible light, one of the~bands of an~electromagnetic spectrum.
+$\lambda \in \langle 380nm;760nm \rangle$ called visible light, one of the~bands of an~electromagnetic spectrum.
 Seeing means receiving a light from a~light source reflected by the~surface of an~observed object to our retina.
 A~biological system composed of~light-sensitive cells {\it rods} and {\it cones} propagates the~information
 through nerves to brain.
@@ -199,13 +199,6 @@ through nerves to brain.
 A~ray coming to an~eye is going through a~converging lens, which changes its~trajectory aiming to~the~retina,
 in~the~best case to~the~most sensitive place with a~lot~of~the~rods and cons called {\it Fovea~centralis}.
 \cite{LightEyeVision}
-
-\begin{figure}[h!]
-\begin{center}
-\includegraphics[width=0.3\textwidth]{img/eye.png}
-\caption{Structure of an eye. \cite{Eye}\label{fig:eye}}
-\end{center}    
-\end{figure}
 
 
 \paragraph{Heat}
@@ -223,7 +216,7 @@ and its~mechanisms is~not fully understanded yet and a~matter of current researc
 
 \begin{figure}[h!]
 \begin{center}
-\includegraphics[width=0.45\textwidth]{img/skin.jpg}
+\includegraphics[width=0.6\textwidth]{img/skin.jpg}
 \caption{Structure of a~skin. \cite{SkinStructure}\label{fig:skin}}
 \end{center}    
 \end{figure}
@@ -259,7 +252,7 @@ the~IR waves, which now enables us to~explore and understand the~universe. \cite
 \subsection*{Infrared radiation processed by machines}
 \label{IRsensing}
 PIR ({\it passive infrared}) sensor is an electronic device that scans electromagnetic
-radiation at~wavelength $\lambda\in \langle 700~nm;2.5~mm \rangle$ aka frequency $f\in \langle 120~MHz;430~THz \rangle$. \cite{an2105}
+radiation at~wavelength $\lambda\in \langle 700nm;2.5mm \rangle$ aka frequency $f\in \langle 120MHz;430THz \rangle$. \cite{an2105}
 
 \paragraph{Principles of PIR sensor}
 There is a~number of approaches how to~construct such a~sensor. The~point is to~convert the electromagnetic
@@ -309,7 +302,7 @@ An example is a scheme \ref{fig:roomsegments} of product {\it PIR STD} made by {
 
 \begin{figure}[h!]
 \begin{center}
-\includegraphics[width=0.7\textwidth]{img/roomsegments.png}
+\includegraphics[width=0.9\textwidth]{img/roomsegments.png}
 \caption{Sensing of PIR STD. \cite{PIROperationalManual}\label{fig:roomsegments}}
 \end{center}    
 \end{figure}
@@ -351,7 +344,7 @@ application-dependent features.
 
 \begin{figure}[h!]
 \begin{center}
-\includegraphics[width=0.7\textwidth]{img/featureextraction.png}
+\includegraphics[width=0.9\textwidth]{img/featureextraction.png}
 \caption{Preprocessing pipeline.\label{fig:featureextraction}}
 \end{center}
 \end{figure}
@@ -387,7 +380,7 @@ is used in {\it Linear Regression} or {\it Support Vector Machine} (SVM). Each n
 
 \begin{figure}[h!]
 \begin{center}
-\includegraphics[width=0.3\textwidth]{img/linear.png}
+\includegraphics[width=0.5\textwidth]{img/linear.png}
 \caption{Linear classifier.\cite{LinearClassifier}\label{fig:linearclassifier}}
 \end{center}
 \end{figure}
@@ -436,7 +429,7 @@ Such a construction is unsuitable to use in rooms though.
 
 \begin{figure}[h!]
 \begin{center}
-\includegraphics[width=0.4\textwidth]{img/3pir_geometry.png}
+\includegraphics[width=0.6\textwidth]{img/3pir_geometry.png}
 \caption{Geometry for three PIR sensors.\label{fig:3pir_geometry}}
 \end{center}
 \end{figure}
@@ -523,7 +516,7 @@ in the figure \ref{fig:fuzzysets} with $t=10$.
 
 \begin{figure}[h!]
 \begin{center}
-\includegraphics[width=0.5\textwidth]{render/fuzzysets.png}
+\includegraphics[width=0.7\textwidth]{render/fuzzysets.png}
 \caption{Fuzzy sets used for fuzzification.\label{fig:fuzzysets}}
 \end{center}
 \end{figure}
@@ -654,7 +647,7 @@ circular sector, it can be easily represented by classical 2D matrix, as it is s
 
 \begin{figure}[h!]
 \begin{center}
-\includegraphics[width=0.5\textwidth]{img/circularsector_transformation.png}
+\includegraphics[width=0.7\textwidth]{img/circularsector_transformation.png}
 \caption{Representation of circular sector.\label{fig:circularsector}}
 \end{center}
 \end{figure}
@@ -689,14 +682,14 @@ M_{<0^{\circ}} = A^{\kappa = left}
 M_{>0^{\circ}} = N(A^{\kappa = left})
 \end{equation}
 \begin{equation}
-M_{<0^{\circ}, <T~M} = N(A^{\kappa = left}) \land_P A^{\kappa = distance}
+M_{<0^{\circ}, <T} = N(A^{\kappa = left}) \land_P A^{\kappa = distance}
 \end{equation}
 \label{eq:regressionmerger}
 \end{subequations}
 
 \begin{figure}[h!]
 \begin{center}
-\includegraphics[width=0.3\textwidth]{img/pir_area.png}
+\includegraphics[width=0.4\textwidth]{img/pir_area.png}
 \caption{Weighting of regression score to area matrix.\label{fig:areamatrixweighting}}
 \end{center}
 \end{figure}
@@ -830,7 +823,7 @@ R_2 = S + r_2*(cos(\omega + \varphi_R), sin(\omega + \varphi_R))
 
 \begin{figure}[!ht]
 \begin{center}
-\includegraphics[width=0.4\textwidth]{img/area_triangles.png}
+\includegraphics[width=0.5\textwidth]{img/area_triangles.png}
 \caption{Sensed area converted to triangles.\label{fig:area2triangles}}
 \end{center}
 \end{figure}
@@ -903,7 +896,7 @@ into squares split into triangles, example shown in the figure \ref{fig:globalAr
 
 \begin{figure}[!ht]
 \begin{center}
-\includegraphics[width=0.4\textwidth]{img/global_area.png}
+\includegraphics[width=0.6\textwidth]{img/global_area.png}
 \caption{Representation of global area with triangles.\label{fig:globalArea}}
 \end{center}
 \end{figure}
@@ -945,99 +938,6 @@ T_{val} = \bigvee\limits_{\forall a: S(T \cup a) > 0}{} (c_{T,a} \land a_{val})
 
 
 
-\chapter{Data}
-
-A output of a sensor as you can see in the figures \ref{fig:signalcalm} and \ref{fig:signalwalk}
-is very discriminative -- with a bare eye a movement from no movement is distinguishable.
-A detection of presence used in light sensors can be implemented with tresholding, this attitude is
-not very suitable for classification of anything else except the presence itself.
-
-In a calm state the sensor sends a constant signal\footnote{Constant signal in the terms
-of electricity, slightly polluted with a background noise etc.}. Movement in the sensed area causes
-abrupt changes of output. When the object either leaves the area, or stays completely calm, the signal
-changes are getting slower and after a little while the output voltage gets in the calm state again.
-
-\begin{figure}[h!]
-\begin{center}
-\includegraphics[width=0.65\textwidth]{render/signal_calm.png}
-\caption{Signal of zero movement.\label{fig:signalcalm}}
-\end{center}
-\end{figure}
-
-\begin{figure}[h!]
-\begin{center}
-\includegraphics[width=0.65\textwidth]{render/signal_walk.png}
-\caption{Signal of person walking around.\label{fig:signalwalk}}
-\end{center}
-\end{figure}
-
-Therefore, the nature of the signal does not seem to need a complicated method to perform a classification on it.
-{\it Fourier transformation} and {\it wavelet transformation} were considered for feature
-extraction. The abrupt changes in the signal could be problem for FT, because it can not represent
-it efficiently\cite{SinglePIR}, % youtube video
-but unlike sinusoids, the wavelets exist for a finite duration and they are suitable for representing
-abrupt changes.
-
-The wavelet transformation is defined as a function $F_{(s,k)}(x)$. Parameters s,k are scale and shift, changing
-them in predefined unit and interval creates a matrix, as you can see in the figure \ref{fig:walk03}.
-
-\begin{equation}
-F_{(s,k)}(x) = \sum_{n=1}^{N} x[n] \Psi_{(s,k)}^{*}[n]
-\end{equation}
-
-Firstly The data were offline analysed using {\it Matlab}, which has implemented wavelet transformation.
-The Matlab is not used because it is proprietary software and the program would be dependent on it.
-During the analysis it was found, that the data are very well separable using continuous wavelet tranformation.
-
-\begin{figure}[h!]
-\begin{lstlisting}[style=matlab]
-data = csvread('walk02.csv');
-wscalogram('image', cwt(data));
-\end{lstlisting}
-\caption{Matlab code performing cwt.\label{list:cwtmatlab}}
-\end{figure}
-
-\begin{figure}[h!]
-\begin{center}
-\includegraphics[width=0.5\textwidth]{img/walk03.png}
-\caption{Matlab {\it cwt()} output of {\it walk03.csv}.\label{fig:walk03}}
-\end{center}
-\end{figure}
-
-
-The training and testing data were recorded as a part of the work, results are
-shown and described by the appendix \ref{appendix:PIRSignal}.
-
-\subsection*{Labeling the data set}
-Classification is implemented as supervised learning. The supervisory is implemented
-as labels for recorded files. For achieving such labels a special script {\it classifiers/labeller.py}
-was made. This script uses {\it segment.py} of Monitor app to make the labeling possible.
-
-The labeling itself is made by human. We have a recorded file with signal in the format .csv
-and video file of the area as well in the format *.mp4. During the labeling, firstly the 
-signal is segmented ino artefacts using classes Segment, Edge and Artefact. After that
-artefacts are shown to the person performing the labeling.
-
-When the program is started, it requires entering a session name to label. After that
-measurements of the session are being processed. In order to work properly, if the
-session is named X, the session measurements must be called X\_1.csv, X\_2.csv, ... .
-
-Each artefact is shown as a signal plot, center frame of the video and the questions,
-that the person ought to answer. The first question is "Is the person present?".
-Clicking 0 or 1 on the keyboard with active window with a frame the program shows
-another frame or question dependent on the answer. The consequent questions 
-in the case of presence of the person are "Is the person in the center?", "Is the
-parson on the left?" and "Is the person close?". After answering the next artefact
-is processed.
-
-The labeling process is shown in the figure \ref{fig:labeling}.
-
-\begin{figure}[h!]
-\begin{center}
-\includegraphics[width=0.8\textwidth]{img/labeling2.png}
-\caption{Labeling method of the data set.\label{fig:labeling}}
-\end{center}
-\end{figure}
 
 
 
@@ -1095,7 +995,7 @@ output of this is the sensor analog output. The third phase generates binary out
 
 \begin{figure}[h!]
 \begin{center}
-\includegraphics[width=0.75\textwidth]{img/pirstd.png}
+\includegraphics[width=0.9\textwidth]{img/pirstd.png}
 \caption{Scheme of PIR STD.\cite{PIROperationalManual}\label{fig:pirstdscheme}}
 \end{center}
 \end{figure}
@@ -1180,9 +1080,9 @@ used in simple industrial application. It is not used in the project.\cite{PIRSc
 
 \subsection*{Connecting the sensor}
 PIR sensor is connected to the MCU. Except for source, ground and output which are connected directly,
-{\it PIR STD} has also reference voltage input, that should be approximately $\frac{V_{cc}}{2}~V$.
+{\it PIR STD} has also reference voltage input, that should be approximately $\frac{V_{cc}}{2}V$.
 To ensure that a voltage divider is used with two resistors of the same resistance $R_X$.
-During the testing $100~k\Omega$ resistors were used. The circuit is shown in the figure \ref{fig:PIRcircuit}.
+During the testing $100k\Omega$ resistors were used. The circuit is shown in the figure \ref{fig:PIRcircuit}.
 
 \begin{figure}[h!]
 \begin{center}
@@ -1208,7 +1108,7 @@ During the testing $100~k\Omega$ resistors were used. The circuit is shown in th
   % vcc
   (0,1.5) to[short, l={\tiny $VCC$}, o-]
   (1,1.5) to[short]
-  (7,1.5) to[short, l={\tiny $5~V$}, -o] (8,1.5)
+  (7,1.5) to[short, l={\tiny $5V$}, -o] (8,1.5)
   % signal
   (0,1) to[short, l={\tiny $ANA$}, o-] 
   (1,1) to[short]
@@ -1231,14 +1131,14 @@ A printed circuit board was designed (figure \ref{fig:circuitboard}) and a proto
 was printed with a PCB drill in electronic laboratory at {\it FH Vorarlberg} to
 illustrate the possible size and design of the final product.
 
-The dimensions of final product were minimized to $50 \times 50 \times 25$~mm.
+The dimensions of final product were minimized to $50 \times 50 \times 25$mm.
 It was possible to prototype a board connecting the NodeMCU microcontroller,
 sensor PIR STD, 2AA battery case and control elements (reset button, status LED)
 within these dimensions. The sensor case design was briefly sketched too.
 
 \begin{figure}[!ht]
 \begin{center}
-\includegraphics[width=0.3\textwidth]{render/circuitboard.png}
+\includegraphics[width=0.5\textwidth]{render/circuitboard.png}
 \caption{Circuit board. \label{fig:circuitboard}}
 \end{center}
 \end{figure}
@@ -1268,17 +1168,17 @@ c: A \rightarrow D = x_A \rightarrow \frac{1023x_A}{V_{cc}}, x_A \in D
 
 \paragraph{Sampling frequency}
 The usable sampling frequency can be estimated: the fresnel lens of {\it PIR STD} splits the
-area into $10^{\circ} = \frac{\pi}{18}$ circular sectors. Object moving around the sensor in the distance $0.5~m$
-with speed $15~km.h^{-1} = 4.1667~m.s^{-1}$ (very fast run) passes the central circular sector in
+area into $10^{\circ} = \frac{\pi}{18}$ circular sectors. Object moving around the sensor in the distance $0.5m$
+with speed $15km.h^{-1} = 4.1667m.s^{-1}$ (very fast run) passes the central circular sector in
 
 \begin{equation}
-t = \frac{s}{v} = \frac{0.5*tg(10^{\circ})}{4.1667} = 0.02116~s
+t = \frac{s}{v} = \frac{0.5*tg(10^{\circ})}{4.1667} = 0.02116s
 \end{equation}
 
 This means the frequency of the movement through the circular sectors is
 
 \begin{equation}
-f = \frac{1}{t} = \frac{1}{0.02116} = 47.259~Hz
+f = \frac{1}{t} = \frac{1}{0.02116} = 47.259Hz
 \end{equation}
 
 According to Shannon theorem\cite{DigitalSignalProcessing}, the sampling frequency must be at least twice as big as the
@@ -1288,11 +1188,11 @@ maximal frequency in the signal, which leads to
 Fs \geq 2*47.259 = 94.518 
 \end{equation}
 
-Rounding up gives us minimal sampling frequency $100~Hz$, or sampling period $10~ms$.
+Rounding up gives us minimal sampling frequency $100Hz$, or sampling period $10ms$.
 resulting with $2B$ sample in throughput $\mu$
 
 \begin{equation}
-\mu = F_s * |\text{sample}| * 8\frac{bit}{byte} = 100 * 2 * 8 = 1.6~kbps
+\mu = F_s * |\text{sample}| * 8\frac{bit}{byte} = 100 * 2 * 8 = 1.6kbps
 \end{equation}
 
 
@@ -1428,7 +1328,7 @@ the online reading is performed in loop waiting for chunk to come from the senso
 
 \begin{figure}[!ht]
 \begin{center}
-\includegraphics[width=0.7\textwidth]{img/class_src.png}
+\includegraphics[width=0.9\textwidth]{img/class_src.png}
 \caption{UML diagram of Reader classes. \label{fig:class_src}}
 \end{center}
 \end{figure}
@@ -1479,7 +1379,7 @@ but the recommended way how to perform the feature extraction using this module 
 
 \begin{figure}[!ht]
 \begin{center}
-\includegraphics[width=0.5\textwidth]{img/class_segment.png}
+\includegraphics[width=0.7\textwidth]{img/class_segment.png}
 \caption{UML diagram of Segment classes. \label{fig:class_segment}}
 \end{center}
 \end{figure}
@@ -1513,7 +1413,7 @@ for featuresVector in featuresVectorVector:
 
 \begin{figure}[!ht]
 \begin{center}
-\includegraphics[width=0.8\textwidth]{img/class_model.png}
+\includegraphics[width=1\textwidth]{img/class_model.png}
 \caption{UML diagram of Model classes. \label{fig:class_model}}
 \end{center}
 \end{figure}
@@ -1575,8 +1475,175 @@ argmax_{p} (\sum_{\forall A} f_{p}(A)\cdot \kappa_{X}(A) )* 100\%
 
 
 
+\section{User Interface}
+\label{Label:UI}
+
+{\it Monitor} as a classification server is endowed with simple GUI for the needs of monitoring
+the signal real-time and recording of the data sets used for training, testing and evaluating the results.
+The interface is shown in the figure \ref{fig:monitorGUI}.
+
+Since the programming language used for the Monitor was Python3 due to many amazing libraries focused on the
+machine learning and classification (numpy, scipy, matplotlib), for GUI was chosen a library {\it TKinter}
+-- as a part of standard Python3 library is always present whenever Python3 is, the usage is pretty simple
+and it is easy to connect with matplotlib, graph plotting library. The whole GUI is still designed as a prototype,
+for the system deployed to the real situations it would be probably too slow and not flexible enough.
+As an alternative, Qt might be considered.
+
+\subsection*{Structure of the view}
+
+\begin{figure}[!ht]
+\begin{center}
+\includegraphics[width=0.7\textwidth]{render/gui.png}
+\caption{Monitor GUI prototype with sample data. \label{fig:monitorGUI}}
+\end{center}
+\end{figure}
+
+The classical menu bar with dropdowns appears in the top of the window. Dropdown {\it File} contains
+option to switch to the record mode over the source in the active tab and opening the tab with a
+source from file.
+The side menu contains possible sources to read: multicast channels or serial ports. Checking
+opens a new tab with a real-time view of the signal of the source as well as the area view,
+classified by the system. 
+
+In order to record a signal into a file, a recording session needs to be created and arranged.
+The session is made from recordings. The lengths of recordings and time delays before each recording
+are adjustable. This enables recording session to fulfil the needs for any kind of movement to be made.
+To work properly with the program, the names of the exercises must match the name of the session and they
+must have appendixes \_1, \_2, ... . An example is shown in the figure \ref{fig:monitorRecordGUI}.
+
+\begin{figure}[!ht]
+\begin{center}
+\includegraphics[width=0.2\textwidth]{render/record.png}
+\caption{Monitor GUI recording session dialog.\label{fig:monitorRecordGUI}}
+\end{center}
+\end{figure}
+
+\subsection*{Structure}
+
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[width=0.9\textwidth]{img/class_gui.png}
+\caption{Class diagram of view part. \label{fig:classGUI}}
+\end{center}
+\end{figure}
+
+The whole Monitor is made as model-view-controller pattern. The view consists of module {\it app.py} with
+the class App controlling the processes inside of the view. Two more modules are present, {\it ui.py}
+and {\it views.py}.
+
+The {\it ui.py} is a adapter over several TKinter classes with slight extension of its functionality according
+to the needs of App class. It contains CheckButton connected with a data source, which repeats testing the 
+connected source availability and enables or disables itself by that. Notebook extends {\it TKinter.ttk.Notebook}
+with a simple graphical widget, Menu represents the menubar.
+
+The whole graphical design consists of multiple parts with various roles, assembled together in one window.
+For scalability reasons each of this "views" is implemented as a separate class inside the module {\it views.py}.
+Classes MulticastView and SerialView are used in the side menus with checkbuttons for each data source, multicast
+channel or serial port. SignalView and AreaView are the main part of the tab system (notebook), visualizing the
+received segment and the counted area fuzzy matrix. The ReplayView can be seen when a replay is shown as a data
+source, it contains the button controlling the replaying of the file.
+
+
+
+
 
 \chapter{Experiments}
+
+\section{Data acquisition}
+
+A output of a sensor as you can see in the figures \ref{fig:signalcalm} and \ref{fig:signalwalk}
+is very discriminative -- with a bare eye a movement from no movement is distinguishable.
+A detection of presence used in light sensors can be implemented with tresholding, this attitude is
+not very suitable for classification of anything else except the presence itself.
+
+In a calm state the sensor sends a constant signal\footnote{Constant signal in the terms
+of electricity, slightly polluted with a background noise etc.}. Movement in the sensed area causes
+abrupt changes of output. When the object either leaves the area, or stays completely calm, the signal
+changes are getting slower and after a little while the output voltage gets in the calm state again.
+
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[width=0.65\textwidth]{render/signal_calm.png}
+\caption{Signal of zero movement.\label{fig:signalcalm}}
+\end{center}
+\end{figure}
+
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[width=0.65\textwidth]{render/signal_walk.png}
+\caption{Signal of person walking around.\label{fig:signalwalk}}
+\end{center}
+\end{figure}
+
+Therefore, the nature of the signal does not seem to need a complicated method to perform a classification on it.
+{\it Fourier transformation} and {\it wavelet transformation} were considered for feature
+extraction. The abrupt changes in the signal could be problem for FT, because it can not represent
+it efficiently\cite{SinglePIR}, % youtube video
+but unlike sinusoids, the wavelets exist for a finite duration and they are suitable for representing
+abrupt changes.
+
+The wavelet transformation is defined as a function $F_{(s,k)}(x)$. Parameters s,k are scale and shift, changing
+them in predefined unit and interval creates a matrix, as you can see in the figure \ref{fig:walk03}.
+
+\begin{equation}
+F_{(s,k)}(x) = \sum_{n=1}^{N} x[n] \Psi_{(s,k)}^{*}[n]
+\end{equation}
+
+Firstly The data were offline analysed using {\it Matlab}, which has implemented wavelet transformation.
+The Matlab is not used because it is proprietary software and the program would be dependent on it.
+During the analysis it was found, that the data are very well separable using continuous wavelet tranformation.
+
+\begin{figure}[h!]
+\begin{lstlisting}[style=matlab]
+data = csvread('walk02.csv');
+wscalogram('image', cwt(data));
+\end{lstlisting}
+\caption{Matlab code performing cwt.\label{list:cwtmatlab}}
+\end{figure}
+
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[width=0.5\textwidth]{img/walk03.png}
+\caption{Matlab {\it cwt()} output of {\it walk03.csv}.\label{fig:walk03}}
+\end{center}
+\end{figure}
+
+
+The training and testing data were recorded as a part of the work, results are
+shown and described by the appendix \ref{appendix:PIRSignal}.
+
+\subsection*{Labeling the data set}
+Classification is implemented as supervised learning. The supervisory is implemented
+as labels for recorded files. For achieving such labels a special script {\it classifiers/labeller.py}
+was made. This script uses {\it segment.py} of Monitor app to make the labeling possible.
+
+The labeling itself is made by human. We have a recorded file with signal in the format .csv
+and video file of the area as well in the format *.mp4. During the labeling, firstly the 
+signal is segmented ino artefacts using classes Segment, Edge and Artefact. After that
+artefacts are shown to the person performing the labeling.
+
+When the program is started, it requires entering a session name to label. After that
+measurements of the session are being processed. In order to work properly, if the
+session is named X, the session measurements must be called X\_1.csv, X\_2.csv, ... .
+
+Each artefact is shown as a signal plot, center frame of the video and the questions,
+that the person ought to answer. The first question is "Is the person present?".
+Clicking 0 or 1 on the keyboard with active window with a frame the program shows
+another frame or question dependent on the answer. The consequent questions 
+in the case of presence of the person are "Is the person in the center?", "Is the
+parson on the left?" and "Is the person close?". After answering the next artefact
+is processed.
+
+The labeling process is shown in the figure \ref{fig:labeling}.
+
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[width=0.8\textwidth]{img/labeling2.png}
+\caption{Labeling method of the data set.\label{fig:labeling}}
+\end{center}
+\end{figure}
+
+
 
 \section{Evaluation}
 \label{section:evaluationMetrics}
@@ -1672,7 +1739,7 @@ Backwards           & $-0.0025$         & $-0.1$            & $-0.01$         & 
 
 The table \ref{table:results} includes certainty of decision to presence or absence of the trait,
 equal to $100\overline{A_{X}}'$. In the case of presence, positive means presence of body in area,
-negative means absence, for distance it is body being further than $4.5~m$ when positive, closer when negative.
+negative means absence, for distance it is body being further than $4.5m$ when positive, closer when negative.
 Center is positive for body being in front of the sensor, negative for body on the side.
 
 Since the training is done by numerical solving of gradient descent, every training results in different
@@ -1733,7 +1800,7 @@ could be propagated into the results, even though there was an effort to reduce 
 class Reference, which performs operations across the artefacts.
 
 Not mentioned, though quite important is a size of dataset. During the whole development, about 200
-15~s recordings were done, each then splitted into 10 - 30 artefacts, which each possess a separate
+15s recordings were done, each then splitted into 10 - 30 artefacts, which each possess a separate
 label. For the training and testing purposes only 81 recordings were later included, 45 with no
 movement (empty area) and 36 included movement.
 
@@ -1763,76 +1830,6 @@ another improvement could be designing a server, monitoring and identification o
 a network of PIR sensors and cameras. Such a mechanism was already matter of research in
 several theses, such as \cite{KenyaThesis}.
 
-
-
-
-\chapter{User Interface}
-\label{Label:UI}
-
-{\it Monitor} as a classification server is endowed with simple GUI for the needs of monitoring
-the signal real-time and recording of the data sets used for training, testing and evaluating the results.
-The interface is shown in the figure \ref{fig:monitorGUI}.
-
-Since the programming language used for the Monitor was Python3 due to many amazing libraries focused on the
-machine learning and classification (numpy, scipy, matplotlib), for GUI was chosen a library {\it TKinter}
--- as a part of standard Python3 library is always present whenever Python3 is, the usage is pretty simple
-and it is easy to connect with matplotlib, graph plotting library. The whole GUI is still designed as a prototype,
-for the system deployed to the real situations it would be probably too slow and not flexible enough.
-As an alternative, Qt might be considered.
-
-\subsection*{Structure of the view}
-
-\begin{figure}[!ht]
-\begin{center}
-\includegraphics[width=0.7\textwidth]{render/gui.png}
-\caption{Monitor GUI prototype with sample data. \label{fig:monitorGUI}}
-\end{center}
-\end{figure}
-
-The classical menu bar with dropdowns appears in the top of the window. Dropdown {\it File} contains
-option to switch to the record mode over the source in the active tab and opening the tab with a
-source from file.
-The side menu contains possible sources to read: multicast channels or serial ports. Checking
-opens a new tab with a real-time view of the signal of the source as well as the area view,
-classified by the system. 
-
-In order to record a signal into a file, a recording session needs to be created and arranged.
-The session is made from recordings. The lengths of recordings and time delays before each recording
-are adjustable. This enables recording session to fulfil the needs for any kind of movement to be made.
-To work properly with the program, the names of the exercises must match the name of the session and they
-must have appendixes \_1, \_2, ... . An example is shown in the figure \ref{fig:monitorRecordGUI}.
-
-\begin{figure}[!ht]
-\begin{center}
-\includegraphics[width=0.2\textwidth]{render/record.png}
-\caption{Monitor GUI recording session dialog.\label{fig:monitorRecordGUI}}
-\end{center}
-\end{figure}
-
-\subsection*{Structure}
-
-\begin{figure}[h!]
-\begin{center}
-\includegraphics[width=1\textwidth]{img/class_gui.png}
-\caption{Class diagram of view part. \label{fig:classGUI}}
-\end{center}
-\end{figure}
-
-The whole Monitor is made as model-view-controller pattern. The view consists of module {\it app.py} with
-the class App controlling the processes inside of the view. Two more modules are present, {\it ui.py}
-and {\it views.py}.
-
-The {\it ui.py} is a adapter over several TKinter classes with slight extension of its functionality according
-to the needs of App class. It contains CheckButton connected with a data source, which repeats testing the 
-connected source availability and enables or disables itself by that. Notebook extends {\it TKinter.ttk.Notebook}
-with a simple graphical widget, Menu represents the menubar.
-
-The whole graphical design consists of multiple parts with various roles, assembled together in one window.
-For scalability reasons each of this "views" is implemented as a separate class inside the module {\it views.py}.
-Classes MulticastView and SerialView are used in the side menus with checkbuttons for each data source, multicast
-channel or serial port. SignalView and AreaView are the main part of the tab system (notebook), visualizing the
-received segment and the counted area fuzzy matrix. The ReplayView can be seen when a replay is shown as a data
-source, it contains the button controlling the replaying of the file.
 
 
 
