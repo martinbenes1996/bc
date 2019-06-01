@@ -22,6 +22,8 @@ zip:
 	@printf "";\
 	cp monitor/*.py xbenes49/monitor/
 	@printf "";\
+	cp monitor/Makefile xbenes49/monitor/
+	@printf "";\
 	cp monitor/*.sh xbenes49/monitor/
 	@printf "";\
 	cp monitor/README.md xbenes49/monitor/

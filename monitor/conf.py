@@ -47,7 +47,7 @@ class Config:
             self.channel_port = data["channel"]["port"]
 
             # initialize logging
-            logging.basicConfig(format='%(levelname)s\t%(name)s: %(funcName)s(): %(lineno)i: %(message)s', level=logging.WARNING)
+            logging.basicConfig(format='%(levelname)s\t%(name)s: %(funcName)s(): %(lineno)i: %(message)s', level=logging.INFO)
             logging.getLogger('matplotlib').setLevel(logging.WARNING)
 
             # initialize signal handlers
