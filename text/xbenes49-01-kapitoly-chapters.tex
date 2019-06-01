@@ -28,14 +28,20 @@ use PIR sensors.
 \end{figure}
 
 PIR sensors offer even more than stating a presence of person. It is possible to~process sensor
-output signal to~get more information about~sensed space - a~position of~person, a~number of~people.
+output signal to~get more information about~sensed space -- a~position of~person, a~number of~people.
 Especially when more sensors are used.
 
-The localization using PIR is still matter of intense research, a number of articles has been
-written on it. This thesis suggests multisensor attitude and a usage of fuzzy logic to merge
-sensor's outputs.
+Even though in the last years a number of articles has been written on the topic of localization
+using PIR, it is still a matter of intense research. This research will suggest a possible approach,
+a heat signal processing pipeline, to evaluate the situation in the sensed area. The multiple
+sensors can be used. At the second part, designed algorithms will be implemented, tested and
+the results of tests will be presented.
 
-{\it Motivace, duvod, specifikace cilu}
+This topic was suggested as part of ongoing research aimed on integration of technology and
+buildings and smart housing by a research group Nutzerzentrierte Technologien in Fachhochschule
+Vorarlberg in Dornbirn in Austria under the direct supervisory of a lead researcher prof. Guido Kempter.
+The research and the thesis were made during the study program Erasmus+ in FHV.
+
 
 
 
@@ -169,7 +175,7 @@ The peak wavelength (temperature $37^{\circ}C$ or $310.15K$) can be calculated w
 
 \begin{figure}[h!]
 \begin{center}
-\includegraphics[width=0.6\textwidth]{img/bodyradiation.png}
+\includegraphics[width=0.7\textwidth]{img/bodyradiation.png}
 \caption{Human body radiation wavelength.\cite{BodyRadiation}\label{fig:bodywavelength}}
 \end{center}    
 \end{figure}
@@ -216,7 +222,7 @@ and its~mechanisms is~not fully understanded yet and a~matter of current researc
 
 \begin{figure}[h!]
 \begin{center}
-\includegraphics[width=0.6\textwidth]{img/skin.jpg}
+\includegraphics[width=0.7\textwidth]{img/skin.jpg}
 \caption{Structure of a~skin. \cite{SkinStructure}\label{fig:skin}}
 \end{center}    
 \end{figure}
@@ -277,7 +283,7 @@ changing during the~temperature change. \cite{DetectorsBook}
 
 \begin{figure}[h!]
 \begin{center}
-\includegraphics[width=0.25\textwidth]{img/pirscheme.png}
+\includegraphics[width=0.2\textwidth]{img/pirscheme.png}
 \caption{Single element pyroelectric detector.\cite{an2105}\label{fig:pir}}
 \end{center}    
 \end{figure}
@@ -302,7 +308,7 @@ An example is a scheme \ref{fig:roomsegments} of product {\it PIR STD} made by {
 
 \begin{figure}[h!]
 \begin{center}
-\includegraphics[width=0.9\textwidth]{img/roomsegments.png}
+\includegraphics[width=1\textwidth]{img/roomsegments.png}
 \caption{Sensing of PIR STD. \cite{PIROperationalManual}\label{fig:roomsegments}}
 \end{center}    
 \end{figure}
@@ -380,7 +386,7 @@ is used in {\it Linear Regression} or {\it Support Vector Machine} (SVM). Each n
 
 \begin{figure}[h!]
 \begin{center}
-\includegraphics[width=0.5\textwidth]{img/linear.png}
+\includegraphics[width=0.35\textwidth]{img/linear.png}
 \caption{Linear classifier.\cite{LinearClassifier}\label{fig:linearclassifier}}
 \end{center}
 \end{figure}
@@ -585,7 +591,7 @@ l_0,l_1 = \text{argmin} ( \Delta_{\textbf{A},k} )
 
 \begin{figure}[h!]
 \begin{center}
-\includegraphics[width=0.85\textwidth]{render/signallines.png}
+\includegraphics[width=1\textwidth]{render/signallines.png}
 \caption{Representation of artefacts using line scope.\label{fig:siglines}}
 \end{center}
 \end{figure}
@@ -995,7 +1001,7 @@ output of this is the sensor analog output. The third phase generates binary out
 
 \begin{figure}[h!]
 \begin{center}
-\includegraphics[width=0.9\textwidth]{img/pirstd.png}
+\includegraphics[width=1\textwidth]{img/pirstd.png}
 \caption{Scheme of PIR STD.\cite{PIROperationalManual}\label{fig:pirstdscheme}}
 \end{center}
 \end{figure}
@@ -1138,7 +1144,7 @@ within these dimensions. The sensor case design was briefly sketched too.
 
 \begin{figure}[!ht]
 \begin{center}
-\includegraphics[width=0.5\textwidth]{render/circuitboard.png}
+\includegraphics[width=0.6\textwidth]{render/circuitboard.png}
 \caption{Circuit board. \label{fig:circuitboard}}
 \end{center}
 \end{figure}
@@ -1219,10 +1225,11 @@ as same as sending period, frequency, or segment size with a preset implementati
 The REST API also enables to set the multicast channel, both address and port, turning
 debugging informations on/off to serial line.
 
-\subsection*{REST API of MCU HTTP server}
+\section{REST API of MCU HTTP server}
 The MCU runs a REST API, that can configure it. The API includes following options:
 
 \begin{table}[h!]
+  \begin{center}
     \begin{tabular}{|l|l|} \hline
         \textbf{Resource} & \textbf{Description} \\ \hline
         \texttt{/} & Welcome page. \\ \hline
@@ -1233,6 +1240,7 @@ The MCU runs a REST API, that can configure it. The API includes following optio
         \texttt{/log}         & Logs. \\ \hline
     \end{tabular}
     \caption{REST API resources overview.}
+  \end{center}
 \end{table}
 
 \paragraph{\texttt{/config/mcast}}
@@ -1379,7 +1387,7 @@ but the recommended way how to perform the feature extraction using this module 
 
 \begin{figure}[!ht]
 \begin{center}
-\includegraphics[width=0.7\textwidth]{img/class_segment.png}
+\includegraphics[width=0.87\textwidth]{img/class_segment.png}
 \caption{UML diagram of Segment classes. \label{fig:class_segment}}
 \end{center}
 \end{figure}
@@ -1429,13 +1437,14 @@ output $f(a)$, using inner memory vector $m$ and saturation function $S(x)$
 $p$ is smoothening parameter with optimal value approximately $p \in (0,-1\rangle$,
 where 0 means no influence and $-1$ means absolute influence of previous artefact.
 
-\begin{subequations}
 \begin{equation}
 S(x) =\begin{cases} 1 & x > 1           \\
                     0 & x < 0           \\
                     x & \text{otherwise}
       \end{cases}
 \end{equation}
+
+\begin{subequations}
 \begin{equation}
 m[0] = 0
 \end{equation}
@@ -1493,7 +1502,7 @@ As an alternative, Qt might be considered.
 
 \begin{figure}[!ht]
 \begin{center}
-\includegraphics[width=0.7\textwidth]{render/gui.png}
+\includegraphics[width=1\textwidth]{render/gui.png}
 \caption{Monitor GUI prototype with sample data. \label{fig:monitorGUI}}
 \end{center}
 \end{figure}
@@ -1513,7 +1522,7 @@ must have appendixes \_1, \_2, ... . An example is shown in the figure \ref{fig:
 
 \begin{figure}[!ht]
 \begin{center}
-\includegraphics[width=0.2\textwidth]{render/record.png}
+\includegraphics[width=0.4\textwidth]{render/record.png}
 \caption{Monitor GUI recording session dialog.\label{fig:monitorRecordGUI}}
 \end{center}
 \end{figure}
@@ -1522,7 +1531,7 @@ must have appendixes \_1, \_2, ... . An example is shown in the figure \ref{fig:
 
 \begin{figure}[h!]
 \begin{center}
-\includegraphics[width=0.9\textwidth]{img/class_gui.png}
+\includegraphics[width=1\textwidth]{img/class_gui.png}
 \caption{Class diagram of view part. \label{fig:classGUI}}
 \end{center}
 \end{figure}
@@ -1563,14 +1572,14 @@ changes are getting slower and after a little while the output voltage gets in t
 
 \begin{figure}[h!]
 \begin{center}
-\includegraphics[width=0.65\textwidth]{render/signal_calm.png}
+\includegraphics[width=1\textwidth]{render/signal_calm.png}
 \caption{Signal of zero movement.\label{fig:signalcalm}}
 \end{center}
 \end{figure}
 
 \begin{figure}[h!]
 \begin{center}
-\includegraphics[width=0.65\textwidth]{render/signal_walk.png}
+\includegraphics[width=1\textwidth]{render/signal_walk.png}
 \caption{Signal of person walking around.\label{fig:signalwalk}}
 \end{center}
 \end{figure}
@@ -1603,7 +1612,7 @@ wscalogram('image', cwt(data));
 
 \begin{figure}[h!]
 \begin{center}
-\includegraphics[width=0.5\textwidth]{img/walk03.png}
+\includegraphics[width=0.85\textwidth]{img/walk03.png}
 \caption{Matlab {\it cwt()} output of {\it walk03.csv}.\label{fig:walk03}}
 \end{center}
 \end{figure}
@@ -1638,7 +1647,7 @@ The labeling process is shown in the figure \ref{fig:labeling}.
 
 \begin{figure}[h!]
 \begin{center}
-\includegraphics[width=0.8\textwidth]{img/labeling2.png}
+\includegraphics[width=1\textwidth]{img/labeling2.png}
 \caption{Labeling method of the data set.\label{fig:labeling}}
 \end{center}
 \end{figure}

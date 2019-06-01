@@ -351,7 +351,6 @@ class Classification:
         areaM[0][1] = AND(score['presence'], score['distance'] )
         areaM[1][0] = AND(score['presence'], N(score['distance']) )
         areaM[1][1] = AND(score['presence'], N(score['distance']) )
-        print(areaM)
         return areaM
 
 
@@ -506,7 +505,7 @@ class LinearRegression(Classifier):
             self.clf.fit(X,Y)
         except ValueError:
             for i in X:
-                print(i)
+                pass
             raise
 
     def classify(self,x):
