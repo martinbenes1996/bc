@@ -1567,18 +1567,18 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.11313708"
-     inkscape:cx="-135.96278"
-     inkscape:cy="1019.2109"
+     inkscape:zoom="0.31999999"
+     inkscape:cx="-76.38189"
+     inkscape:cy="7.7166005"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
      showguides="false"
-     inkscape:window-width="958"
-     inkscape:window-height="1018"
-     inkscape:window-x="-7"
-     inkscape:window-y="30"
-     inkscape:window-maximized="0" />
+     inkscape:window-width="1920"
+     inkscape:window-height="1027"
+     inkscape:window-x="-8"
+     inkscape:window-y="22"
+     inkscape:window-maximized="1" />
   <metadata
      id="metadata5">
     <rdf:RDF>
@@ -1587,7 +1587,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -1726,8 +1726,8 @@
            id="rect821-9-5" /></flowRegion><flowPara
          style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:17.33333397px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Italic'"
          id="flowPara823-1-92">- update_window()</flowPara></flowRoot>    <rect
-       y="11.881164"
-       x="-104.27053"
+       y="289.69366"
+       x="-517.68201"
        height="259.23297"
        width="373.54495"
        id="rect815-3"
@@ -1735,7 +1735,7 @@
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <flowRoot
-       transform="matrix(0.26458333,0,0,0.26458333,-114.85285,-18.451613)"
+       transform="matrix(0.26458333,0,0,0.26458333,-528.26433,259.3609)"
        style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
        id="flowRoot817-7"
        xml:space="preserve"
@@ -1749,8 +1749,8 @@
            id="rect821-6" /></flowRegion><flowPara
          style="font-size:33.33333206px"
          id="flowPara823-0">SerialView</flowPara></flowRoot>    <rect
-       y="35.285381"
-       x="-72.059669"
+       y="313.0979"
+       x="-485.47116"
        height="80.20137"
        width="93.157295"
        id="rect825-5"
@@ -1758,7 +1758,7 @@
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <flowRoot
-       transform="matrix(0.26458333,0,0,0.26458333,-169.7761,-45.598061)"
+       transform="matrix(0.26458333,0,0,0.26458333,-583.18758,232.21445)"
        style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
        id="flowRoot817-3-5"
        xml:space="preserve"
@@ -1774,12 +1774,12 @@
          id="flowPara823-5-8">views.py</flowPara></flowRoot>    <path
        inkscape:connector-curvature="0"
        id="path851-9"
-       d="M -69.536705,50.40534 H 18.201357"
+       d="m -482.94818,328.21785 h 87.73806"
        style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <flowRoot
-       transform="matrix(0.26458333,0,0,0.26458333,-137.9113,-0.16299873)"
+       transform="matrix(0.26458333,0,0,0.26458333,-551.32278,277.64951)"
        style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
        id="flowRoot817-35-56"
        xml:space="preserve"
@@ -1793,7 +1793,7 @@
            id="rect821-9-3" /></flowRegion><flowPara
          style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:17.33333397px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Italic'"
          id="flowPara823-1-2">+ begin(create, close)</flowPara></flowRoot>    <flowRoot
-       transform="matrix(0.26458333,0,0,0.26458333,-137.9113,-6.9230347)"
+       transform="matrix(0.26458333,0,0,0.26458333,-551.32278,270.88948)"
        style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
        id="flowRoot817-35-2-3"
        xml:space="preserve"
@@ -1807,7 +1807,7 @@
            id="rect821-9-0-9" /></flowRegion><flowPara
          style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:17.33333397px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Italic'"
          id="flowPara823-1-9-0">+ __init__(master)</flowPara></flowRoot>    <flowRoot
-       transform="matrix(0.26458333,0,0,0.26458333,-138.06439,26.497724)"
+       transform="matrix(0.26458333,0,0,0.26458333,-551.47587,304.31024)"
        style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
        id="flowRoot817-35-2-3-2-9"
        xml:space="preserve"
@@ -1824,19 +1824,19 @@
        sodipodi:nodetypes="cc"
        inkscape:connector-curvature="0"
        id="path851-8-5"
-       d="m -64.063674,91.58418 55.1703681,0.02027"
+       d="m -477.47515,369.39669 55.17037,0.0203"
        style="fill:none;stroke:#000000;stroke-width:0.2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <path
        inkscape:connector-curvature="0"
        id="path851-6-7"
-       d="m -69.830733,96.95478 h 87.50747"
+       d="m -483.24221,374.76729 h 87.50747"
        style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <flowRoot
-       transform="matrix(0.26458333,0,0,0.26458333,-136.99084,44.610632)"
+       transform="matrix(0.26458333,0,0,0.26458333,-550.40232,322.42314)"
        style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
        id="flowRoot817-35-3-2-7"
        xml:space="preserve"
@@ -1850,7 +1850,7 @@
            id="rect821-9-04-7-9" /></flowRegion><flowPara
          style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:17.33333397px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Italic'"
          id="flowPara823-1-7-9-6">- buttons: {str: tk.CheckButton()}</flowPara></flowRoot>    <flowRoot
-       transform="matrix(0.26458333,0,0,0.26458333,-137.11017,37.911689)"
+       transform="matrix(0.26458333,0,0,0.26458333,-550.52165,315.7242)"
        style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
        id="flowRoot817-35-3-2-3-8"
        xml:space="preserve"
@@ -1864,7 +1864,7 @@
            id="rect821-9-04-7-2-4" /></flowRegion><flowPara
          style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:17.33333397px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Italic'"
          id="flowPara823-1-7-9-8-5">- root: tk.Frame()</flowPara></flowRoot>    <flowRoot
-       transform="matrix(0.26458333,0,0,0.26458333,-137.9113,6.5970373)"
+       transform="matrix(0.26458333,0,0,0.26458333,-551.32278,284.40955)"
        style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
        id="flowRoot817-35-5-5"
        xml:space="preserve"
@@ -1878,7 +1878,7 @@
            id="rect821-9-5-4" /></flowRegion><flowPara
          style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:17.33333397px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Italic'"
          id="flowPara823-1-92-8">+ disable()</flowPara></flowRoot>    <flowRoot
-       transform="matrix(0.26458333,0,0,0.26458333,-137.9113,13.357074)"
+       transform="matrix(0.26458333,0,0,0.26458333,-551.32278,291.16959)"
        style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
        id="flowRoot817-35-5-1-5"
        xml:space="preserve"
@@ -1896,7 +1896,7 @@
          id="flowPara1873-1" /><flowPara
          style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:17.33333397px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Italic'"
          id="flowPara1871-1" /></flowRoot>    <flowRoot
-       transform="matrix(0.26458333,0,0,0.26458333,-137.9113,20.117118)"
+       transform="matrix(0.26458333,0,0,0.26458333,-551.32278,297.92963)"
        style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
        id="flowRoot817-35-5-1-7-3"
        xml:space="preserve"
@@ -1910,7 +1910,7 @@
            id="rect821-9-5-9-4-4" /></flowRegion><flowPara
          style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:17.33333397px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Italic'"
          id="flowPara823-1-92-5-9-2">+ uncheck()</flowPara></flowRoot>    <flowRoot
-       transform="matrix(0.26458333,0,0,0.26458333,-6.7582349,64.592871)"
+       transform="matrix(0.26458333,0,0,0.26458333,-420.16971,342.40538)"
        style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
        id="flowRoot817-8-4"
        xml:space="preserve"
@@ -1924,8 +1924,8 @@
            id="rect821-0-0" /></flowRegion><flowPara
          style="font-size:33.33333206px"
          id="flowPara823-6-7">SignalView</flowPara></flowRoot>    <rect
-       y="118.53864"
-       x="32.512005"
+       y="396.35117"
+       x="-380.89948"
        height="133.12222"
        width="105.82516"
        id="rect825-4-4"
@@ -1935,12 +1935,12 @@
     <path
        inkscape:connector-curvature="0"
        id="path851-2-5"
-       d="M 35.498824,133.51452 H 135.25829"
+       d="m -377.91265,411.32703 h 99.75946"
        style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <flowRoot
-       transform="matrix(0.26458333,0,0,0.26458333,-31.199598,82.242005)"
+       transform="matrix(0.26458333,0,0,0.26458333,-444.61107,360.05452)"
        style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
        id="flowRoot817-35-4-5"
        xml:space="preserve"
@@ -1954,7 +1954,7 @@
            id="rect821-9-1-8" /></flowRegion><flowPara
          style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:17.33333397px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Italic'"
          id="flowPara823-1-0-6">+ show()</flowPara></flowRoot>    <flowRoot
-       transform="matrix(0.26458333,0,0,0.26458333,-31.199598,75.355074)"
+       transform="matrix(0.26458333,0,0,0.26458333,-444.61107,353.16759)"
        style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
        id="flowRoot817-35-2-5-89"
        xml:space="preserve"
@@ -1968,7 +1968,7 @@
            id="rect821-9-0-6-89" /></flowRegion><flowPara
          style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:17.33333397px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Italic'"
          id="flowPara823-1-9-5-3">+ __init__(root, master, reader, recorder) </flowPara></flowRoot>    <flowRoot
-       transform="matrix(0.26458333,0,0,0.26458333,-30.468778,89.128924)"
+       transform="matrix(0.26458333,0,0,0.26458333,-443.88025,366.94144)"
        style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
        id="flowRoot817-35-5-7-0"
        xml:space="preserve"
@@ -1982,7 +1982,7 @@
            id="rect821-9-5-91-9" /></flowRegion><flowPara
          style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:17.33333397px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Italic'"
          id="flowPara823-1-92-6-8">- update()</flowPara></flowRoot>    <flowRoot
-       transform="matrix(0.26458333,0,0,0.26458333,-31.199598,96.015844)"
+       transform="matrix(0.26458333,0,0,0.26458333,-444.61107,373.82836)"
        style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
        id="flowRoot817-35-5-1-7-2-7"
        xml:space="preserve"
@@ -1996,7 +1996,7 @@
            id="rect821-9-5-9-4-7-2" /></flowRegion><flowPara
          style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:17.33333397px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Italic'"
          id="flowPara823-1-92-5-9-5-8">+ manualUpdate(event) </flowPara></flowRoot>    <flowRoot
-       transform="matrix(0.26458333,0,0,0.26458333,-31.199598,102.90277)"
+       transform="matrix(0.26458333,0,0,0.26458333,-444.61107,380.71528)"
        style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
        id="flowRoot817-35-5-1-7-2-4-5"
        xml:space="preserve"
@@ -2010,7 +2010,7 @@
            id="rect821-9-5-9-4-7-4-6" /></flowRegion><flowPara
          style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:17.33333397px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Italic'"
          id="flowPara823-1-92-5-9-5-2-8">+ showMenu(event) </flowPara></flowRoot>    <flowRoot
-       transform="matrix(0.26458333,0,0,0.26458333,-31.199598,109.8009)"
+       transform="matrix(0.26458333,0,0,0.26458333,-444.61107,387.61341)"
        style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
        id="flowRoot817-35-5-1-7-2-4-1-9"
        xml:space="preserve"
@@ -2641,7 +2641,7 @@
            height="132.14285"
            x="-953.57141"
            y="531.80542" /></flowRegion><flowPara
-         id="flowPara4317"></flowPara></flowRoot>    <flowRoot
+         id="flowPara4317" /></flowRoot>    <flowRoot
        transform="matrix(0.26458333,0,0,0.26458333,-306.20755,102.28513)"
        style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
        id="flowRoot817-0-8"
@@ -2772,7 +2772,7 @@
            id="rect821-9-0-6-7-70-7" /></flowRegion><flowPara
          style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:17.33333397px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Italic'"
          id="flowPara823-1-9-08-8-27-5">+ __init__(onclose)</flowPara></flowRoot>    <flowRoot
-       transform="matrix(0.26458333,0,0,0.26458333,-3.7732659,-19.384916)"
+       transform="matrix(0.26458333,0,0,0.26458333,-417.18474,258.4276)"
        style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
        id="flowRoot817-8-4-3"
        xml:space="preserve"
@@ -2786,8 +2786,8 @@
            id="rect821-0-0-3" /></flowRegion><flowPara
          style="font-size:33.33333206px"
          id="flowPara823-6-7-1">ReplayView</flowPara></flowRoot>    <rect
-       y="34.388294"
-       x="47.401463"
+       y="312.20081"
+       x="-366.01001"
        height="65.966896"
        width="81.605515"
        id="rect825-4-4-4"
@@ -2797,12 +2797,12 @@
     <path
        inkscape:connector-curvature="0"
        id="path851-2-5-8"
-       d="M 50.181454,49.541881 H 126.14608"
+       d="m -363.23002,327.35439 h 75.96462"
        style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <flowRoot
-       transform="matrix(0.26458333,0,0,0.26458333,-16.137553,-1.7357824)"
+       transform="matrix(0.26458333,0,0,0.26458333,-429.54903,276.07673)"
        style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
        id="flowRoot817-35-4-5-3"
        xml:space="preserve"
@@ -2816,7 +2816,7 @@
            id="rect821-9-1-8-4" /></flowRegion><flowPara
          style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:17.33333397px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Italic'"
          id="flowPara823-1-0-6-0">+ restart()</flowPara></flowRoot>    <flowRoot
-       transform="matrix(0.26458333,0,0,0.26458333,-16.137553,-8.6227144)"
+       transform="matrix(0.26458333,0,0,0.26458333,-429.54903,269.1898)"
        style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
        id="flowRoot817-35-2-5-89-6"
        xml:space="preserve"
@@ -2832,12 +2832,12 @@
          id="flowPara823-1-9-5-3-7">+ __init__(master, replay)</flowPara></flowRoot>    <path
        inkscape:connector-curvature="0"
        id="path851-6-3-0-4"
-       d="M 50.517794,67.882399 H 125.90903"
+       d="m -362.89368,345.69491 h 75.39123"
        style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <flowRoot
-       transform="matrix(0.26458333,0,0,0.26458333,-122.3652,103.49457)"
+       transform="matrix(0.26458333,0,0,0.26458333,-535.77668,381.30708)"
        style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
        id="flowRoot817-7-9"
        xml:space="preserve"
@@ -2851,8 +2851,8 @@
            id="rect821-6-8" /></flowRegion><flowPara
          style="font-size:33.33333206px"
          id="flowPara823-0-5">MulticastView</flowPara></flowRoot>    <rect
-       y="157.16641"
-       x="-72.951653"
+       y="434.97891"
+       x="-486.36313"
        height="59.247704"
        width="93.579941"
        id="rect825-5-5"
@@ -2862,12 +2862,12 @@
     <path
        inkscape:connector-curvature="0"
        id="path851-9-5"
-       d="M -70.367733,172.35944 H 17.669789"
+       d="m -483.77921,450.17195 h 88.03752"
        style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <flowRoot
-       transform="matrix(0.26458333,0,0,0.26458333,-138.73813,121.78319)"
+       transform="matrix(0.26458333,0,0,0.26458333,-552.14961,399.5957)"
        style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
        id="flowRoot817-35-56-2"
        xml:space="preserve"
@@ -2881,7 +2881,7 @@
            id="rect821-9-3-2" /></flowRegion><flowPara
          style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:17.33333397px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Italic'"
          id="flowPara823-1-2-0">+ begin(create, close)</flowPara></flowRoot>    <flowRoot
-       transform="matrix(0.26458333,0,0,0.26458333,-138.73813,115.02315)"
+       transform="matrix(0.26458333,0,0,0.26458333,-552.14961,392.83566)"
        style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
        id="flowRoot817-35-2-3-0"
        xml:space="preserve"
@@ -2897,12 +2897,12 @@
          id="flowPara823-1-9-0-0">+ __init__(master)</flowPara></flowRoot>    <path
        inkscape:connector-curvature="0"
        id="path851-6-7-9"
-       d="M -69.679417,197.43568 H 18.126721"
+       d="m -483.09089,475.24819 h 87.80613"
        style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <flowRoot
-       transform="matrix(0.26458333,0,0,0.26458333,-138.73813,128.54321)"
+       transform="matrix(0.26458333,0,0,0.26458333,-552.14961,406.35572)"
        style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
        id="flowRoot817-35-5-5-7"
        xml:space="preserve"
@@ -2916,7 +2916,7 @@
            id="rect821-9-5-4-4" /></flowRegion><flowPara
          style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:17.33333397px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Italic'"
          id="flowPara823-1-92-8-3">+ uncheck(name)</flowPara></flowRoot>    <flowRoot
-       transform="matrix(0.26458333,0,0,0.26458333,106.26595,-20.209332)"
+       transform="matrix(0.26458333,0,0,0.26458333,-307.14553,257.60318)"
        style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
        id="flowRoot817-7-9-3"
        xml:space="preserve"
@@ -2930,8 +2930,8 @@
            id="rect821-6-8-7" /></flowRegion><flowPara
          style="font-size:33.33333206px"
          id="flowPara823-0-5-8">RightMenu</flowPara></flowRoot>    <rect
-       y="33.561474"
-       x="149.67754"
+       y="311.37399"
+       x="-263.73395"
        height="72.92955"
        width="90.58046"
        id="rect825-5-5-6"
@@ -2941,12 +2941,12 @@
     <path
        inkscape:connector-curvature="0"
        id="path851-9-5-3"
-       d="m 152.14634,48.682058 h 85.28008"
+       d="m -261.26514,326.49457 h 85.28008"
        style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <flowRoot
-       transform="matrix(0.26458333,0,0,0.26458333,83.792149,-1.9207116)"
+       transform="matrix(0.26458333,0,0,0.26458333,-329.61933,275.8918)"
        style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
        id="flowRoot817-35-56-2-3"
        xml:space="preserve"
@@ -2960,7 +2960,7 @@
            id="rect821-9-3-2-6" /></flowRegion><flowPara
          style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:17.33333397px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Italic'"
          id="flowPara823-1-2-0-8">+ pause()</flowPara></flowRoot>    <flowRoot
-       transform="matrix(0.26458333,0,0,0.26458333,83.792149,-8.6807516)"
+       transform="matrix(0.26458333,0,0,0.26458333,-329.61933,269.13176)"
        style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
        id="flowRoot817-35-2-3-0-7"
        xml:space="preserve"
@@ -2976,12 +2976,12 @@
          id="flowPara823-1-9-0-0-0">+ __init__(master, refresh, record)</flowPara></flowRoot>    <path
        inkscape:connector-curvature="0"
        id="path851-6-7-9-7"
-       d="m 152.81309,81.659838 h 85.05595"
+       d="m -260.59839,359.47235 h 85.05595"
        style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <flowRoot
-       transform="matrix(0.26458333,0,0,0.26458333,84.881709,28.651878)"
+       transform="matrix(0.26458333,0,0,0.26458333,-328.52977,306.46439)"
        style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
        id="flowRoot817-35-3-2-7-9-5"
        xml:space="preserve"
@@ -2995,7 +2995,7 @@
            id="rect821-9-04-7-9-8-6" /></flowRegion><flowPara
          style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:17.33333397px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Italic'"
          id="flowPara823-1-7-9-6-0-3">- recording: bool</flowPara></flowRoot>    <flowRoot
-       transform="matrix(0.26458333,0,0,0.26458333,84.762379,22.904358)"
+       transform="matrix(0.26458333,0,0,0.26458333,-328.6491,300.71687)"
        style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
        id="flowRoot817-35-3-2-3-8-3-7"
        xml:space="preserve"
@@ -3009,7 +3009,7 @@
            id="rect821-9-04-7-2-4-1-2" /></flowRegion><flowPara
          style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:17.33333397px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Italic'"
          id="flowPara823-1-7-9-8-5-8-3">- record: f()</flowPara></flowRoot>    <flowRoot
-       transform="matrix(0.26458333,0,0,0.26458333,83.792149,4.8393184)"
+       transform="matrix(0.26458333,0,0,0.26458333,-329.61933,282.65183)"
        style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
        id="flowRoot817-35-5-5-7-1"
        xml:space="preserve"
@@ -3023,7 +3023,7 @@
            id="rect821-9-5-4-4-7" /></flowRegion><flowPara
          style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:17.33333397px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Italic'"
          id="flowPara823-1-92-8-3-2">+ switchRecord()</flowPara></flowRoot>    <flowRoot
-       transform="matrix(0.26458333,0,0,0.26458333,83.792149,11.599368)"
+       transform="matrix(0.26458333,0,0,0.26458333,-329.61933,289.41188)"
        style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
        id="flowRoot817-35-5-1-5-0-4"
        xml:space="preserve"
@@ -3041,7 +3041,7 @@
          id="flowPara1873-1-3-7" /><flowPara
          style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:17.33333397px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Italic'"
          id="flowPara1871-1-4-0" /></flowRoot>    <flowRoot
-       transform="matrix(0.26458333,0,0,0.26458333,110.54446,84.753145)"
+       transform="matrix(0.26458333,0,0,0.26458333,-302.86702,362.56566)"
        style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
        id="flowRoot817-7-9-3-4"
        xml:space="preserve"
@@ -3055,8 +3055,8 @@
            id="rect821-6-8-7-8" /></flowRegion><flowPara
          style="font-size:33.33333206px"
          id="flowPara823-0-5-8-3">AreaView</flowPara></flowRoot>    <rect
-       y="138.5049"
-       x="152.50836"
+       y="416.31741"
+       x="-260.90311"
        height="88.130508"
        width="89.863464"
        id="rect825-5-5-6-3"
@@ -3066,12 +3066,12 @@
     <path
        inkscape:connector-curvature="0"
        id="path851-9-5-3-2"
-       d="m 154.92583,153.60305 h 84.66833"
+       d="m -258.48565,431.41556 h 84.66833"
        style="fill:none;stroke:#000000;stroke-width:0.30000001;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <flowRoot
-       transform="matrix(0.26458333,0,0,0.26458333,86.641969,103.04177)"
+       transform="matrix(0.26458333,0,0,0.26458333,-326.76951,380.85428)"
        style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
        id="flowRoot817-35-56-2-3-8"
        xml:space="preserve"
@@ -3085,7 +3085,7 @@
            id="rect821-9-3-2-6-9" /></flowRegion><flowPara
          style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:17.33333397px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Italic'"
          id="flowPara823-1-2-0-8-5">+ show(data)</flowPara></flowRoot>    <flowRoot
-       transform="matrix(0.26458333,0,0,0.26458333,86.641969,96.281725)"
+       transform="matrix(0.26458333,0,0,0.26458333,-326.76951,374.09424)"
        style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
        id="flowRoot817-35-2-3-0-7-5"
        xml:space="preserve"
@@ -3101,12 +3101,12 @@
          id="flowPara823-1-9-0-0-0-5">+ __init__(master, reader)</flowPara></flowRoot>    <path
        inkscape:connector-curvature="0"
        id="path851-6-7-9-7-5"
-       d="m 154.47327,185.67472 h 84.4458"
+       d="m -258.93821,463.48723 h 84.4458"
        style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <flowRoot
-       transform="matrix(0.26458333,0,0,0.26458333,87.543069,132.13924)"
+       transform="matrix(0.26458333,0,0,0.26458333,-325.86841,409.95175)"
        style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
        id="flowRoot817-35-3-2-7-9-5-6"
        xml:space="preserve"
@@ -3120,7 +3120,7 @@
            id="rect821-9-04-7-9-8-6-7" /></flowRegion><flowPara
          style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:17.33333397px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Italic'"
          id="flowPara823-1-7-9-6-0-3-3">- reader: f(): fuzzy[2][2]</flowPara></flowRoot>    <flowRoot
-       transform="matrix(0.26458333,0,0,0.26458333,87.543069,126.35717)"
+       transform="matrix(0.26458333,0,0,0.26458333,-325.86841,404.16968)"
        style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
        id="flowRoot817-35-3-2-3-8-3-7-3"
        xml:space="preserve"
@@ -3134,7 +3134,7 @@
            id="rect821-9-04-7-2-4-1-2-3" /></flowRegion><flowPara
          style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:17.33333397px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Italic'"
          id="flowPara823-1-7-9-8-5-8-3-6">- master: tk.Frame()</flowPara></flowRoot>    <flowRoot
-       transform="matrix(0.26458333,0,0,0.26458333,87.665109,109.65564)"
+       transform="matrix(0.26458333,0,0,0.26458333,-325.74637,387.46815)"
        style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
        id="flowRoot817-35-5-5-7-1-7"
        xml:space="preserve"
@@ -3148,7 +3148,7 @@
            id="rect821-9-5-4-4-7-9" /></flowRegion><flowPara
          style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:17.33333397px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Italic'"
          id="flowPara823-1-92-8-3-2-0">- update()</flowPara></flowRoot>    <flowRoot
-       transform="matrix(0.26458333,0,0,0.26458333,86.641969,116.56183)"
+       transform="matrix(0.26458333,0,0,0.26458333,-326.76951,394.37434)"
        style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
        id="flowRoot817-35-5-1-5-0-4-5"
        xml:space="preserve"
@@ -3166,7 +3166,7 @@
          id="flowPara1873-1-3-7-4" /><flowPara
          style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:17.33333397px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Italic'"
          id="flowPara1871-1-4-0-1" /></flowRoot>    <flowRoot
-       transform="matrix(0.26458333,0,0,0.26458333,-137.67739,145.28272)"
+       transform="matrix(0.26458333,0,0,0.26458333,-551.08887,423.09523)"
        style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
        id="flowRoot817-35-3-2-7-1"
        xml:space="preserve"
@@ -3180,7 +3180,7 @@
            id="rect821-9-04-7-9-83" /></flowRegion><flowPara
          style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:17.33333397px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Italic'"
          id="flowPara823-1-7-9-6-7">- buttons: {str: tk.CheckButton()}</flowPara></flowRoot>    <flowRoot
-       transform="matrix(0.26458333,0,0,0.26458333,-137.79672,138.58377)"
+       transform="matrix(0.26458333,0,0,0.26458333,-551.2082,416.39628)"
        style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
        id="flowRoot817-35-3-2-3-8-6"
        xml:space="preserve"
@@ -3194,7 +3194,7 @@
            id="rect821-9-04-7-2-4-4" /></flowRegion><flowPara
          style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:17.33333397px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Italic'"
          id="flowPara823-1-7-9-8-5-1">- root: tk.Frame()</flowPara></flowRoot>    <flowRoot
-       transform="matrix(0.26458333,0,0,0.26458333,-15.057247,15.604077)"
+       transform="matrix(0.26458333,0,0,0.26458333,-428.46872,293.41659)"
        style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
        id="flowRoot817-35-3-2-7-9"
        xml:space="preserve"
@@ -3208,7 +3208,7 @@
            id="rect821-9-04-7-9-8" /></flowRegion><flowPara
          style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:17.33333397px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Italic'"
          id="flowPara823-1-7-9-6-1">- frame: tk.Frame()</flowPara></flowRoot>    <flowRoot
-       transform="matrix(0.26458333,0,0,0.26458333,-15.17658,8.9051338)"
+       transform="matrix(0.26458333,0,0,0.26458333,-428.58806,286.71765)"
        style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
        id="flowRoot817-35-3-2-3-8-1"
        xml:space="preserve"
@@ -3222,7 +3222,7 @@
            id="rect821-9-04-7-2-4-9" /></flowRegion><flowPara
          style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:17.33333397px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Italic'"
          id="flowPara823-1-7-9-8-5-2">- master: tk.Frame()</flowPara></flowRoot>    <flowRoot
-       transform="matrix(0.26458333,0,0,0.26458333,-15.086664,28.811055)"
+       transform="matrix(0.26458333,0,0,0.26458333,-428.49814,306.62357)"
        style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
        id="flowRoot817-35-3-2-7-9-59"
        xml:space="preserve"
@@ -3236,7 +3236,7 @@
            id="rect821-9-04-7-9-8-8" /></flowRegion><flowPara
          style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:17.33333397px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Italic'"
          id="flowPara823-1-7-9-6-1-2">- replayBtn: tk.Button()</flowPara></flowRoot>    <flowRoot
-       transform="matrix(0.26458333,0,0,0.26458333,-15.205997,22.112112)"
+       transform="matrix(0.26458333,0,0,0.26458333,-428.61747,299.92462)"
        style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
        id="flowRoot817-35-3-2-3-8-1-1"
        xml:space="preserve"
@@ -3250,7 +3250,7 @@
            id="rect821-9-04-7-2-4-9-9" /></flowRegion><flowPara
          style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:17.33333397px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Italic'"
          id="flowPara823-1-7-9-8-5-2-0">- replay: f()</flowPara></flowRoot>    <flowRoot
-       transform="matrix(0.26458333,0,0,0.26458333,84.898319,34.850608)"
+       transform="matrix(0.26458333,0,0,0.26458333,-328.51316,312.66312)"
        style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
        id="flowRoot817-35-3-2-7-9-5-9"
        xml:space="preserve"
@@ -3266,12 +3266,12 @@
          id="flowPara823-1-7-9-6-0-3-0">- popup: tk.Menu()</flowPara></flowRoot>    <path
        inkscape:connector-curvature="0"
        id="path851-2-5-9"
-       d="M 36.459454,179.75277 H 136.21892"
+       d="m -376.95202,457.56528 h 99.75946"
        style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <flowRoot
-       transform="matrix(0.26458333,0,0,0.26458333,-30.155738,127.56834)"
+       transform="matrix(0.26458333,0,0,0.26458333,-443.56721,405.38085)"
        style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
        id="flowRoot817-35-3-2-7-9-2"
        xml:space="preserve"
@@ -3285,7 +3285,7 @@
            id="rect821-9-04-7-9-8-3" /></flowRegion><flowPara
          style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:17.33333397px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Italic'"
          id="flowPara823-1-7-9-6-1-5">- getData: f():int[N]</flowPara></flowRoot>    <flowRoot
-       transform="matrix(0.26458333,0,0,0.26458333,-30.275068,120.8694)"
+       transform="matrix(0.26458333,0,0,0.26458333,-443.68654,398.68191)"
        style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
        id="flowRoot817-35-3-2-3-8-1-3"
        xml:space="preserve"
@@ -3299,7 +3299,7 @@
            id="rect821-9-04-7-2-4-9-5" /></flowRegion><flowPara
          style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:17.33333397px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Italic'"
          id="flowPara823-1-7-9-8-5-2-8">- master: tk.Frame()</flowPara></flowRoot>    <flowRoot
-       transform="matrix(0.26458333,0,0,0.26458333,-30.185158,140.77532)"
+       transform="matrix(0.26458333,0,0,0.26458333,-443.59663,418.58783)"
        style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
        id="flowRoot817-35-3-2-7-9-59-9"
        xml:space="preserve"
@@ -3313,7 +3313,7 @@
            id="rect821-9-04-7-9-8-8-3" /></flowRegion><flowPara
          style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:17.33333397px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Italic'"
          id="flowPara823-1-7-9-6-1-2-5">- afterId:</flowPara></flowRoot>    <flowRoot
-       transform="matrix(0.26458333,0,0,0.26458333,-30.304488,134.07638)"
+       transform="matrix(0.26458333,0,0,0.26458333,-443.71596,411.88889)"
        style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
        id="flowRoot817-35-3-2-3-8-1-1-0"
        xml:space="preserve"
@@ -3327,7 +3327,7 @@
            id="rect821-9-04-7-2-4-9-9-6" /></flowRegion><flowPara
          style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:17.33333397px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Italic'"
          id="flowPara823-1-7-9-8-5-2-0-5">- record:</flowPara></flowRoot>    <flowRoot
-       transform="matrix(0.26458333,0,0,0.26458333,-30.000888,154.14321)"
+       transform="matrix(0.26458333,0,0,0.26458333,-443.41236,431.95572)"
        style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
        id="flowRoot817-35-3-2-7-9-2-0"
        xml:space="preserve"
@@ -3341,7 +3341,7 @@
            id="rect821-9-04-7-9-8-3-3" /></flowRegion><flowPara
          style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:17.33333397px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Italic'"
          id="flowPara823-1-7-9-6-1-5-2">- subplt: Subplot()</flowPara></flowRoot>    <flowRoot
-       transform="matrix(0.26458333,0,0,0.26458333,-30.120218,147.44426)"
+       transform="matrix(0.26458333,0,0,0.26458333,-443.53169,425.25677)"
        style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
        id="flowRoot817-35-3-2-3-8-1-3-6"
        xml:space="preserve"
@@ -3355,7 +3355,7 @@
            id="rect821-9-04-7-2-4-9-5-5" /></flowRegion><flowPara
          style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:17.33333397px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Italic'"
          id="flowPara823-1-7-9-8-5-2-8-9">- fig: matplotlib.pyplot.Figure()</flowPara></flowRoot>    <flowRoot
-       transform="matrix(0.26458333,0,0,0.26458333,-30.030308,167.35019)"
+       transform="matrix(0.26458333,0,0,0.26458333,-443.44178,445.1627)"
        style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
        id="flowRoot817-35-3-2-7-9-59-9-5"
        xml:space="preserve"
@@ -3369,7 +3369,7 @@
            id="rect821-9-04-7-9-8-8-3-3" /></flowRegion><flowPara
          style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:17.33333397px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Italic'"
          id="flowPara823-1-7-9-6-1-2-5-5">- afterId: int</flowPara></flowRoot>    <flowRoot
-       transform="matrix(0.26458333,0,0,0.26458333,-30.149638,160.65124)"
+       transform="matrix(0.26458333,0,0,0.26458333,-443.56111,438.46375)"
        style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
        id="flowRoot817-35-3-2-3-8-1-1-0-7"
        xml:space="preserve"
@@ -3383,7 +3383,7 @@
            id="rect821-9-04-7-2-4-9-9-6-7" /></flowRegion><flowPara
          style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:17.33333397px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Italic'"
          id="flowPara823-1-7-9-8-5-2-0-5-5">- record: f()</flowPara></flowRoot>    <flowRoot
-       transform="matrix(0.26458333,0,0,0.26458333,-30.006938,173.32476)"
+       transform="matrix(0.26458333,0,0,0.26458333,-443.41841,451.13727)"
        style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
        id="flowRoot817-35-3-2-7-9-59-9-5-0"
        xml:space="preserve"
@@ -3397,7 +3397,7 @@
            id="rect821-9-04-7-9-8-8-3-3-5" /></flowRegion><flowPara
          style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:17.33333397px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Italic'"
          id="flowPara823-1-7-9-6-1-2-5-5-6">- canvas: FigureCanvasTkAgg()</flowPara></flowRoot>    <flowRoot
-       transform="matrix(0.26458333,0,0,0.26458333,-30.197268,179.69595)"
+       transform="matrix(0.26458333,0,0,0.26458333,-443.60874,457.50846)"
        style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
        id="flowRoot817-35-3-2-7-9-59-9-5-0-7"
        xml:space="preserve"
@@ -3411,7 +3411,7 @@
            id="rect821-9-04-7-9-8-8-3-3-5-9" /></flowRegion><flowPara
          style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:17.33333397px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Italic'"
          id="flowPara823-1-7-9-6-1-2-5-5-6-4">- menu: Menu()</flowPara></flowRoot>    <flowRoot
-       transform="matrix(0.26458333,0,0,0.26458333,87.543069,138.3367)"
+       transform="matrix(0.26458333,0,0,0.26458333,-325.86841,416.14921)"
        style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
        id="flowRoot817-35-3-2-3-8-3-7-3-5"
        xml:space="preserve"
@@ -3425,7 +3425,7 @@
            id="rect821-9-04-7-2-4-1-2-3-2" /></flowRegion><flowPara
          style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:17.33333397px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Italic'"
          id="flowPara823-1-7-9-8-5-8-3-6-8">- afterId: int</flowPara></flowRoot>    <flowRoot
-       transform="matrix(0.26458333,0,0,0.26458333,87.675569,149.44066)"
+       transform="matrix(0.26458333,0,0,0.26458333,-325.73591,427.25317)"
        style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
        id="flowRoot817-35-3-2-7-9-2-0-4"
        xml:space="preserve"
@@ -3439,7 +3439,7 @@
            id="rect821-9-04-7-9-8-3-3-2" /></flowRegion><flowPara
          style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:17.33333397px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Italic'"
          id="flowPara823-1-7-9-6-1-5-2-9">- subplt: Subplot()</flowPara></flowRoot>    <flowRoot
-       transform="matrix(0.26458333,0,0,0.26458333,87.556239,143.66867)"
+       transform="matrix(0.26458333,0,0,0.26458333,-325.85524,421.48118)"
        style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
        id="flowRoot817-35-3-2-3-8-1-3-6-6"
        xml:space="preserve"
@@ -3453,7 +3453,7 @@
            id="rect821-9-04-7-2-4-9-5-5-3" /></flowRegion><flowPara
          style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:17.33333397px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Italic'"
          id="flowPara823-1-7-9-8-5-2-8-9-2">- fig: matplotlib.pyplot.Figure()</flowPara></flowRoot>    <flowRoot
-       transform="matrix(0.26458333,0,0,0.26458333,87.669519,155.17522)"
+       transform="matrix(0.26458333,0,0,0.26458333,-325.74196,432.98773)"
        style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
        id="flowRoot817-35-3-2-7-9-59-9-5-0-5"
        xml:space="preserve"
