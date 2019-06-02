@@ -1217,7 +1217,8 @@ F_{send} = \frac{F_s}{N}
 
 The program is written in C++ and programming the module is done with Arduino IDE. Several libraries
 are used that need to be downloaded to the IDE from its repository. ESP8266 libraries for networking
-(multicast, HTTP) and EEPROM library to operate EEPROM persistent memory.
+(multicast, HTTP) and EEPROM library to operate EEPROM persistent memory. External library was used
+for functionality of web interface for initialization of WiFi of module.
 
 MCU runs HTTP server, enabling remote configuration of the MCU at the runtime without reprogramming
 and reset. It is possible to set sampling frequency or period with the altering other correspondingly

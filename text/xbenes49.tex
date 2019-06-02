@@ -168,7 +168,9 @@
   and Ing. Daniel Sadjak for providing facilities for the research. Last but not the least, I am greatful to my family and friends for
   unceasing support and encouragement.},
   % Rozšířený abstrakt (cca 3 normostrany) - lze definovat zde nebo níže / Extended abstract (approximately 3 standard pages) - can be defined here or below
-  %extendedabstract={Do tohoto odstavce bude zapsán rozšířený výtah (abstrakt) práce v českém (slovenském) jazyce.},
+  extendedabstract={
+    Do tohoto odstavce bude zapsán rozšířený výtah (abstrakt) práce v českém (slovenském) jazyce.
+  },
   %faculty={FIT}, % FIT/FEKT/FSI/FA/FCH/FP/FAST/FAVU/USI/DEF
   faculty.cs={Fakulta informačních technologií}, % Fakulta v češtině - pro využití této položky výše zvolte fakultu DEF / Faculty in Czech - for use of this entry select DEF above
   faculty.en={Faculty of Information Technology}, % Fakulta v angličtině - pro využití této položky výše zvolte fakultu DEF / Faculty in English - for use of this entry select DEF above
@@ -177,7 +179,111 @@
 }
 
 % Rozšířený abstrakt (cca 3 normostrany) - lze definovat zde nebo výše / Extended abstract (approximately 3 standard pages) - can be defined here or above
-%\extendedabstract{Do tohoto odstavce bude zapsán výtah (abstrakt) práce v českém (slovenském) jazyce.}
+\extendedabstract{
+
+  \section*{Úvod}
+  PIR (pasivní infračervený) sensor je elektronická součástka, transformující infračervené záření
+  na eletrický signál. Toto zařízení se používá zejména pro detekci přítomnosti osob a oznámení
+  systému pro příslušnou reakci, např. čidlo pro automatické ovládání světel. Cílem této práce je
+  navrhout možný přístup, který by zpracovával signál sensoru a zjišťoval více informací o snímaném
+  prostoru -- pozice přítomných osob, nebo jejich počet. Je možné také uvážit použití více sensorů. 
+
+  Výsledkem jsou dva produkty, modul se sensorem, který snímá a segmentuje analogový signál
+  z okolí a odesílá do klasifikačního serveru, ve kterém bude probíhat většina kalkulací
+  a jehož výstupem budou právě zjištěná data o objektech před sensorem.
+
+
+  \section*{Návrh}
+
+  \subparagraph{Snímání a segmentace}
+
+  Způsob zpracování se provádí v řetězci několika fází dle klasického klasifikačního schématu.
+  Signál se nejprve nasnímá, vzorkuje a kvantuje v sensorovém modulu, a následně se
+  odešle pomocí specifikovaného média, po síti pomocí unicast nebo multicast, případně
+  po sériové lince. Toto odesílání se děje v časově konstantních úsecích, modul tedy
+  zároveň provádí homogenní segmentaci.
+
+  Klasifikační server čte komunikační kanál a získaná data prochází přes zpracovávající
+  řetězec -- nejprve je signál prostřednictvím spojité vlnkové transformace (CWT) a fuzzifikace
+  rozdělen na jednotlivé hrany a rovné úseky, tzv. artefakty.
+
+  \subparagraph{Extrakce příznaků a klasifikace}
+
+  Každý jeden artefakt je poté základem pro příznakový vektor. Jako příznaky jsou použity
+  statistické vlastnosti artefaktu: střední hodnota, délka, rozptyl a další.
+
+  Příznaky jsou vstupem několika klasifikátorů, implementovaných lineární regresí.
+  Tyto klasifikátory jsou předtrénovány na trénovacích datech pro méně náročné ohodnocení -- 
+  přítomnost nebo absence, vzdálenost, zda je objekt v ose sensoru nebo na kraji snímaného
+  pole, nalevo nebo napravo. Výstupy klasifikátorů jsou měkká rozhodnutí, jejichž
+  transformací sigmoidou dojde k převodu do fuzzy.
+
+  \subparagraph{Postprocessing}
+
+  Vnitřní model prostoru je reprezentován v podobě matice. Index značí určitý segment prostoru,
+  respektive plochy. Výstupy klasifikátorů jsou nad těmito indexy použity jako vstupy
+  a fuzzy formule pro každý index udává, jakou kombinací vstupů se získá hodnota konkrétního
+  indexu. Na konci je matice, jejichž indexy obsahují fuzzy hodnoty, do jaké míry je
+  v daném segmentu přítomna osoba.
+
+  Pro získání konkrétních pozic osob a jejich počtu se může provést shluková analýza.
+  V případě přítomnosti více sensorů se použije tato matice a určí se míra překrytí
+  jednotlivých indexů všech matic, poté se přes tyto míry naváhují jejich hodnoty
+  a výsledek se zapíše do globální matice. Nad ní je poté provedena shluková analýza.
+
+
+  \section*{Implementace}
+
+  \subparagraph{Modul}
+  
+  Coby sensor byl použit PIR STD od firmy B+B Sensors, který jako jediný nalezený na trhu
+  má analogový signál přímo vyveden na výstupní pin, pro snímání a odesílání byl zvolen
+  mikrokontroler NodeMCU, osazený ESP8266, který obsahuje i síťovou kartu,
+  umožňuje běh WiFi AP, HTTP serveru, mDNS i webového rozhraní pro přihlášení a
+  je kompatibilní s knihovnami pro Arduino. 
+
+  Programování tohoto sensoru proběhlo pomocí nástroje Arduino IDE v dialektu C++
+  pro Arduino. Hlavní funkcionalitou je pochopitelně čtení výstupu senzoru a ukládání
+  do containeru s periodou $\frac{1}{f_{sample}}s$, kde $f_{sample}$ je vzorkovací
+  frekvence. Odesílání $N$-prvkového bufferu se provádí jednou za $\frac{N}{f_{sample}}s$.
+
+  \paragraph{Monitor}
+
+  Klasifikační server byl implementován v jazyce Python3 z důvodu existence mnoha 
+  knihoven nejen z oblasti strojového učení jako NumPy, SciPy, matplotlib, OpenCV.
+  Monitor je opatřen grafickým uživatelským rozhraním, pro které bylo rozhodnuto
+  použít Python3 knihovnu tkinter. Ta je vhodná pro rychlý a snadný vývoj prototypů
+  GUI.
+
+  Uživateli je umožněno číst a zobrazovat data hned z několika zdrojů, jak z multicastového
+  kanálu, tak i ze sériové linky, popř. uložené ze souboru, které je možné nahrávat
+  z programu. Nahrávání je poměrně pokročilá funkcionalita, je možné plánovat nahrávání
+  několika nahrávek libovolné délky v rámci session s variabilní prodlevou mezi nimi,
+  což je velmi výhodné pro tvorbu trénovacích a testovacích sad dat.
+
+  \section*{Experimentování}
+
+  Na počátku experimentální fáze je mechanismus vytváření štítků, referenčních hodnot
+  pro jednotlivé úseky signálu. Tyto štítky jsou poté použity jak během trénování
+  klasifikátoru, tak pro vyhodnocování úspěšnosti klasifikace pomocí testovacích
+  dat. Štítky pro nahraná data byla vytvářena manuálně s použitím synchronizovaného
+  videa jako reference pro pozici osoby.
+
+  Během experimentování byla také zařazena do klasifikačního řetězce fáze post-processing,
+  která vyhlazuje signály každého klasifikátoru. To signifikantně zvýšilo úspěšnost
+  klasifikace.
+  
+  \section*{Závěr}
+
+  Hlavní cíl výzkumu, navrhnout systém pro klasifikaci PIR signálu a zjišťování 
+  přítomnosti, pozice osoby, případně jejich počtu, byl splněn. Implementace
+  detekuje přítomnost a odhaduje pozici osoby. Výsledky poukazují na možnost
+  použití technlogie PIR v oblasti lokalizace.
+
+  Mimoto byl také navržen celkový vzhled produktu tak, jak by mohl být případně
+  uveden na trh a vyhotoven plošný spoj, který ilustruje rozměry tohoto zařízení.
+  
+}
 
 % nastavení délky bloku s titulkem pro úpravu zalomení řádku - lze definovat zde nebo výše / setting the length of a block with a thesis title for adjusting a line break - can be defined here or above
 %\titlelength{14.5cm}
