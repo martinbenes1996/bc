@@ -27,12 +27,31 @@ import conf
 import ui
 
 class SerialView:
+    """View of signal on serial port.
+    
+    Static attributes:
+        log         Logging instance.
+    Attributes:
+        root        Parent element.
+        buttons     Button container.
+    """
     log = logging.getLogger(__name__)
     def __init__(self, root):
+        """Constructor of Serial view.
+        
+        Arguments:
+            root    Parent element.
+        """
         self.root = root
         self.buttons = {}
 
     def begin(self, create, close):
+        """Begins the button element.
+        
+        Arguments:
+            create      Handler for checking the button.
+            close       Handler for unchecking the button.
+        """
         # look up serials
         allfiles = re.findall(r'ttyS[0-9]+', ",".join(os.listdir("/dev/")))
         # sort serial files by numeric appendix numerically
@@ -51,20 +70,26 @@ class SerialView:
             self.buttons[serialname] = checkbutton
     
     def disable(self):
+        """Disables all the checkbuttons."""
         for _,chb in self.buttons.items():
             chb.disable()
     def update(self):
+        """Updating method, called in loop."""
         for _,chb in self.buttons.items():
             chb.manualUpdate()
         self.log.debug("update serial view")
 
     def uncheck(self, name):
+        """Uncheck a button specified by name.
+        
+        Arguments:
+            name    Name of the button to uncheck.
+        """
         try:
             self.buttons[name].off()
         except KeyError:
             pass
         
-
     @staticmethod
     def sortByNumericAppendix(name):
         """ Separates a numeric appendix from Linux serial ports name. 
@@ -81,12 +106,30 @@ class SerialView:
         # convert to int
         return int( n.group(0) )
 
+
 class MulticastView:
+    """View of signal from multicast.
+    
+    Attributes:
+        root        Parent element.
+        buttons     Buttons container.
+    """
     def __init__(self, root):
+        """Constructor of Multicast view.
+        
+        Arguments:
+            root    Parent element.
+        """
         self.root = root
         self.buttons = {}
     
     def begin(self, create, close):
+        """Begins the checkbutton view.
+        
+        Argument:
+            create      Handler for checking the button.
+            close       Handler for unchecking the button.
+        """
         tk.Label(self.root, text=u"Multicast channel", font=30).grid(column=0, sticky=tk.W+tk.N, padx=30)
         btnname = "M:"+str(conf.Config.channel())
         checkbutton_mcast = ui.CheckButton(self.root, btnname)
@@ -96,6 +139,11 @@ class MulticastView:
         self.buttons[btnname] = checkbutton_mcast
     
     def uncheck(self, name):
+        """Uncheck a button specified by name.
+        
+        Arguments:
+            name    Name of the button to uncheck.
+        """
         try:
             self.buttons[name].off()
         except KeyError:
@@ -316,11 +364,22 @@ class AreaView:
 class ReplayView:
     """Replay controller.
     
+    Static attributes:
+        log             Logging instance.
     Attributes:
-        master  Item to show in.
+        frame           Frame of the view.
+        master          Item to show in.
+        replay          Replay callback.
+        replayBtn       Button for replay.
     """
     log = logging.getLogger(__name__)
     def __init__(self, master=None, replay=lambda:None):
+        """Constructor of Replay view.
+        
+        Arguments:
+            master      Parent element.
+            replay      Replay callback.
+        """
         self.master = master
         self.frame = tk.Frame(master)
         self.replay = replay
@@ -328,6 +387,7 @@ class ReplayView:
         self.replayBtn.grid(sticky=tk.N)
     
     def restart(self):
+        """Restarts the replaying of signal. """
         self.log.debug("restart replaying with "+str(self.replay))
         self.replay()
 

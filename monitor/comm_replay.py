@@ -24,7 +24,15 @@ import conf
 class Reader(comm.Reader):
     """Reader of data from file. Singleton.
     
+    Static attributes:
+        log         Log instance.
+        _readers    Reader instances for various channels.
     Attributes:
+        filename        Filename for file to record to.
+        name            Name of the file.
+        readThrd        Reading thread.
+        readThrdLock    Lock for reading thread.
+        started         True if reading started.
     """
     # socket instances
     log = logging.getLogger(__name__)
@@ -60,6 +68,7 @@ class Reader(comm.Reader):
         self.run()
 
     def run(self):
+        """Start the reading thread."""
         with self.readThrdLock:
             if self.readThrd is None:
                 self.readThrd = threading.Thread(target=self.read)
@@ -141,6 +150,11 @@ class Reader(comm.Reader):
     
     @staticmethod
     def readFile(name):
+        """Reads file with name, returns data in vector.
+        
+        Arguments:
+            name    File name.        
+        """
         with open(name, 'r') as f:
             rd = csv.reader(f)
             return np.array([int(sample) for line in rd for sample in line])

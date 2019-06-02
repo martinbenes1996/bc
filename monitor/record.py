@@ -21,18 +21,34 @@ from tkinter import ttk
 
 
 class Recorder:
+    """Recorder representation.
+    
+    Attributes:
+        signalRecorder          Callback for record the signal.
+    """
+
     def __init__(self, signalRecorder):
-        self.signalRecorder = signalRecorder
+        """Constructor of Recorder.
         
-        
+        Arguments:
+            signalRecorder      Callback for record the signal.
+        """
+        self.signalRecorder = signalRecorder    
 
     def start(self, session, setMarked, setDelayMarked):
+        """Programs the recording session and runs it in separate thread.
+        
+        Arguments:
+            session             Session, exported from view.
+            setMarked           Callback for marking.
+            setDelayMarked      Callback for delay of marking.
+        """
         self.session = session
         self.setMarked, self.setDelayMarked = setMarked, setDelayMarked
         threading.Thread(target=self.run).start()
 
     def run(self):
-        print("Record")
+        """Runs the recording session."""
         for i,m in enumerate(self.session['measurements']):
             # delay
             self.setDelayMarked(i)
@@ -53,47 +69,116 @@ class Recorder:
 
         self.setMarked( len(self.session['measurements']) )
 
-    
     def generateSessionName(self):
+        """Generates a name for session name."""
         return "NewRecording"
 
     def saveSession(self, session):
+        """Save the session in the file.
+        
+        Arguments:
+            session     Session state to save.
+        """
         with open("sessions/"+session['name']+'.json', 'w') as f:
             json.dump(session, f)
 
     def loadSession(self, name):
+        """Load the session from the file.
+        
+        Arguments:
+            name        Name of the file.
+        """
         with open("sessions/"+name + '.json', 'r') as f:
             return json.loads(f.read())
     
     def count(self, secs):
+        """Signalizes number of seconds.
+        
+        Arguments:
+            secs        Count of seconds to signalize.
+        """
         _thread.start_new_thread(self.count_run, (), {"secs" : secs})
     def count_run(self, secs=1):
+        """Beep for length.
+        
+        Arguments:
+            secs        Length of beeping.
+        """
         for i in range(0, secs):
             self.sine_tone(1000, 0.2, 0.8)
             time.sleep(0.8)
     def beep(self):
+        """Beeps."""
         self.sine_tone(440, 0.5)
 
     @classmethod
     def sine_tone(cls, frequency, duration, volume=1, sample_rate=22050):
-        print(frequency, duration, volume)
+        """Beeps.
+        
+        Arguments:
+            frequency       Frequency of beep.
+            duration        Duration of beep in ms.
+            volume          Volume of beep.
+            sample_rate     Sample rate.
+        """
         os.system("bash beep.sh "+str(frequency)+" "+str(duration))
 
 
 class View:
+    """RecordView.
+    
+    Attributes:
+        root            Parent view element.
+        measurements    List of measurements.
+        setRecording    Callback to set record.
+        recordFrame     Main frame.
+        headerFrame     Frame for header.
+        closeRecord     Button to close recording view.
+        sessionName     Input with session name.
+        recordBtn       Button to start recording session.
+        loadBtn         Button to load session.
+        addBtn          Button to add new measurement.
+        saveBtn         Button to save session.
+    """
+
     class MemFunction:
+        """Function with static variable.
+        
+        Attributes:
+            f       Callable to call.
+            arg1    Argument to handle.
+        """
         def __init__(self, f, arg1):
+            """Constructor of function with static variable.
+            
+            Arguments:
+                f       Callable to call.
+                arg1    Argument to handle.
+            """
             self.f = f
             self.arg1 = arg1
         def __call__(self):
+            """Call the function."""
             self.f(self.arg1)
 
     def __init__(self, root, setRecording):
+        """Constructor of the RecordView.
+        
+        Arguments:
+            root            Parent view element.
+            setRecording    Callback to set record.
+        """
         self.root = root
         self.measurements = []
         self.setRecording = setRecording
     
     def begin(self, source, recordCallback):
+        """Creates the recording view.  
+        
+        Arguments:
+            source          Source of recording.
+            recordCallback  Callback for recording.
+        """
         self.recorder = Recorder(recordCallback)
         self.measurements = []
         self.setRecording(True)
@@ -122,6 +207,7 @@ class View:
         self.saveBtn.grid(columnspan=2, sticky=tk.N+tk.E+tk.W)
     
     def endRecordingSession(self):
+        """Closes the Recordview."""
         del self.recorder
         for m in self.measurements:
             del m
@@ -130,27 +216,45 @@ class View:
         del self.recordFrame
         self.setRecording(False)
     def startRecording(self):
+        """Handler of event to start recording."""
         self.recordBtn.config(text='Stop Recording', command=self.stopRecording)
         self.recordFrame.config(highlightcolor='red', highlightbackground='red')
         self.recorder.start(self.getSession(), self.recordSlave_markMeasurement, self.recordSlave_markDelay)
     def recordSlave_unmarkAll(self):
+        """Unmarks all frames."""
         for m in self.measurements:
             m['delayFrame'].config(highlightcolor='black', highlightbackground='black')
             m['frame'].config(highlightcolor='black', highlightbackground='black')
     def recordSlave_markMeasurement(self, i):
+        """Marks measurement frame.
+        
+        Arguments:
+            i       Index of measurement frame.
+        """
         self.recordSlave_unmarkAll()
         if i == len(self.measurements):
             return
         self.measurements[i]['frame'].config(highlightcolor='red', highlightbackground='red')
     def recordSlave_markDelay(self, i):
+        """Marks delay frame.
+        
+        Arguments:
+            i       Index of delay frame.
+        """
         self.recordSlave_unmarkAll()
         if i == len(self.measurements):
             return
         self.measurements[i]['delayFrame'].config(highlightcolor='red', highlightbackground='red')
     def stopRecording(self):
+        """Stops the recording."""
         self.recordBtn.config(text='Record', command=self.startRecording)
         self.recordFrame.config(highlightcolor='black', highlightbackground='black')
     def addMeasurement(self, value = {'name' : '', 'time' : 5, 'delay' : 10, 'signal' : True}):
+        """Adds new measurement to the session.
+        
+        Arguments:
+            value       Values for the measurement.
+        """
         self.addBtn.grid_forget()
         self.saveBtn.grid_forget()
 
@@ -194,6 +298,11 @@ class View:
         self.saveBtn.grid(columnspan=2, sticky=tk.N+tk.E+tk.W)
 
     def deleteMeasurement(self, index):
+        """Deletes the measurement.
+        
+        Arguments:
+            index       Index of measurement to delete.
+        """
         self.measurements[index]['delayFrame'].destroy()
         self.measurements[index]['frame'].destroy()
         del self.measurements[index]
@@ -202,6 +311,7 @@ class View:
             m['close'].config(command=self.MemFunction(self.deleteMeasurement, i))
 
     def loadSession(self):
+        """Loads a session."""
         filename = self.sessionName.get("1.0","end-1c")
 
         session = self.recorder.loadSession(filename)
@@ -212,11 +322,10 @@ class View:
             self.deleteMeasurement(0)
         for it in session['measurements']:
             self.addMeasurement(it)
-
     
     def getSession(self):
+        """Constructs new measurement."""
         session = {'measurements' : []}
-
         session['name'] = self.sessionName.get("1.0","end-1c")
         print("Save session", session['name'])
         
@@ -230,6 +339,7 @@ class View:
         return session
 
     def saveSession(self):
+        """Saves the session to file."""
         self.recorder.saveSession(self.getSession())
 
 

@@ -58,6 +58,7 @@ class CheckButton:
         # finish separate thread
         self.stopUpdate()
     def stopUpdate(self):
+        """Stops the update loop."""
         if self.threadid:
             self.master.after_cancel(self.threadid)
         self.threadid = None
@@ -182,6 +183,7 @@ class Notebook(ttk.Notebook):
         self._active = None
 
     def __initialize_custom_style(self):
+        """Initializes the custom style."""
         style = ttk.Style()
         self.images = (
             tk.PhotoImage("img_close", data='''

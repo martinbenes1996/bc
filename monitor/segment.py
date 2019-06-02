@@ -10,36 +10,59 @@ This module contains classes preprocessing the signal and performing the feature
 Developed as a part of bachelor thesis "Counting of people using PIR sensor".
 """
 
-
 import numpy as np
 import scipy.signal as signal
 
 import fuzzy
 
-# to document
-
 class Segment:
+    """Class performing segmentation.
+    
+    Static attributes:
+        cwtCoef
+        edgeOrder
+    Attributes:
+        pos
+        samples
+    """
     cwtCoef = 1.33846 # 1.3384615384615386
     edgeOrder = 8 # 7.564102564102564
     
     def __init__(self, samples, position):
+        """Constucts the segment class.
+        
+        Arguments:
+            samples
+            position
+        """
         self.samples = samples
         self.pos = position
     def __len__(self):
+        """Returns the length of the segment."""
         return len(self.samples)
+    def len(self):
+        """Returns the length of the segment."""
+        return len(self)
     def mu(self):
+        """Returns the mean value of the segment."""
         return np.mean(self.samples)
     def var(self):
+        """Returns the variance of the segment."""
         return np.var(self.samples)
-    def len(self):
-        return len(self)
     def position(self):
+        """Position of the segment in the signal."""
         return self.pos
     def xcenter(self):
+        """Index of center of the segment."""
         return int(self.pos + len(self)/2)
 
     @classmethod
     def segmentize(cls, x):
+        """Segmentizes the signal.
+        
+        Arguments:
+            x       Input signal.
+        """
         # changes using CWT
         coefs = signal.cwt(x, signal.ricker, [cls.cwtCoef])[0]
         extrems = signal.argrelextrema(coefs, np.greater, order=cls.edgeOrder)[0]
@@ -65,7 +88,19 @@ class Segment:
             lensum += segmentInstance.len()
         return segmentList
 
+
 class Edge:
+    """Class covering the Edge computation.
+    
+    Static attributes:
+        toleranceStagnation     Coefficient of tolerance towards stagnation.
+        toleranceCharacter      Coefficient of tolerance towards character.
+        Khi                     Fuzzifying sets (left/fall, stagnate, right/rise)
+    Attributes:
+        first                   First segment of the edge.
+        second                  Second segment of the edge.
+        fuzzyScore              Fuzzy score.
+    """
     toleranceStagnation = 20
     toleranceCharacter = 2
     Khi = { "F": fuzzy.ArctangenoidSet(toleranceStagnation, 0, "L").get,
@@ -73,62 +108,111 @@ class Edge:
             "R": fuzzy.ArctangenoidSet(toleranceStagnation, 0, "R").get }
 
     def __init__(self, segments):
+        """Constructs the edge.
+        
+        Arguments:
+            segments            Segment vector.
+        """
         self.first, self.second = segments[0], segments[1]
         self.fuzzyScore = dict()
     def Dmu(self):
+        """Difference of mean values of segments."""
         return self.second.mu() - self.first.mu()
     def Dvar(self):
+        """Difference of variances of segments."""
         return self.second.var() - self.first.var()
 
     def muScore(self):
+        """Mean value score of edge."""
         return self.Dmu() #/ self.toleranceStagnation
     def varScore(self):
+        """Variance score of edge."""
         return self.Dvar() #/ self.toleranceCharacter
 
     def stagnates(self):
+        """Returns weather stagnates or not."""
         return abs(self.muScore()) <= 1
     def rises(self):
+        """Returns weather rises or not."""
         return not self.stagnates() and self.Dmu() > 0
     def falls(self):
+        """Returns weather falls or not."""
         return not self.stagnates() and self.Dmu() < 0
 
     def S(self):
+        """Score of stagnation."""
         return self.Khi["S"](self.muScore())
     def R(self):
+        """Score of rising."""
         return self.Khi["R"](self.muScore())
     def F(self):
+        """Score of falling."""
         return self.Khi["F"](self.muScore())
     def getKhi(self, key):
+        """Returns score.
+        
+        Attributes:
+            key         "S" for stagnation, "R" for rising, "F" for falling.
+        """
         assert(key in {"S","R","F"})
         return self.Khi[key](self.muScore())
     
     def stays(self):
+        """Returns weather stays (by characteristics) or not."""
         return abs(self.varScore()) <= 1
     def wilds(self):
+        """Returns weather wilds (by characteristics) or not."""
         return self.varScore() > 1
     def calms(self):
+        """Returns weather calms (by characteristics) or not."""
         return self.varScore() < -1
-    
-
 
     @classmethod
     def edgify(cls, segments):
+        """Factory for edge.
+        
+        Arguments:
+            segments        Segment vector.
+        """
         return [ cls(segments[0:2]), cls(segments[1:3]), cls(segments[2:4]) ]
 
 
-
 class Artefact:
+    """Representation of Artefact - merge of segments.
+    Represented by double-linked list.
+    
+    Attributes:
+        segments        Segment vector.
+        previous        Pointer to previous
+        optimalK        Optimal scope.
+        _samples        Sample vector.
+    """
+
     def __init__(self):
+        """Constructor of Artefact."""
         self.segments = []
         self.previous = None
         self.optimalK = None
         self._samples = None
+
     def append(self, segment):
+        """Append segment to artefact.
+        
+        Arguments:
+            segment
+        """
         self.segments.append(segment)
+
     def setPreviousArtefact(self, prev):
+        """Sets pointer to predecesor.
+        
+        Arguments:
+            prev        Reference to new neighbor.
+        """
         self.previous = prev
 
     def samples(self):
+        """Returns sample vector."""
         if self._samples is not None:
             return self._samples
         artefactSamples = []
@@ -138,13 +222,17 @@ class Artefact:
         self._samples = np.array(artefactSamples)
         return self._samples
     def mu(self):
+        """Returns mean value of artefact."""
         return np.mean(self.samples())
     def var(self):
+        """Returns variance of artefact."""
         return np.var(self.samples())
     def len(self):
+        """Returns length of artefact."""
         return len(self.samples())
 
     def getK(self):
+        """Returns slope of replacing line."""
         if self.optimalK is not None:
             return self.optimalK
         samples = self.samples()
@@ -171,6 +259,11 @@ class Artefact:
         return optimalK
 
     def getFeatures(self, plotting=False):
+        """Extracts the features of the artefact.
+        
+        Arguments:
+            plotting        Returns the semiresults.
+        """
         features = []
         # get description
         samples = self.samples()
@@ -229,13 +322,20 @@ class Artefact:
     
     @classmethod
     def artefactLength(cls, features):
+        """Returns length of artefact from features.
+        
+        Arguments:
+            features        Input feature vector.
+        """
         return features[4]
         
-        
-
-
     @classmethod
     def parseArtefacts(cls, x):
+        """Parses signal to artefacts.
+        
+        Arguments:
+            x       Signal vector.
+        """
         segments = Segment.segmentize(x)
         if len(segments) == 1:
             a = cls()
@@ -276,7 +376,6 @@ class Artefact:
                 artefacts.append(Artefact())
                 artefacts[-1].setPreviousArtefact(artefacts[-2])
                 
-            
         if artefacts[-1].len() == 0:
             artefacts = artefacts[:-1]
         return artefacts

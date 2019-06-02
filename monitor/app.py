@@ -27,14 +27,20 @@ import views
 class App:
     """View of the client and window at once. Singleton.
     
-    Attributes:
+    Static attributes:
         app_                Main app to call mainloop() on.
-        root                Master element.
+    Attributes:
         getReader           Callback for getting reader instance.
         getRecorder         Callback for getting recorder instance.
-        window              Main window of app.
+        getExtractor        Callback for getting extractor instance.
+        getReplayer         Callback for getting replayer instance.
+        multicastView       View for multicast.
+        recorderView        View for recorder.
+        root                Master element.
+        serialView          View for serial.
         tabControl          Tab control.
         tabs                Opened views of serial ports. Mapped {portname : TKinter Frame}.
+        window              Main window of app.
     """
     app_ = None # app instance
     log = logging.getLogger(__name__)
@@ -113,6 +119,7 @@ class App:
         
         Keyword arguments:
             name        Source name.
+            replayview  Indicator of showing replay view.
         """
         # check if not opened already
         if name in self.tabs:
@@ -185,7 +192,7 @@ class App:
         
         Keyword arguments:
             master      Element to show in.
-            reader      Callback for restarting the replaying.
+            replayer    Callback for restarting the replaying.
         """
         # create view
         rv = views.ReplayView(master, replayer)
@@ -207,7 +214,11 @@ class App:
         tabName = self.tabControl.tab(tabid, "text")
         self.recorderView.begin(tabName, self.getRecorder(tabName))
     def switchRecording(self, recording):
-        """Disables the serial view during recording session."""
+        """Disables the serial view during recording session.
+        
+        Keyword arguments:
+            recording   If serial view is visible or not.
+        """
         if recording:
             self.serialView.disable()
         else:

@@ -26,13 +26,18 @@ import conf
 class Reader(comm.Reader):
     """Reader of data from multicast. Singleton.
     
+    Static attributes:
+        log         Log instance.
+        _sockets    Reader instances for various channels.
     Attributes:
-        sockets     Reader instances for various channels.
+        filename    Filename for file to record to.
+        segment     Shared buffer for received data.
         sock        Socket for reading multicast channel.
     """
     # Reader instances (singletons)
     _sockets = {}
     log = logging.getLogger(__name__)
+
     @classmethod
     def getReader(cls, key, port=None):
         """Instance getter (singleton).

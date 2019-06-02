@@ -24,11 +24,14 @@ import comm
 class Reader(comm.Reader):
     """Reader of data from serial port. Singleton.
     
+    Static attributes:
+        log         Log instance.
+        readers     Reader instances for various serial ports.
     Attributes:
-        readers         Reader instances for various serial ports.
-        devicename      Name of the device.
-        port            Serial file handle.
-        mem             Buffer for error reading.
+        devicename  Name of the device.
+        filename    File name to record to.
+        mem         Buffer for error reading.
+        port        Serial file handle.
     """
     # reader instances
     readers = {}
