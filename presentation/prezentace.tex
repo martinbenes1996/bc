@@ -4,6 +4,7 @@
 %\usepackage[czech]{babel}
 \usepackage{hyperref}
 \usepackage{fancyvrb}
+\usepackage{multicol}
 \usetheme{FIT}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -56,11 +57,52 @@ xbenes49@stud.fit.vutbr.cz}
     \end{center}
 \end{frame}
 
-% ---- PROGRAM ---- %
-\begin{frame}\frametitle{Classification}
+% ---- FEATURE EXTRACTION ---- %
+\begin{frame}\frametitle{Classification: feature extraction}
     \begin{center}
-        \includegraphics[width=1\textwidth]{img/features.png}
+        \includegraphics[width=1\textwidth]{img/features2.png}
+
+        \includegraphics[width=0.8\textwidth]{img/artefacts.png}
     \end{center}
+\end{frame}
+
+% ---- CLASSIFIER ---- %
+\begin{frame}\frametitle{Classification: classifier}
+    \begin{itemize}
+        \item Based on set of linear regression classifiers.
+            \begin{center}
+                \includegraphics[width=0.3\textwidth]{img/area.png}
+            \end{center}
+            
+        \item Spatial model of sensed area.
+            \begin{center}
+                \includegraphics[width=0.65\textwidth]{img/circularsector.png}
+            \end{center}
+
+    \end{itemize}
+\end{frame}
+
+% ---- TRAINING ---- %
+\begin{frame}\frametitle{Classification: training}
+    \begin{center}
+        \includegraphics[width=1\textwidth]{img/labelling.png}
+    \end{center}
+\end{frame}
+
+% ---- POSTPROCESSING ---- %
+\begin{frame}\frametitle{Classification: postprocessing}
+    \begin{itemize}
+        \item For \emph{localization} cluster analysis is used.
+            \begin{itemize}
+                \item K-means
+                \item Medoids (PAM)
+            \end{itemize}
+        \item \emph{Count of people} by minimal within-cluster sum of squares.
+    \end{itemize}
+\end{frame}
+
+% ---- IMPLEMENTATION ---- %
+\begin{frame}\frametitle{Implementation:}
 \end{frame}
 
 
