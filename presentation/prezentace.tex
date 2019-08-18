@@ -109,20 +109,19 @@ xbenes49@stud.fit.vutbr.cz}
 \begin{frame}\frametitle{Implementation: sensor device}
     \begin{itemize}
         \item B+B Sensors: PIR STD
+            \begin{center}
+                \includegraphics[width=0.15\textwidth]{img/pirstd.png}
+            \end{center}
         \item NodeMCU (C++/Arduino)
             \begin{itemize}
                 \item ESP8266 (WiFi)
-                \item mDNS
-                \item Dynamic HTTP configuration
+                \item mDNS, HTTP
             \end{itemize}
-        \item Communication via multicast
-    \end{itemize}  
-    \begin{multicols}{2}
-        \begin{center}
-            \includegraphics[width=0.2\textwidth]{img/pirstd.png}
-            \includegraphics[width=0.2\textwidth]{img/nodemcu.png}
-        \end{center}
-    \end{multicols}
+            \begin{center}
+                \includegraphics[width=0.25\textwidth]{img/nodemcu.png}
+            \end{center}
+        \item Communication with server via multicast
+    \end{itemize} 
 \end{frame} 
 
 % ---- CLASSIFIER ---- %
@@ -135,6 +134,26 @@ xbenes49@stud.fit.vutbr.cz}
             \end{itemize}
         \item Linux, Bash
     \end{itemize}
+\end{frame}
+
+% ---- RESULTS ---- %
+\begin{frame}\frametitle{Results}
+    \begin{itemize}
+        \item Posterior probability [\%] 
+    \begin{center}
+        \begin{tabular}{|c|c c c c|} \hline
+            \textbf{Aspect} & \textbf{Presence} & \textbf{Distance} & \textbf{Center}       & \textbf{Left} \\ \hline
+            Positive rate   & $75.972$          & $75.785$          & $63.725$              & $49.263$            \\
+            Negative rate   & $86.542$          & $69.793$          & $53.436$              & $59.327$            \\ \hline
+        \end{tabular}
+    \end{center}
+        \item Possible improvements
+            \begin{itemize}
+                \item Labelling
+                \item Multiple sensors
+            \end{itemize}
+    \end{itemize}
+
 \end{frame}
 
 
