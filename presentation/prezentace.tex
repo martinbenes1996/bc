@@ -44,11 +44,11 @@ xbenes49@stud.fit.vutbr.cz}
 % ---- DESIGN ---- %
 \begin{frame}\frametitle{The design}
     \begin{itemize}
-        \item Sensor device
+        \item Sensor device (PIR STD, NodeMCU)
             \begin{itemize}
                 \item Sampling
             \end{itemize}
-        \item Classification server
+        \item Classification server (Python, NumPy)
             \begin{itemize}
                 \item Classification
                 \item Fusion
@@ -106,35 +106,35 @@ xbenes49@stud.fit.vutbr.cz}
 
 % ---- IMPLEMENTATION ---- %
 % ---- SENSOR DEVICE ---- %
-\begin{frame}\frametitle{Implementation: sensor device}
-    \begin{itemize}
-        \item B+B Sensors: PIR STD
-            \begin{center}
-                \includegraphics[width=0.15\textwidth]{img/pirstd.png}
-            \end{center}
-        \item NodeMCU (C++/Arduino)
-            \begin{itemize}
-                \item ESP8266 (WiFi)
-                \item mDNS, HTTP
-            \end{itemize}
-            \begin{center}
-                \includegraphics[width=0.25\textwidth]{img/nodemcu.png}
-            \end{center}
-        \item Communication with server via multicast
-    \end{itemize} 
-\end{frame} 
+%\begin{frame}\frametitle{Implementation: sensor device}
+%    \begin{itemize}
+%        \item B+B Sensors: PIR STD
+%            \begin{center}
+%                \includegraphics[width=0.15\textwidth]{img/pirstd.png}
+%            \end{center}
+%        \item NodeMCU (C++/Arduino)
+%            \begin{itemize}
+%                \item ESP8266 (WiFi)
+%                \item mDNS, HTTP
+%            \end{itemize}
+%            \begin{center}
+%                \includegraphics[width=0.25\textwidth]{img/nodemcu.png}
+%            \end{center}
+%        \item Communication with server via multicast
+%    \end{itemize} 
+%\end{frame} 
 
 % ---- CLASSIFIER ---- %
-\begin{frame}\frametitle{Implementation: classification server}
-    \begin{itemize}
-        \item Python3
-            \begin{itemize}
-                \item NumPy, SciPy, scikit
-                \item MatPlotLib, PySerial
-            \end{itemize}
-        \item Linux, Bash
-    \end{itemize}
-\end{frame}
+%\begin{frame}\frametitle{Implementation: classification server}
+%    \begin{itemize}
+%        \item Python3
+%            \begin{itemize}
+%                \item NumPy, SciPy, scikit
+%                \item MatPlotLib, PySerial
+%            \end{itemize}
+%        \item Linux, Bash
+%    \end{itemize}
+%\end{frame}
 
 % ---- RESULTS ---- %
 \begin{frame}\frametitle{Results}
