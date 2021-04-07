@@ -1,4 +1,4 @@
-bottle==0.12.16
+bottle==0.12.19
 certifi==2019.3.9
 chardet==3.0.4
 CProfileV==1.0.7
